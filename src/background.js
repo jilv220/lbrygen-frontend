@@ -3,6 +3,10 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+
+const { spawn } = require('child_process');
+const lbrynet = spawn ('lbrynet', ['start'])
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
@@ -37,6 +41,10 @@ async function createWindow() {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
+
+  // kill all child process
+  lbrynet.kill('SIGINT');
+
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
