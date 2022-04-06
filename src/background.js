@@ -3,6 +3,8 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+const { spawn } = require('child_process');
+const path = require('path');
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -13,11 +15,28 @@ protocol.registerSchemesAsPrivileged([
 
 // Download daemon before launch 
 const lbrynetDL = require('./downloadDaemon')
-lbrynetDL.downloadDaemon()
+let lbrynet
+let lbryApi
 
-// start lbrynet daemon
-const { spawn } = require('child_process');
-const lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
+// Start lbry daemon
+lbrynetDL.downloadDaemon().then((value) => {
+  if (value == 'Done') {
+    
+    if (isDevelopment) {
+      lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
+      lbryApi = spawn ('python', ['./static/daemon/api.py'])
+    } else {
+
+      let pathToLbrynet = path.resolve(__dirname,'./static/daemon/lbrynet')
+      console.log(pathToLbrynet)
+      lbrynet = spawn (pathToLbrynet, ['start'])
+
+      let pathToApi = path.resolve(__dirname,'./static/daemon/api.py')
+      console.log(pathToApi)
+      lbryApi = spawn ('python', [pathToApi])
+    }
+  }
+})
 
 async function createWindow() {
   // Create the browser window.
@@ -49,6 +68,7 @@ app.on('window-all-closed', () => {
 
   // kill all child process
   lbrynet.kill('SIGINT');
+  lbryApi.kill('SIGINT');
 
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
