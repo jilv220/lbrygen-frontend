@@ -13,31 +13,37 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-// Download daemon before launch 
 const lbrynetDL = require('./downloadDaemon')
 let lbrynet
+let lbryApi
 
-// Start lbry daemon
-lbrynetDL.downloadDaemon().then((value) => {
-  if (value == 'Done') {
-    
-    if (isDevelopment) {
+if (isDevelopment) {
+
+  // Download or Update daemon for development
+  lbrynetDL.downloadDaemon().then((value) => {
+    if (value == 'Done') {
       lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
-    } else {
-
-      let pathToLbrynet = path.resolve(__dirname,'../static/daemon/lbrynet')
-      console.log(pathToLbrynet)
-      lbrynet = spawn (pathToLbrynet, ['start'])
-
+      lbryApi = spawn ('python', ['./static/daemon/api.py'])
     }
-  }
-})
+  })
+
+} else {
+
+  let pathToLbrynet = path.resolve(__dirname,'../static/daemon/lbrynet')
+  console.log(pathToLbrynet)
+  lbrynet = spawn (pathToLbrynet, ['start'])
+
+  let pathToApi = path.resolve(__dirname,'../static/daemon/api.py')
+  console.log(pathToApi)
+  lbryApi = spawn ('python', [pathToApi])
+}
 
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    show: false,
     webPreferences: {
       
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -45,6 +51,12 @@ async function createWindow() {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
     }
+  })
+
+  // 1) Fix white screen
+  // 2) Wait for child process spawn
+  win.once('ready-to-show', () => {
+    win.show()
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -63,6 +75,7 @@ app.on('window-all-closed', () => {
 
   // kill all child process
   lbrynet.kill('SIGINT');
+  lbryApi.kill('SIGINT');
 
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q

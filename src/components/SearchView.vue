@@ -130,7 +130,7 @@ export default {
       let normalizedSearch = Normalizer.run(this.search, searchType)
 
       EventService.getContent(searchType, streamType, normalizedSearch, pageNum).then((response) => {
-                  console.log(response)
+                  //console.log(response)
                   this.sourceData = response
                 })
     },

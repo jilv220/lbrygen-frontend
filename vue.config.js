@@ -5,7 +5,7 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       builderOptions: {
-        extraFiles: [
+        extraResources: [
           "static"
         ]
       }
