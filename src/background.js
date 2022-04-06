@@ -16,7 +16,6 @@ protocol.registerSchemesAsPrivileged([
 // Download daemon before launch 
 const lbrynetDL = require('./downloadDaemon')
 let lbrynet
-let lbryApi
 
 // Start lbry daemon
 lbrynetDL.downloadDaemon().then((value) => {
@@ -24,16 +23,12 @@ lbrynetDL.downloadDaemon().then((value) => {
     
     if (isDevelopment) {
       lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
-      lbryApi = spawn ('python', ['./static/daemon/api.py'])
     } else {
 
-      let pathToLbrynet = path.resolve(__dirname,'./static/daemon/lbrynet')
+      let pathToLbrynet = path.resolve(__dirname,'../static/daemon/lbrynet')
       console.log(pathToLbrynet)
       lbrynet = spawn (pathToLbrynet, ['start'])
 
-      let pathToApi = path.resolve(__dirname,'./static/daemon/api.py')
-      console.log(pathToApi)
-      lbryApi = spawn ('python', [pathToApi])
     }
   }
 })
@@ -68,7 +63,6 @@ app.on('window-all-closed', () => {
 
   // kill all child process
   lbrynet.kill('SIGINT');
-  lbryApi.kill('SIGINT');
 
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q

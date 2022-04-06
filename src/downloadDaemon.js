@@ -87,32 +87,4 @@ module.exports = {
         });
     }
   }),
-
-  isLBRYExist: targetPlatform => {
-
-    const daemonVersion = packageJSON.lbrySettings.lbrynetDaemonVersion;
-    const daemonDir = path.join(__dirname, '..', packageJSON.lbrySettings.lbrynetDaemonDir);
-    let daemonFileName = packageJSON.lbrySettings.lbrynetDaemonFileName;
-
-    const daemonFilePath = path.join(daemonDir, daemonFileName);
-    const daemonVersionPath = path.join(daemonDir, 'daemon.ver');
-
-    const hasDaemonDownloaded = fs.existsSync(daemonFilePath);
-    const hasDaemonVersion = fs.existsSync(daemonVersionPath);
-    let downloadedDaemonVersion;
-    
-    if (hasDaemonVersion) {
-      downloadedDaemonVersion = fs.readFileSync(daemonVersionPath, 'utf8');
-    }
-
-    is_downloaded = hasDaemonDownloaded && 
-                    hasDaemonVersion && 
-                    ( downloadedDaemonVersion === daemonVersion )
-
-    if (is_downloaded) {
-      return true
-    } else {
-      return false
-    }
-  }
 };
