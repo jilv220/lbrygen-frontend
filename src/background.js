@@ -4,15 +4,20 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
-const { spawn } = require('child_process');
-const lbrynet = spawn ('lbrynet', ['start'])
-
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
+
+// Download daemon before launch 
+const lbrynetDL = require('./downloadDaemon')
+lbrynetDL.downloadDaemon()
+
+// start lbrynet daemon
+const { spawn } = require('child_process');
+const lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
 
 async function createWindow() {
   // Create the browser window.
