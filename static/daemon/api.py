@@ -23,6 +23,16 @@ page_size = 20
 def home():
     return "<h1>Distant Reading Archive</h1><p>This site is a prototype API for distant reading of science fiction novels.</p>"
 
+@app.route('/api/status', methods=['GET'])
+def api_status():
+
+    params = {  "method": "status" }
+    status = requests.post(f'{base}:{lbry_port}', json = params).json()
+    print(status)
+
+    return status
+
+
 @app.route('/api/search', methods=['GET'])
 def api_search():
 

@@ -13,19 +13,13 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-const lbrynetDL = require('./downloadDaemon')
 let lbrynet
 let lbryApi
 
 if (isDevelopment) {
 
-  // Download or Update daemon for development
-  lbrynetDL.downloadDaemon().then((value) => {
-    if (value == 'Done') {
-      lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
-      lbryApi = spawn ('python', ['./static/daemon/api.py'])
-    }
-  })
+  lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
+  lbryApi = spawn ('python', ['./static/daemon/api.py'])
 
 } else {
 
@@ -53,8 +47,7 @@ async function createWindow() {
     }
   })
 
-  // 1) Fix white screen
-  // 2) Wait for child process spawn
+  // Fix white screen
   win.once('ready-to-show', () => {
     win.show()
   })

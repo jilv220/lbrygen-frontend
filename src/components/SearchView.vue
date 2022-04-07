@@ -128,11 +128,16 @@ export default {
     async searchContent(searchType, streamType, pageNum) {
 
       let normalizedSearch = Normalizer.run(this.search, searchType)
-
+      
       EventService.getContent(searchType, streamType, normalizedSearch, pageNum).then((response) => {
-                  //console.log(response)
-                  this.sourceData = response
-                })
+                  
+                //console.log(response)
+                if (response.error !== undefined) {
+                    console.error(response)
+                } else {
+                    this.sourceData = response
+                }
+            })
     },
     async getStream(url) {
         EventService.getStreamByUrl(url).then((response) => {

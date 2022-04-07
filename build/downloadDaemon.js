@@ -6,10 +6,16 @@ const decompress = require('decompress');
 const os = require('os');
 const del = require('del');
 
-module.exports = {
-  downloadDaemon: targetPlatform =>
-  new Promise((resolve, reject) => {
+// Get the target platform to build 
+let targetPlatform = process.argv.slice(2)[0];
+if (targetPlatform == undefined) {
+  targetPlatform = os.platform()
+}
+console.log('Build for platform: ', targetPlatform);
 
+// 
+const downloadDaemon = (targetPlatform) =>
+  new Promise((resolve, reject) => {
     const daemonURLTemplate = packageJSON.lbrySettings.lbrynetDaemonUrlTemplate;
     const daemonVersion = packageJSON.lbrySettings.lbrynetDaemonVersion;
     const daemonDir = path.join(__dirname, '..', packageJSON.lbrySettings.lbrynetDaemonDir);
@@ -24,7 +30,7 @@ module.exports = {
       daemonFileName += '.exe';
     }
     const daemonFilePath = path.join(daemonDir, daemonFileName);
-    const daemonVersionPath = path.join(daemonDir, 'daemon.ver');
+    const daemonVersionPath = path.join(__dirname, 'daemon.ver');
     const tmpZipPath = path.join(__dirname, '..', 'dist', 'daemon.zip');
     const daemonURL = daemonURLTemplate.replace(/DAEMONVER/g, daemonVersion).replace(/OSNAME/g, daemonPlatform);
 
@@ -37,7 +43,7 @@ module.exports = {
       downloadedDaemonVersion = fs.readFileSync(daemonVersionPath, 'utf8');
     }
 
-    if (hasDaemonDownloaded && hasDaemonVersion && downloadedDaemonVersion === daemonVersion) {
+    if (currentPlatform == targetPlatform && hasDaemonDownloaded && hasDaemonVersion && downloadedDaemonVersion === daemonVersion) {
       console.log('\x1b[34minfo\x1b[0m Daemon already downloaded');
       resolve('Done');
     } else {
@@ -86,5 +92,7 @@ module.exports = {
           reject(error);
         });
     }
-  }),
-};
+  });
+
+// Entry
+downloadDaemon(targetPlatform);

@@ -34,5 +34,10 @@ export default {
     let res = await axios.get(`${base_api}/search?${queryType}=${content}`, { params: params } )
     return res.data 
   },
+
+  async getDaemonStatus() {
+    let res = await axios.get(`${base_api}/status`)
+    return res.data 
+  }
   
 }

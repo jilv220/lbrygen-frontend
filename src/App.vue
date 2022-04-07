@@ -1,5 +1,5 @@
 <template>
-  <ion-app>
+  <ion-app v-if="this.isLbryReady">
     <ion-header class="ion-no-border"> </ion-header>
     <ion-content>
       <div class="flex-x-center">
@@ -33,9 +33,15 @@
 
     </ion-content>
   </ion-app>
+
+  <!-- Splash Screen -->
+  <div v-else>
+    Nothing here
+  </div>
 </template>
 
 <script>
+import EventService from "./services/EventService.js"
 import {
   IonApp,
   IonContent,
@@ -60,7 +66,20 @@ export default {
   data() {
     return {
       checked: this.$theme,
+      intervalId: 0,
+      isLbryReady: false
     };
+  },
+  mounted() {
+    this.intervalId = setInterval(() => {
+      this.checkLbryStatus()
+      //console.log(this.isLbryReady)
+    }, 500)
+  },
+  watch: {
+    isLbryReady: function() {
+      clearInterval(this.intervalId)
+    }
   },
   beforeCreate() {
     if (window.localStorage.getItem('theme') == 'dark') {
@@ -91,6 +110,11 @@ export default {
         window.localStorage.setItem('theme', 'light');
       }
     },
+    async checkLbryStatus() {
+      EventService.getDaemonStatus().then((response) => {
+          this.isLbryReady = response.result.is_running
+        })
+    }
   },
 };
 </script>
