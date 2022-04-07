@@ -20,6 +20,7 @@
     "core-js": "^3.8.3",
     "decompress": "^4.2.1",
     "del": "^6.0.0",
+    "electron-builder-squirrel-windows": "^23.0.3",
     "json-rpc-2.0": "^0.2.18",
     "vue": "^3.2.13",
     "vue-router": "^4.0.14"
