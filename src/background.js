@@ -17,7 +17,7 @@ let lbrynet
 let lbryApi
 
 if (isDevelopment) {
-
+  
   lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
   lbryApi = spawn ('python', ['./static/daemon/api.py'])
 

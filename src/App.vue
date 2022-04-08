@@ -35,8 +35,13 @@
   </ion-app>
 
   <!-- Splash Screen -->
-  <div v-else>
-    Nothing here
+  <div v-else class="flex-y-center">
+    <img class="splash-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
+    <div class="fancy-spinner">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="dot"></div>
+    </div>
   </div>
 </template>
 
@@ -71,10 +76,10 @@ export default {
     };
   },
   mounted() {
-    this.intervalId = setInterval(() => {
+     this.intervalId = setInterval(() => {
       this.checkLbryStatus()
       //console.log(this.isLbryReady)
-    }, 500)
+    }, 250)
   },
   watch: {
     isLbryReady: function() {
@@ -168,6 +173,54 @@ ion-toggle {
   --background: grey;
 }
 
+.fancy-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+}
+.fancy-spinner div {
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+}
+.fancy-spinner div.ring {
+  border-width: 0.5rem;
+  border-style: solid;
+  border-color: transparent;
+  -webkit-animation: 2s fancy infinite alternate;
+          animation: 2s fancy infinite alternate;
+}
+.fancy-spinner div.ring:nth-child(1) {
+  border-left-color: #979fd0;
+  border-right-color: #979fd0;
+}
+.fancy-spinner div.ring:nth-child(2) {
+  border-top-color: #979fd0;
+  border-bottom-color: #979fd0;
+  -webkit-animation-delay: 1s;
+          animation-delay: 1s;
+}
+.fancy-spinner div.dot {
+  width: 1rem;
+  height: 1rem;
+  background: #979fd0;
+}
+
+@-webkit-keyframes fancy {
+  to {
+    transform: rotate(360deg) scale(0.5);
+  }
+}
+
+@keyframes fancy {
+  to {
+    transform: rotate(360deg) scale(0.5);
+  }
+}
+
 /* small screen */
 @media (max-width: 890px) {
   .theme-toggle {
@@ -178,6 +231,10 @@ ion-toggle {
     max-width: 25%;
     margin: 10px 0px 20px 100px;
     padding: 10px;
+  }
+  .splash-logo {
+    padding-top: 180px;
+    padding-bottom: 20px;
   }
 }
 
@@ -190,6 +247,10 @@ ion-toggle {
     max-width: 25%;
     margin: 10px 0px 20px 320px;
     padding: 10px;
+  }
+  .splash-logo {
+    max-width: 65%;
+    padding: 40px 20px;
   }
 }
 
