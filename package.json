@@ -9,6 +9,7 @@
     "electron:setup": "node ./build/downloadDaemon.js",
     "electron:pack": "vue-cli-service electron:build --dir",
     "electron:build-linux": "node ./build/downloadDaemon.js linux && vue-cli-service electron:build --linux",
+    "electron:build-windows": "node ./build/downloadDaemon.js windows && vue-cli-service electron:build --win",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -21,7 +22,6 @@
     "core-js": "^3.8.3",
     "decompress": "^4.2.1",
     "del": "^6.0.0",
-    "electron-builder-squirrel-windows": "^23.0.3",
     "json-rpc-2.0": "^0.2.18",
     "vue": "^3.2.13",
     "vue-router": "^4.0.14"

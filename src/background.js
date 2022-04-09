@@ -5,16 +5,34 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const { spawn } = require('child_process');
 const path = require('path');
+const os = require('os');
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const targetPlatform = os.platform()
+let lbrynet
+let lbryApi
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-let lbrynet
-let lbryApi
+function initDaemon(targetPlatform) {
+
+  let pathToLbrynet = path.resolve(__dirname,'../static/daemon/lbrynet')
+  let pathToApi = path.resolve(__dirname,'../static/daemon/api.py')
+
+  if (targetPlatform === 'win32' || targetPlatform === 'windows') {
+    pathToLbrynet += '.exe';
+  }
+
+  console.log(pathToLbrynet)
+  console.log(pathToApi)
+
+  lbrynet = spawn (pathToLbrynet, ['start'])
+  lbryApi = spawn ('python', [pathToApi])
+
+}
 
 if (isDevelopment) {
   
@@ -22,14 +40,7 @@ if (isDevelopment) {
   lbryApi = spawn ('python', ['./static/daemon/api.py'])
 
 } else {
-
-  let pathToLbrynet = path.resolve(__dirname,'../static/daemon/lbrynet')
-  console.log(pathToLbrynet)
-  lbrynet = spawn (pathToLbrynet, ['start'])
-
-  let pathToApi = path.resolve(__dirname,'../static/daemon/api.py')
-  console.log(pathToApi)
-  lbryApi = spawn ('python', [pathToApi])
+  initDaemon()
 }
 
 async function createWindow() {

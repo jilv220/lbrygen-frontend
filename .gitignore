@@ -13,6 +13,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Lock files
+npm.lock
+yarn.lock
+
 # Editor directories and files
 .idea
 .vscode
@@ -26,4 +30,6 @@ pnpm-debug.log*
 /dist_electron
 
 # LBRY files
+daemon.ver
 lbrynet
+lbrynet.exe
