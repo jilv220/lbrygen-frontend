@@ -13,10 +13,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Lock files
-npm.lock
-yarn.lock
-
 # Editor directories and files
 .idea
 .vscode
