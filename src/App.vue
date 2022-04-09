@@ -12,7 +12,7 @@
         </ion-toggle>
       </div>
 
-      <ion-menu side="start" content-id="menuContent">
+      <ion-menu slot="fixed" side="start" content-id="menuContent">
       <ion-content>
         <ion-list>
           <ion-item>Menu Item</ion-item>
