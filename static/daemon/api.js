@@ -39,6 +39,7 @@ app.get('/api/status', (req, res) => {
         //console.log(daemonRes)
         res.send(daemonRes)
     })
+    .catch((error) => {})
 
 })
 

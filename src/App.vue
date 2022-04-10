@@ -84,6 +84,7 @@ export default {
   watch: {
     isLbryReady: function() {
       clearInterval(this.intervalId)
+      console.clear()
     }
   },
   beforeCreate() {
