@@ -79,7 +79,7 @@ export default {
      this.intervalId = setInterval(() => {
       this.checkLbryStatus()
       //console.log(this.isLbryReady)
-    }, 250)
+    }, 100)
   },
   watch: {
     isLbryReady: function() {

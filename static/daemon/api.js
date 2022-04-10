@@ -27,20 +27,19 @@ function apiCall(params) {
     })
 }
 
-// Api start
+// Api route
 app.get('/api/status', (req, res) => {
 
-    let daemonRes
+    req.setTimeout(200);
+
     let params = { method : 'status' }
 
     apiCall(params)
-    .then((res) => {
-        daemonRes = res 
-    })
-    .then(() => {
+    .then((daemonRes) => {
         //console.log(daemonRes)
         res.send(daemonRes)
     })
+
 })
 
 app.get('/api/search', (req, res) => {
@@ -59,18 +58,13 @@ app.get('/api/search', (req, res) => {
                               stream_type : [ streamType == undefined ? 'video' : streamType ],
                               order_by : 'release_time',
                               no_totals : true }}
-    let daemonRes
 
     if ( channel !== undefined ) {
         params["params"]["channel"] = channel
     }
 
     apiCall(params)
-    .then((res) => {
-        daemonRes = res 
-    })
-    .then(() => {
-        //console.log(daemonRes)
+    .then((daemonRes) => {
         res.send(daemonRes)
     })
 })
@@ -89,22 +83,18 @@ app.get('/api/getStream', (req, res) => {
                    params : { uri : uri === undefined ? undefined : uri,
                               save_file : isDownload,
                               timeout : 10 }}
-    let daemonRes
 
     if (isDownload) {
         params["params"]["file_name"] = uri.replace('lbry://', '') 
     }
 
     apiCall(params)
-    .then((res) => {
-        daemonRes = res 
-    })
-    .then(() => {
+    .then((daemonRes) => {
         //console.log(daemonRes)
         res.send(daemonRes.result.streaming_url)
     })
 })
 
-// Entry
+// Api entry
 app.listen(port);
 console.log('API server started on: ' + port)
