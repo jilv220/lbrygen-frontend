@@ -20,8 +20,10 @@
     "@ionic/vue-router": "^6.0.0",
     "axios": "^0.21.4",
     "core-js": "^3.8.3",
+    "cors": "^2.8.5",
     "decompress": "^4.2.1",
     "del": "^6.0.0",
+    "express": "^4.17.3",
     "json-rpc-2.0": "^0.2.18",
     "vue": "^3.2.13",
     "vue-router": "^4.0.14"

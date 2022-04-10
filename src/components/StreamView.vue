@@ -16,7 +16,7 @@ export default {
       stream: String,
     },
     mounted() {
-        console.log(this.stream)
+        //console.log(this.stream)
     },
 }
 </script>

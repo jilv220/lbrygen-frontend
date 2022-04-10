@@ -3,7 +3,7 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
-const { spawn } = require('child_process');
+const { spawn, fork } = require('child_process');
 const path = require('path');
 const os = require('os');
 
@@ -37,7 +37,10 @@ function initDaemon(targetPlatform) {
 if (isDevelopment) {
   
   lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
-  lbryApi = spawn ('python', ['./static/daemon/api.py'])
+  lbryApi 
+  = 
+  fork ('./static/daemon/api.js')
+  // spawn ('python', ['./static/daemon/api.py'])
 
 } else {
   initDaemon()
