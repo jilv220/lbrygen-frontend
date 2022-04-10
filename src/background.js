@@ -20,7 +20,7 @@ protocol.registerSchemesAsPrivileged([
 function initDaemon(targetPlatform) {
 
   let pathToLbrynet = path.resolve(__dirname,'../static/daemon/lbrynet')
-  let pathToApi = path.resolve(__dirname,'../static/daemon/api.py')
+  let pathToApi = path.resolve(__dirname,'../static/daemon/api.js')
 
   if (targetPlatform === 'win32' || targetPlatform === 'windows') {
     pathToLbrynet += '.exe';
@@ -30,17 +30,14 @@ function initDaemon(targetPlatform) {
   console.log(pathToApi)
 
   lbrynet = spawn (pathToLbrynet, ['start'])
-  lbryApi = spawn ('python', [pathToApi])
+  lbryApi = fork (pathToApi)
 
 }
 
 if (isDevelopment) {
   
   lbrynet = spawn ('./static/daemon/lbrynet', ['start'])
-  lbryApi 
-  = 
-  fork ('./static/daemon/api.js')
-  // spawn ('python', ['./static/daemon/api.py'])
+  lbryApi = fork ('./static/daemon/api.js')
 
 } else {
   initDaemon()

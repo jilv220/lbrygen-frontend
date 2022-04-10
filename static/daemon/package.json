@@ -1,0 +1,13 @@
+{
+  "name": "daemon",
+  "version": "1.0.0",
+  "description": "api and daemon required for lbrygen-electron",
+  "main": "api.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.3"
+  }
+}

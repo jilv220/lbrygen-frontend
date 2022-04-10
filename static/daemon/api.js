@@ -75,26 +75,6 @@ app.get('/api/search', (req, res) => {
     })
 })
 
-// @app.route('/api/getStream', methods=['GET'])
-// def get_stream_from_url():
-
-//     if isDownload: 
-//         params["params"]["file_name"] = str(uri).replace('lbry://', '')           
-
-//     lbry_get = requests.post(f'{base}:{lbry_port}', json = params).json()
-
-//     try:
-//         streaming_url = lbry_get["result"]["streaming_url"]
-//     except:
-//         e = lbry_get["result"]["error"]
-//         print(e)
-    
-//     #download_path = lbry_get["result"]["download_path"]
-//     if e != "":
-//         return "error"
-
-//     return streaming_url
-
 app.get('/api/getStream', (req, res) => {
 
     let uri = req.query.url
