@@ -13,7 +13,7 @@
 <script>
 export default {
     props: {
-      stream: String,
+        stream: String,
     },
     mounted() {
         //console.log(this.stream)
@@ -23,17 +23,17 @@ export default {
 
 <style>
 iframe {
-    position: absolute; 
+    position: absolute;
     width: 50%;
-    height: 50%; 
-    top: 0; 
+    height: 50%;
+    top: 0;
     left: 10rem;
 }
 
 #container {
-    padding-bottom:56.25%; 
-    position:relative;
-    display:block; 
+    padding-bottom: 56.25%;
+    position: relative;
+    display: block;
     width: 100%
 }
 </style>

@@ -130,3 +130,21 @@
         margin-left: 1rem;
     }
 }
+
+/* tailwind section */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* tailwind override */
+.navbar {
+    padding: 10px !important;
+}
+  
+.navbar-start {
+    width: auto !important;
+}
+  
+.navbar-end {
+    width: auto !important;
+}
