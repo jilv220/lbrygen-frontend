@@ -25,7 +25,7 @@ const routes = [
     path: '/stream',
     name: 'stream',
     component: Stream,
-    props: route => ({ streamUrl: route.query.url })
+    props: route => ({ claimUrl: route.query.url })
   }
 ]
 

@@ -5,7 +5,7 @@
             <div v-if="sourceData != ''" id="layout" class="grid grid-cols-3 gap-8 mt-4 px-4">
 
                 <div id="container" class="grid grid-rows-9 col-span-2">
-                    <iframe width="1280" height="630" allowfullscreen webkitallowfullscreen :src="stream.getStreamUrl"
+                    <iframe width="1280" height="630" allowfullscreen webkitallowfullscreen :src="streamUrl"
                         frameborder="0">
                     </iframe>
 
@@ -67,10 +67,11 @@ import EventService from "../services/EventService.js"
 import { useStreamStore } from "@/stores/StreamStore.js"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils.js"
+import { BASE_STREAM, BASE_PROD } from '@/constants/env'
 
 export default {
     props: {
-        streamUrl: String,
+        claimUrl: String,
     },
     components: {
         SearchItem
@@ -84,6 +85,7 @@ export default {
             sourceData: '',
             title: '',
             descList: [''],
+            streamUrl: '',
             shouldExpand: true
         }
     },
@@ -94,6 +96,7 @@ export default {
 
             this.title = this.stream.getStreamTitle
             this.descList = this.stream.getStreamDesc.split('\n')
+            this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
 
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {
