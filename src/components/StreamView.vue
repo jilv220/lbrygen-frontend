@@ -5,9 +5,12 @@
             <div v-if="sourceData != ''" id="layout" class="grid grid-cols-3 gap-8 mt-4 px-4">
 
                 <div id="container" class="grid grid-rows-9 col-span-2">
-                    <iframe width="1280" height="630" allowfullscreen webkitallowfullscreen :src="streamUrl"
-                        frameborder="0">
-                    </iframe>
+
+                    <div id="iframe-container">
+                        <iframe allowfullscreen webkitallowfullscreen :src="streamUrl"
+                            frameborder="0">
+                        </iframe>
+                    </div>
 
                     <div id="stream-info" class="mt-6">
 
@@ -141,7 +144,12 @@ span {
 iframe {
     top: 0;
     left: 0;
+    height: 100%;
     width: 100%;
+}
+
+#iframe-container {
+    height: 630px;
 }
 
 #container {
