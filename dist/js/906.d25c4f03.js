@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunklbrygen_frontend"]=self["webpackChunklbrygen_frontend"]||[]).push([[906],{5906:function(n,e,r){r.r(e),r.d(e,{default:function(){return a}});var t=r(3396);function u(n,e,r,u,l,c){return(0,t.wg)(),(0,t.iD)("p",null,"placeholder")}var l={},c=r(89);const f=(0,c.Z)(l,[["render",u]]);var a=f}}]);
+//# sourceMappingURL=906.d25c4f03.js.map
