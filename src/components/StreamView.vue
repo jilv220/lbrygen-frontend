@@ -103,17 +103,20 @@ export default {
                 this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
             }
 
-            let os = this.getOS()
-            let claimId = this.stream.getClaimId
-            let claimName = this.stream.getClaimName
-
-            if (os == 'Mac OS' || os == 'iOS') {
-                this.streamUrl
-                    = `${BACK_UP_STREAM}/${claimName}/${claimId}`
-            }
-
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {
+
+                let os = this.getOS()
+                let claimId = this.stream.getClaimId
+                let claimName = this.stream.getClaimName
+
+                if (os == 'Mac OS' || os == 'iOS') {
+                    this.streamUrl
+                        = `${BACK_UP_STREAM}/${claimName}/${claimId}`
+                }
+
+                // this.streamUrl
+                //         = `${BACK_UP_STREAM}/${claimName}/${claimId}`
 
                 EventService.getContent('tag', 'video', state.stream.tags, 1, 18, "trending_group").then((response) => {
 

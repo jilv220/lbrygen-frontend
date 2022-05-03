@@ -29,8 +29,12 @@ export const useStreamStore = defineStore (
                 EventService.getStreamByUrl(url).then((response) => {
 
                     this.stream.url = response.streaming_url
-                    this.claimId = response.claim_id
-                    this.claimName = response.claim_name
+                    this.stream.claimId = response.claim_id
+                    this.stream.claimName = response.claim_name
+
+                    // console.log(response)
+                    // console.log(this.claimId)
+                    // console.log(this.claimName)
 
                     if (response.metadata !== undefined) {
                         
