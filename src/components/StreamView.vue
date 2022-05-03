@@ -126,6 +126,18 @@ export default {
                     } else {
                         this.sourceData = response
                     }
+                }).then(() => {
+
+                    // TODO: Refactor screenUtil
+                    console.log(window.screen.width)
+                    this.adaptScreen(window.screen.width)
+                    for (let sw = 375; sw < 1200 ; sw+=10) {
+                        // console.log(sw)
+                        window.matchMedia(`(min-width: ${sw}px)`)
+                              .addEventListener("change", () => {
+                                  this.adaptScreen(window.screen.width)
+                              });    
+                    }
                 })
             }
         })
@@ -165,6 +177,14 @@ export default {
             }
 
             return os;
+        },
+        adaptScreen(screenWidth) {
+            let iframeContainer = document.getElementById('iframe-container')
+
+            if(iframeContainer) {
+                iframeContainer.style.width = `${screenWidth}px`
+                iframeContainer.style.height = `${screenWidth / 16 * 9}px`
+            }
         }
     }
 }
@@ -184,8 +204,11 @@ iframe {
     width: 100%;
 }
 
-#iframe-container {
-    height: 630px;
+@media (min-width: 1200px) {
+    #iframe-container {
+        width: auto !important;
+        height: 630px !important;
+    }
 }
 
 #container {
@@ -230,6 +253,8 @@ iframe {
 
 #stream-info {
     text-align: start;
+    overflow: auto;
+    overflow-wrap: break-word;
 }
 
 #stream-info-divider {
