@@ -99,7 +99,10 @@ export default {
 
             this.title = this.stream.getStreamTitle
             this.descList = this.stream.getStreamDesc.split('\n')
-            this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
+
+            if(this.stream.getStreamUrl) {
+                this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
+            }
 
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {

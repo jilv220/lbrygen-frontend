@@ -118,4 +118,11 @@ export default {
     }
 }
 
+@media (max-width: 960px) {
+    #thumbnail {
+        width: calc(12rem * 1.2 * 0.66);
+        height: calc(12rem * 0.6 * 0.66);
+    }
+}
+
 </style>

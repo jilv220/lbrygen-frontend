@@ -8,7 +8,7 @@
             v-model="searchContent"
             placeholder="Search some contents..."
             autocomplete="off"
-            @keyup.enter="performSearch(search.getSearchType, 
+            @keyup.enter="resetPage(); performSearch(search.getSearchType, 
                         searchContent, search.getStreamType, search.getCurrPage);"
         />
     </div>
@@ -79,6 +79,9 @@ export default {
                 })
             })
         },
+        resetPage() {
+            this.search.resetPage()
+        }
     }
 }
 </script>
