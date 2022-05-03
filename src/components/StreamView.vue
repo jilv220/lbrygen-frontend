@@ -69,7 +69,6 @@ import EventService from "../services/EventService.js"
 import { useStreamStore } from "@/stores/StreamStore.js"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils.js"
-import { BASE_STREAM, BASE_PROD, BACK_UP_STREAM } from '@/constants/env'
 
 export default {
     props: {
@@ -98,22 +97,19 @@ export default {
 
             this.title = this.stream.getStreamTitle
             this.descList = this.stream.getStreamDesc.split('\n')
-
-            if (this.stream.getStreamUrl) {
-                this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
-            }
+            this.streamUrl = this.stream.getStreamUrl
 
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {
 
-                let os = this.getOS()
-                let claimId = this.stream.getClaimId
-                let claimName = this.stream.getClaimName
+                // let os = this.getOS()
+                // let claimId = this.stream.getClaimId
+                // let claimName = this.stream.getClaimName
 
-                if (os == 'Mac OS' || os == 'iOS') {
-                    this.streamUrl
-                        = `${BACK_UP_STREAM}/${claimName}/${claimId}`
-                }
+                // if (os == 'Mac OS' || os == 'iOS') {
+                //     this.streamUrl
+                //         = `${BACK_UP_STREAM}/${claimName}/${claimId}`
+                // }
 
                 // this.streamUrl
                 //         = `${BACK_UP_STREAM}/${claimName}/${claimId}`
