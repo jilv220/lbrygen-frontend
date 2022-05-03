@@ -7,8 +7,7 @@
                 <div id="container" class="grid grid-rows-9 col-span-2">
 
                     <div id="iframe-container">
-                        <iframe allowfullscreen webkitallowfullscreen :src="streamUrl"
-                            frameborder="0">
+                        <iframe allowfullscreen webkitallowfullscreen :src="streamUrl" frameborder="0">
                         </iframe>
                     </div>
 
@@ -45,7 +44,7 @@
                                 </div>
                                 <div v-else> Anonymous </div>
                             </template>
-                            
+
                         </SearchItem>
                     </li>
                 </div>
@@ -89,7 +88,6 @@ export default {
             title: '',
             descList: [''],
             streamUrl: '',
-            isSafari: window.safari !== undefined,
             shouldExpand: true
         }
     },
@@ -101,13 +99,14 @@ export default {
             this.title = this.stream.getStreamTitle
             this.descList = this.stream.getStreamDesc.split('\n')
 
-            if(this.stream.getStreamUrl) {
+            if (this.stream.getStreamUrl) {
                 this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
             }
 
-            if(this.isSafari) {
-                this.streamUrl 
-                = 'https://odysee.com/$/embed/monkey-island-theme-on-classical-guitar!/8ffa7f5ba938dd72b1b545c7bd5b31f06b1afa6d'
+            let os = this.getOS()
+            if (os == 'Mac OS' || os == 'iOS') {
+                this.streamUrl
+                    = 'https://odysee.com/$/embed/monkey-island-theme-on-classical-guitar!/8ffa7f5ba938dd72b1b545c7bd5b31f06b1afa6d'
             }
 
             // Make sure only request once
@@ -138,6 +137,28 @@ export default {
                 document.getElementById('stream-desc').style.maxHeight = '10em'
             }
             this.shouldExpand = !this.shouldExpand
+        },
+        getOS() {
+            var userAgent = window.navigator.userAgent,
+                platform = window.navigator?.userAgentData?.platform ?? window.navigator.platform,
+                macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+                windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+                iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+                os = null;
+
+            if (macosPlatforms.indexOf(platform) !== -1) {
+                os = 'Mac OS';
+            } else if (iosPlatforms.indexOf(platform) !== -1) {
+                os = 'iOS';
+            } else if (windowsPlatforms.indexOf(platform) !== -1) {
+                os = 'Windows';
+            } else if (/Android/.test(userAgent)) {
+                os = 'Android';
+            } else if (!os && /Linux/.test(platform)) {
+                os = 'Linux';
+            }
+
+            return os;
         }
     }
 }
