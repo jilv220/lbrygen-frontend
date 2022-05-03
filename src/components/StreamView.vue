@@ -69,7 +69,7 @@ import EventService from "../services/EventService.js"
 import { useStreamStore } from "@/stores/StreamStore.js"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils.js"
-import { BASE_STREAM, BASE_PROD } from '@/constants/env'
+import { BASE_STREAM, BASE_PROD, BACK_UP_STREAM } from '@/constants/env'
 
 export default {
     props: {
@@ -104,9 +104,12 @@ export default {
             }
 
             let os = this.getOS()
+            let claimId = this.stream.getClaimId
+            let claimName = this.stream.getClaimName
+
             if (os == 'Mac OS' || os == 'iOS') {
                 this.streamUrl
-                    = 'https://odysee.com/$/embed/monkey-island-theme-on-classical-guitar!/8ffa7f5ba938dd72b1b545c7bd5b31f06b1afa6d'
+                    = `${BACK_UP_STREAM}/${claimName}/${claimId}`
             }
 
             // Make sure only request once

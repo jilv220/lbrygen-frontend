@@ -5,6 +5,8 @@ let streamModel = {
     url: '',
     desc: '',
     title: '',
+    claimId: '',
+    claimName: '',
     tags: ['']
 }
 
@@ -18,6 +20,8 @@ export const useStreamStore = defineStore (
             getStreamUrl: (state) => state.stream.url,
             getStreamDesc: (state) => state.stream.desc,
             getStreamTitle: (state) => state.stream.title,
+            getClaimId: (state) => state.stream.claimId,
+            getClaimName: (state) => state.stream.claimName,
             getStreamTags: (state) => state.stream.tags 
         },
         actions: {
@@ -25,6 +29,8 @@ export const useStreamStore = defineStore (
                 EventService.getStreamByUrl(url).then((response) => {
 
                     this.stream.url = response.streaming_url
+                    this.claimId = response.claim_id
+                    this.claimName = response.claim_name
 
                     if (response.metadata !== undefined) {
                         
