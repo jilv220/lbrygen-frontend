@@ -1,0 +1,24 @@
+<template>
+    <li @click="navigateTo(link)">
+        <div class="active:bg-green">
+            <slot name="item-icon"></slot>
+            <slot name="item-label"></slot>
+        </div>
+    </li>
+</template>
+
+<script>
+export default {
+    props: {
+        link: String
+    },
+    methods:{
+        navigateTo(routeName) {
+            this.$router.push({ name: routeName })
+        }
+    }
+}
+</script>
+
+<style>
+</style>

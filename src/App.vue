@@ -60,20 +60,22 @@
         <!-- Drawer Content -->
         <div class="drawer-side h-screen">
           <label for="my-drawer" class="drawer-overlay"></label>
-          <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content">
+          <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-64">
+
             <!-- Sidebar content here -->
-            <li @click="navigateTo('home')">
-              <div class="active:bg-green">
+            <SideBarItem link="home">
+              <template v-slot:item-icon>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                Home
-              </div>
-            </li>
+              </template>
+              <template v-slot:item-label>Home</template>
+            </SideBarItem>
+
           </ul>
         </div>
+        
       </div>
     </div>
   </div>
@@ -92,14 +94,16 @@
 <script>
 import EventService from "./services/EventService.js"
 import SearchBar from '@/components/SearchBar.vue'
+import SideBarItem from '@/components/base/SideBarItem.vue'
 import FilterDropdown from "./components/FilterDropdown.vue";
 
 export default {
   name: "App",
   components: {
     SearchBar,
+    SideBarItem,
     FilterDropdown
-},
+  },
   data() {
     return {
       checked: this.$theme,
