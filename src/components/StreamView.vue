@@ -101,13 +101,13 @@ export default {
             this.title = this.stream.getStreamTitle
             this.descList = this.stream.getStreamDesc.split('\n')
 
+            if(this.stream.getStreamUrl) {
+                this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
+            }
+
             if(this.isSafari) {
                 this.streamUrl 
                 = 'https://odysee.com/$/embed/monkey-island-theme-on-classical-guitar!/8ffa7f5ba938dd72b1b545c7bd5b31f06b1afa6d'
-            }
-
-            if(this.stream.getStreamUrl) {
-                this.streamUrl = this.stream.getStreamUrl.replace(BASE_STREAM, BASE_PROD)
             }
 
             // Make sure only request once
