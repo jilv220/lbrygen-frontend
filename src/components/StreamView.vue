@@ -69,6 +69,7 @@ import EventService from "../services/EventService.js"
 import { useStreamStore } from "@/stores/StreamStore.js"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils.js"
+import { API_BASE, PROD_IP } from '@/constants/env.js'
 
 export default {
     props: {
@@ -101,6 +102,11 @@ export default {
 
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {
+
+                // Fix mixed content
+                if (this.streamUrl) {
+                    this.streamUrl = this.stream.getStreamUrl.replace(PROD_IP, API_BASE)
+                }
 
                 EventService.getContent('tag', 'video', state.stream.tags, 1, 18, "trending_group").then((response) => {
 
