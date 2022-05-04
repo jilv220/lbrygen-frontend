@@ -69,7 +69,7 @@ import EventService from "../services/EventService.js"
 import { useStreamStore } from "@/stores/StreamStore.js"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils.js"
-import { API_BASE, PROD_IP } from '@/constants/env.js'
+import { API_BASE, STREAM_IP } from '@/constants/env.js'
 
 export default {
     props: {
@@ -105,7 +105,8 @@ export default {
 
                 // Fix mixed content
                 if (this.streamUrl) {
-                    this.streamUrl = this.stream.getStreamUrl.replace(PROD_IP, API_BASE)
+                    this.streamUrl = this.stream.getStreamUrl.replace(STREAM_IP, API_BASE)
+                    console.log(this.streamUrl)
                 }
 
                 EventService.getContent('tag', 'video', state.stream.tags, 1, 18, "trending_group").then((response) => {
