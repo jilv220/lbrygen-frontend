@@ -102,18 +102,6 @@ export default {
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {
 
-                // let os = this.getOS()
-                // let claimId = this.stream.getClaimId
-                // let claimName = this.stream.getClaimName
-
-                // if (os == 'Mac OS' || os == 'iOS') {
-                //     this.streamUrl
-                //         = `${BACK_UP_STREAM}/${claimName}/${claimId}`
-                // }
-
-                // this.streamUrl
-                //         = `${BACK_UP_STREAM}/${claimName}/${claimId}`
-
                 EventService.getContent('tag', 'video', state.stream.tags, 1, 18, "trending_group").then((response) => {
 
                     //console.log(response)
@@ -151,28 +139,6 @@ export default {
                 document.getElementById('stream-desc').style.maxHeight = '10em'
             }
             this.shouldExpand = !this.shouldExpand
-        },
-        getOS() {
-            var userAgent = window.navigator.userAgent,
-                platform = window.navigator?.userAgentData?.platform ?? window.navigator.platform,
-                macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
-                windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
-                iosPlatforms = ['iPhone', 'iPad', 'iPod'],
-                os = null;
-
-            if (macosPlatforms.indexOf(platform) !== -1) {
-                os = 'Mac OS';
-            } else if (iosPlatforms.indexOf(platform) !== -1) {
-                os = 'iOS';
-            } else if (windowsPlatforms.indexOf(platform) !== -1) {
-                os = 'Windows';
-            } else if (/Android/.test(userAgent)) {
-                os = 'Android';
-            } else if (!os && /Linux/.test(platform)) {
-                os = 'Linux';
-            }
-
-            return os;
         },
         adaptScreen(screenWidth) {
             let iframeContainer = document.getElementById('iframe-container')
