@@ -134,15 +134,7 @@ export default {
 };
 </script>
 
-<style>
-li {
-    list-style-type: none;
-}
-
-button {
-    cursor: pointer;
-}
-
+<style scoped>
 .btn-group .btn {
   @apply bg-green !important;
   @apply hover:bg-green-800 !important;

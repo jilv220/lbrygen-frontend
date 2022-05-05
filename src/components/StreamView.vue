@@ -29,7 +29,7 @@
                     </div>
                 </div>
 
-                <div id="related-videos" class="card flex-1">
+                <div id="related-videos" class="card flex-1 md:px-2">
                     <li v-for="item in sourceData.result.items" :key="item">
                         <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url" :showAvatar="false">
 
