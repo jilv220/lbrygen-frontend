@@ -3,7 +3,7 @@
 
         <div class="avatar">
             <div id="thumbnail" class="rounded">
-                <img v-if="thumbnail" :src="thumbnail.url">
+                <img v-if="thumbnail" :src="optimizedThumbnail">
             </div>
         </div>
 
@@ -31,6 +31,7 @@
 <script>
 import { useStreamStore } from "@/stores/StreamStore.js"
 import LGAvatarLabel from "./LGAvatarLabel.vue"
+import { ODYSEE_OPTIMIZE } from '@/constants/env'
 export default {
     components: {
         LGAvatarLabel
@@ -43,6 +44,16 @@ export default {
             default: true,
             type: Boolean
         },
+    },
+    data() {
+        return {
+            optimizedThumbnail: '',
+        }
+    },
+    mounted() {
+        if (this.thumbnail.url) {
+            this.optimizedThumbnail = ODYSEE_OPTIMIZE + this.thumbnail.url
+        }
     },
     setup() {
         const stream = useStreamStore()
