@@ -15,11 +15,7 @@
 
             <LGAvatarLabel
             :showAvatar="this.showAvatar"
-            :avatar="this.avatar"
-            :channelName="this.channelName">
-                <template v-slot:lg-label>
-                    <slot name="center-sub"></slot>
-                </template>
+            :avatar="this.avatar">
             </LGAvatarLabel>
 
         </div>
@@ -47,7 +43,6 @@ export default {
             default: true,
             type: Boolean
         },
-        channelName: String
     },
     setup() {
         const stream = useStreamStore()
@@ -56,7 +51,7 @@ export default {
     methods: {
         async getStream(url) {
 
-            this.stream.storeChannelInfo(this.avatar, this.channelName)
+            this.stream.storeChannelInfo(this.avatar)
             this.stream.requestStream(url).then(() => {
                 this.$router.push({
                     name: "stream",

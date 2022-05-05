@@ -44,20 +44,12 @@
                         :thumbnail="item.value.thumbnail" 
                         :streamUrl="item.short_url" 
                         :showAvatar="false"
-                        :channelName="item.signing_channel.name">
-
+                        :avatar="item.signing_channel"
+                        >
                             <template v-slot:center>
                                 {{ item.name }}
                             </template>
-
-                            <template v-slot:center-sub>
-                                <div v-if="item.signing_channel
-                                && item.signing_channel.value">
-                                    {{ item.signing_channel.value.title }}
-                                </div>
-                                <div v-else> Anonymous </div>
-                            </template>
-
+                            
                         </SearchItem>
                     </li>
                 </div>
@@ -117,7 +109,7 @@ export default {
             this.descList = this.stream.getStreamDesc.split('\n')
             this.streamUrl = this.stream.getStreamUrl
             this.avatar = this.stream.getAvatar
-            this.channelName = this.stream.getClaimName
+            this.channelName = this.stream.getChannelName
 
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {

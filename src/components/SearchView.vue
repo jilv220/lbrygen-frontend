@@ -6,7 +6,7 @@
                 :thumbnail="item.value.thumbnail" 
                 :streamUrl="item.short_url"
                 :avatar="item.signing_channel"
-                :channelName="item.signing_channel.name" >
+                >
                     <template v-slot:center>
 
                         <div v-if="item.value.title">
@@ -16,15 +16,6 @@
                         <div v-else>
                         {{ item.name }}
                         </div>
-
-                    </template>
-                    <template v-slot:center-sub>
-
-                        <div v-if="item.signing_channel
-                                && item.signing_channel.value">
-                        {{ item.signing_channel.value.title }}
-                        </div>
-                        <div v-else> Anonymous </div>
 
                     </template>
                     <template v-slot:rear>
@@ -70,8 +61,8 @@ import SearchItem from '@/components/SearchItem.vue'
 
 export default {
     components: {
-        SearchItem
-    },
+    SearchItem,
+},
     setup() {
         const search = useSearchStore()
         return { search }

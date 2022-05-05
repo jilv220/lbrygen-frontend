@@ -1,17 +1,29 @@
 <template>
     <AvatarLabel :showAvatar="this.showAvatar" @click="gotoChannelView()">
         <template v-slot:avatar>
-            <div v-if="avatar
-            && avatar.value
-            && avatar.value.thumbnail" id="channel-avatar">
+            <div v-if="
+            avatar && 
+            avatar.value && 
+            avatar.value.thumbnail" 
+            id="channel-avatar">
                 <img :src="avatar.value.thumbnail.url" loading="lazy">
             </div>
         </template>
+
         <template v-slot:label>
             <label id="channel-name">
-                <slot name="lg-label"></slot>
+                <div v-if="
+                avatar &&
+                avatar.value &&
+                avatar.value.title">
+                    {{ avatar.value.title }}
+                </div>
+                <div v-else> 
+                    {{ avatar.name}}
+                </div>
             </label>
         </template>
+
     </AvatarLabel>
 </template>
 
@@ -27,14 +39,13 @@ export default {
             default: true,
             type: Boolean
         },
-        channelName: String
     },
     methods: {
         gotoChannelView() {
-            this.$router.push({ 
+            this.$router.push({
                 name: 'search',
-                query: { 
-                    q:  this.channelName,
+                query: {
+                    q: this.avatar.name,
                     qt: 'channel',
                     st: 'video',
                     p: 1
@@ -49,12 +60,12 @@ export default {
 #channel-avatar {
     width: 2.1rem;
     height: 2.1rem;
-    cursor:  pointer !important;
+    cursor: pointer !important;
 }
 
 #channel-name {
     font-size: 0.78rem;
     font-weight: 300;
-    cursor:  pointer !important;
+    cursor: pointer !important;
 }
 </style>

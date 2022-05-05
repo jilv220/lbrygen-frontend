@@ -8,7 +8,6 @@ let streamModel = {
     claimId: '',
     claimName: '',
     avatar: Object,
-    channelName: '',
     tags: ['']
 }
 
@@ -26,7 +25,6 @@ export const useStreamStore = defineStore (
             getClaimName: (state) => state.stream.claimName,
             getStreamTags: (state) => state.stream.tags,
             getAvatar: (state) => state.stream.avatar,
-            getChannelName: (state) => state.stream.channelName,
         },
         actions: {
             async requestStream(url) {
@@ -60,9 +58,8 @@ export const useStreamStore = defineStore (
                     }
                 })
             },
-            storeChannelInfo(avatar, channelName) {
+            storeChannelInfo(avatar) {
                 this.stream.avatar = avatar
-                this.stream.channelName = channelName
             }
         }
         
