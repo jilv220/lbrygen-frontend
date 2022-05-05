@@ -19,6 +19,15 @@
 
                         <div id="stream-info-divider" class="divider h-0"></div>
 
+                        <LGAvatarLabel id="stream-channel" class="flex-x-start"
+                        :showAvatar="this.showAvatar"
+                        :avatar="this.avatar"
+                        :channelName="this.channelName">
+                            <template v-slot:lg-label>
+                                {{ this.channelName }}
+                            </template>
+                        </LGAvatarLabel>
+
                         <div id="stream-desc">
                             <div v-for="(line, index) in descList" :key="index">
                                 <span v-html="linkify(line)"></span>
@@ -31,7 +40,11 @@
 
                 <div id="related-videos" class="card flex-1 md:px-2">
                     <li v-for="item in sourceData.result.items" :key="item">
-                        <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url" :showAvatar="false">
+                        <SearchItem 
+                        :thumbnail="item.value.thumbnail" 
+                        :streamUrl="item.short_url" 
+                        :showAvatar="false"
+                        :channelName="item.signing_channel.name">
 
                             <template v-slot:center>
                                 {{ item.name }}
@@ -69,13 +82,15 @@ import EventService from "../services/EventService.js"
 import { useStreamStore } from "@/stores/StreamStore.js"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils.js"
+import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 
 export default {
     props: {
         claimUrl: String,
     },
     components: {
-        SearchItem
+        SearchItem,
+        LGAvatarLabel
     },
     setup() {
         const stream = useStreamStore()
@@ -83,11 +98,14 @@ export default {
     },
     data() {
         return {
+            avatar: undefined,
+            channelName: '',
             sourceData: '',
             title: '',
             descList: [''],
             streamUrl: '',
-            shouldExpand: true
+            shouldExpand: true,
+            showAvatar: true
         }
     },
     mounted() {
@@ -98,6 +116,8 @@ export default {
             this.title = this.stream.getStreamTitle
             this.descList = this.stream.getStreamDesc.split('\n')
             this.streamUrl = this.stream.getStreamUrl
+            this.avatar = this.stream.getAvatar
+            this.channelName = this.stream.getClaimName
 
             // Make sure only request once
             if (mutation.storeId == 'stream' && this.sourceData == '') {
@@ -217,6 +237,16 @@ iframe {
     text-align: start;
     overflow: auto;
     overflow-wrap: break-word;
+}
+
+#stream-channel #channel-name {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.rounded-full #channel-avatar {
+    @apply w-12;
+    @apply h-12;
 }
 
 #stream-info-divider {

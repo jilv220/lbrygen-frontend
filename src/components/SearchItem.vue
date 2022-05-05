@@ -13,23 +13,14 @@
                 <slot name="center"></slot>
             </label>
 
-            <div class="flex-x-start mt-2">
-
-                <div v-if="showAvatar" id="channel-avatar-wrapper" class="avatar mr-2">
-                    <div id="channel-avatar" class="rounded-full">
-                        <img v-if="avatar 
-                                && avatar.value 
-                                && avatar.value.thumbnail" 
-                            :src="avatar.value.thumbnail.url" loading="lazy">
-                    </div>
-                </div>
-                <div v-else></div>
-
-                <label id="channel-name">
+            <LGAvatarLabel
+            :showAvatar="this.showAvatar"
+            :avatar="this.avatar"
+            :channelName="this.channelName">
+                <template v-slot:lg-label>
                     <slot name="center-sub"></slot>
-                </label>
-
-            </div>
+                </template>
+            </LGAvatarLabel>
 
         </div>
 
@@ -42,8 +33,12 @@
 </template>
 
 <script>
-import { useStreamStore } from "@/stores/StreamStore.js";
+import { useStreamStore } from "@/stores/StreamStore.js"
+import LGAvatarLabel from "./LGAvatarLabel.vue"
 export default {
+    components: {
+        LGAvatarLabel
+    },
     props: {
         thumbnail: Object,
         streamUrl: String,
@@ -52,19 +47,20 @@ export default {
             default: true,
             type: Boolean
         },
+        channelName: String
     },
     setup() {
         const stream = useStreamStore()
         return { stream }
     },
     methods: {
-         async getStream(url) {
-            window.scrollTo(0,0)
-            this.stream.requestStream(url).then (() => {
+        async getStream(url) {
 
-                this.$router.push({ 
-                    name: 'stream', 
-                    query: { url:  url}
+            this.stream.storeChannelInfo(this.avatar, this.channelName)
+            this.stream.requestStream(url).then(() => {
+                this.$router.push({
+                    name: "stream",
+                    query: { url: url },
                 })
             })
         },
@@ -94,16 +90,6 @@ export default {
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-}
-
-#channel-avatar {
-    width: 2.1rem;
-    height: 2.1rem;
-}
-
-#channel-name {
-    font-size: 0.78rem;
-    font-weight: 300;
 }
 
 #thumbnail {

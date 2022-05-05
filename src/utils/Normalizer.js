@@ -3,12 +3,12 @@ export default {
 
         let result = ''
         
-        if (picked == 'channel') {
+        if (picked == 'channel' && text[0] != '@') {
             result = `@${text}`
         } else {
             result = text
         }
-
+        
         return result
     }
 }

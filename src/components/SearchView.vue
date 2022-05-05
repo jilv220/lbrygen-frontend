@@ -2,9 +2,11 @@
     <div id="content" class="mx-10 pt-20 overflow-hidden">
         <div v-if="sourceData && sourceData.result">
             <li v-for="item in sourceData.result.items" :key="item">
-                <SearchItem :thumbnail="item.value.thumbnail" 
-                            :streamUrl="item.short_url"
-                            :avatar="item.signing_channel">
+                <SearchItem 
+                :thumbnail="item.value.thumbnail" 
+                :streamUrl="item.short_url"
+                :avatar="item.signing_channel"
+                :channelName="item.signing_channel.name" >
                     <template v-slot:center>
 
                         <div v-if="item.value.title">
