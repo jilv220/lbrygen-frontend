@@ -108,26 +108,30 @@ export default {
         };
     },
     mounted() {
+        this.search.$onAction(
+            ({
+                name,
+                after
+            }) => {
 
-        this.search.$subscribe((mutation) => {
+                after(() => {
+                    if (name == 'storeSourceData') {
+                        this.sourceData = this.search.getSourceData
+                    }
 
-            // console.log("[From SearchView] Mutation happended on field : " + mutation.events.key)
+                    if (name == 'storeChannelData') {
+                        this.channelData = this.search.getChannelData
+                        this.channelName = this.$route.query.q
 
-            if (mutation.events.key == 'sourceData') {
-                this.sourceData = this.search.getSourceData
+                        if (this.channelData.result[this.channelName]) {
+                            this.descList = this.channelData
+                                .result[this.channelName]
+                                .value.description.split('\n')
+                        }
+                    }
+                })
             }
-
-            if (mutation.events.key == 'channelData') {
-                this.channelData = this.search.getChannelData
-                this.channelName = this.$route.query.q
-
-                if (this.channelData.result[this.channelName]) {
-                    this.descList = this.channelData
-                        .result[this.channelName]
-                        .value.description.split('\n')
-                }
-            }
-        })
+        )
     },
     methods: {
         linkify,
