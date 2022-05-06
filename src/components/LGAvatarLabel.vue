@@ -52,7 +52,9 @@ export default {
         }
     },
     mounted() {
-        this.backupTitle = this.avatar.name.split('').join('')
+        if (this.avatar.name) {
+            this.backupTitle = this.avatar.name.split('').join('')
+        }
     },
     methods: {
         gotoChannelView() {
