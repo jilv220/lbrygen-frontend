@@ -111,7 +111,7 @@ export default {
 
         this.search.$subscribe((mutation) => {
 
-            console.log("[From SearchView] Mutation happended on field : " + mutation.events.key)
+            // console.log("[From SearchView] Mutation happended on field : " + mutation.events.key)
 
             if (mutation.events.key == 'sourceData') {
                 this.sourceData = this.search.getSourceData
