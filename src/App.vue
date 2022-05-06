@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import EventService from "./services/EventService.js"
 import SearchBar from '@/components/SearchBar.vue'
 import SideBarItem from '@/components/base/SideBarItem.vue'
 import FilterDropdown from "./components/FilterDropdown.vue"
@@ -98,12 +97,6 @@ export default {
       intervalId: 0,
       isLbryReady: false
     };
-  },
-  mounted() {
-    this.intervalId = setInterval(() => {
-      this.checkLbryStatus()
-      //console.log(this.isLbryReady)
-    }, 100)
   },
   beforeCreate() {
     if (window.localStorage.getItem('theme') == 'dark') {
@@ -133,11 +126,6 @@ export default {
         document.documentElement.setAttribute("data-theme", "light")
         window.localStorage.setItem('theme', 'light');
       }
-    },
-    async checkLbryStatus() {
-      EventService.getDaemonStatus().then((response) => {
-        this.isLbryReady = response.result.is_running
-      })
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })

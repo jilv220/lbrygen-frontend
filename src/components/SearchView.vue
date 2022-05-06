@@ -5,7 +5,7 @@
         channelData &&
         channelData.result &&
         channelData.result[channelName] &&
-        channelData.result[channelName].value" class="flex-y-start">
+        channelData.result[channelName].value" class="flex-y-start pb-4">
             <div id="cover-wrapper" class="flex-x flex-1">
                 <img v-if="channelData.result[channelName].value.cover"
                     :src="channelData.result[channelName].value.cover.url" loading="lazy" id="cover" class="rounded">
@@ -28,7 +28,7 @@
         </div>
 
 
-        <div v-if="sourceData" class="pt-4">
+        <div v-if="sourceData">
             <li v-for="item in sourceData.result.items" :key="item">
                 <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url"
                     :avatar="item.signing_channel">
@@ -121,7 +121,7 @@ export default {
                 this.channelData = this.search.getChannelData
                 this.channelName = this.$route.query.q
 
-                if (this.channelData) {
+                if (this.channelData.result[this.channelName]) {
                     this.descList = this.channelData
                         .result[this.channelName]
                         .value.description.split('\n')
