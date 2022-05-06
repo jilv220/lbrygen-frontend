@@ -2,6 +2,7 @@
     <div id="content" class="mx-10 pt-20 overflow-hidden">
 
         <div v-if="
+        queryType == 'channel' &&
         channelData &&
         channelData.result &&
         channelData.result[channelName] &&
@@ -105,6 +106,7 @@ export default {
             channelName: '',
             descList: [''],
             shouldExpand: true,
+            queryType: this.$route.query.qt
         };
     },
     mounted() {
