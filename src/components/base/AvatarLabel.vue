@@ -1,13 +1,13 @@
 <template>
     <div class="flex-x-start mt-2">
         <div v-if="showAvatar" class="avatar mr-2">
-            <div class="rounded-full">
+            <div id="base-avatar" class="rounded-full">
                 <slot name="avatar"></slot>
             </div>
         </div>
         <div v-else></div>
 
-        <div>
+        <div id="base-label" >
             <slot name="label"></slot>
         </div>
     </div>

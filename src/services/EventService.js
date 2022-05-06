@@ -72,7 +72,7 @@ export default {
   },
 
   async resolveClaimSingle(curl) {
-    let res = await axios.get(`${base_api}/resolveSingle?urls=${curl}`);
+    let res = await axios.get(`${base_api}/resolveSingle?curl=${curl}`);
     return res.data;
   },
 

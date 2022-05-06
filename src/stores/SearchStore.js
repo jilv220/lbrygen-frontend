@@ -5,7 +5,8 @@ let searchModel = {
     searchContent: String,
     streamType: String,
     currPage: '1',
-    sourceData: Object
+    sourceData: Object,
+    channelData: Object
 }
 
 export const useSearchStore = defineStore (
@@ -19,7 +20,8 @@ export const useSearchStore = defineStore (
             getSearchContent: (state) => state.search.searchContent,
             getStreamType: (state) => state.search.streamType,
             getCurrPage: (state) => state.search.currPage,
-            getSourceData: (state) => state.search.sourceData
+            getSourceData: (state) => state.search.sourceData,
+            getChannelData: (state) => state.search.channelData
         },
         actions: {
             init() {
@@ -62,6 +64,9 @@ export const useSearchStore = defineStore (
             },
             storeSourceData(sourceData) {
                 this.search.sourceData = sourceData
+            },
+            storeChannelData(channelData) {
+                this.search.channelData = channelData
             }
         }
         

@@ -1,20 +1,45 @@
 <template>
     <div id="content" class="mx-10 pt-20 overflow-hidden">
-        <div v-if="sourceData && sourceData.result">
+
+        <div v-if="
+        channelData &&
+        channelData.result &&
+        channelData.result[channelName] &&
+        channelData.result[channelName].value" class="flex-y-start">
+            <div id="cover-wrapper" class="flex-x flex-1">
+                <img v-if="channelData.result[channelName].value.cover"
+                    :src="channelData.result[channelName].value.cover.url" loading="lazy" id="cover" class="rounded">
+                <div v-else></div>
+            </div>
+
+            <div class="p-3 text-left w-full bg-dark">
+                <LGAvatarLabel class="pb-3" :avatar="channelData.result[channelName]" :showName="true">
+                </LGAvatarLabel>
+
+                <div id="channel-desc" class="text-left pb-5">
+                    <div v-for="(line, index) in descList" :key="index">
+                        <span v-html="linkify(line)"></span>
+                    </div>
+                </div>
+
+                <button id="expand-btn" class="text-green pt-3" @click="expandDesc('channel-desc')">More</button>
+
+            </div>
+        </div>
+
+
+        <div v-if="sourceData" class="pt-4">
             <li v-for="item in sourceData.result.items" :key="item">
-                <SearchItem 
-                :thumbnail="item.value.thumbnail" 
-                :streamUrl="item.short_url"
-                :avatar="item.signing_channel"
-                >
+                <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url"
+                    :avatar="item.signing_channel">
                     <template v-slot:center>
 
                         <div v-if="item.value.title">
-                        {{ item.value.title }}
+                            {{ item.value.title }}
                         </div>
 
                         <div v-else>
-                        {{ item.name }}
+                            {{ item.name }}
                         </div>
 
                     </template>
@@ -22,22 +47,22 @@
 
                         <div v-if="item.value.tags" id="tag-group" class="flex-x row-start-6">
                             <div v-if="item.value.tags[0]" class="badge tag-spacing rounded-md"
-                                @click="queryTag(item.value.tags[0])"> 
-                                 {{ item.value.tags[0] }}
+                                @click="queryTag(item.value.tags[0])">
+                                {{ item.value.tags[0] }}
                             </div>
 
                             <div v-if="item.value.tags[1]" class="badge tag-spacing rounded-md"
-                                @click="queryTag(item.value.tags[1])"> 
-                                {{ item.value.tags[1] }} 
+                                @click="queryTag(item.value.tags[1])">
+                                {{ item.value.tags[1] }}
                             </div>
 
                             <div v-if="item.value.tags[2]" class="badge rounded-md"
-                                @click="queryTag(item.value.tags[2])"> 
-                                {{ item.value.tags[2] }} 
+                                @click="queryTag(item.value.tags[2])">
+                                {{ item.value.tags[2] }}
                             </div>
 
                         </div>
-                        
+
                     </template>
                 </SearchItem>
             </li>
@@ -52,53 +77,82 @@
                 <button class="btn" @click="nextPage()">Next</button>
             </div>
         </div>
-  </div>
+    </div>
 </template>
 
 <script>
 import { useSearchStore } from "@/stores/SearchStore.js"
 import SearchItem from '@/components/SearchItem.vue'
+import { linkify } from "@/utils/ReUtils.js"
+import LGAvatarLabel from "@/components/LGAvatarLabel.vue";
 
 export default {
     components: {
-    SearchItem,
-},
+        SearchItem,
+        LGAvatarLabel
+    },
     setup() {
         const search = useSearchStore()
         return { search }
     },
     props: {
-        searchContent: String,
-        queryType: String,
-        streamType: String,
         currPage: String
     },
     data() {
         return {
-            sourceData: '',
+            sourceData: undefined,
+            channelData: undefined,
+            channelName: '',
+            descList: [''],
+            shouldExpand: true,
         };
     },
     mounted() {
-        this.sourceData = this.search.getSourceData
-        this.search.$subscribe((mutation, state) => {
-            
-            // Make sure only request once
-            if (mutation.storeId == 'search') {
-                this.sourceData = state.search.sourceData
+
+        this.search.$subscribe((mutation) => {
+
+            console.log("[From SearchView] Mutation happended on field : " + mutation.events.key)
+
+            if (mutation.events.key == 'sourceData') {
+                this.sourceData = this.search.getSourceData
+            }
+
+            if (mutation.events.key == 'channelData') {
+                this.channelData = this.search.getChannelData
+                this.channelName = this.$route.query.q
+
+                if (this.channelData) {
+                    this.descList = this.channelData
+                        .result[this.channelName]
+                        .value.description.split('\n')
+                }
             }
         })
     },
     methods: {
+        linkify,
         navigateToSearch() {
-            this.$router.push({ 
+            this.$router.push({
                 name: 'search',
-                query: { 
-                    q:  this.searchContent,
+                query: {
+                    q: this.$route.query.q,
                     qt: this.search.getSearchType,
                     st: this.search.getStreamType,
                     p: this.search.getCurrPage
                 }
             })
+        },
+        expandDesc(eleToExpand) {
+            if (this.shouldExpand) {
+                document.getElementById('expand-btn').innerHTML = 'Less'
+                document.getElementById(eleToExpand).style.overflow = 'unset'
+                document.getElementById(eleToExpand).style.maxHeight = 'unset'
+            } else {
+                document.getElementById('expand-btn').innerHTML = 'More'
+                document.getElementById(eleToExpand).style.overflow = 'hidden'
+                document.getElementById(eleToExpand).style.maxHeight = '10em'
+            }
+            this.shouldExpand = !this.shouldExpand
         },
         firstPage() {
             this.search.resetPage()
@@ -112,11 +166,11 @@ export default {
             this.search.nextPage()
             this.navigateToSearch()
         },
-        queryTag(searchContent) {
-            this.$router.push({ 
+        queryTag(queryContent) {
+            this.$router.push({
                 name: 'search',
-                query: { 
-                    q:  searchContent,
+                query: {
+                    q: queryContent,
                     qt: 'tag',
                     st: 'video',
                     p: '1'
@@ -129,9 +183,9 @@ export default {
 
 <style scoped>
 .btn-group .btn {
-  @apply bg-green !important;
-  @apply hover:bg-green-800 !important;
-  @apply text-white;
+    @apply bg-green !important;
+    @apply hover:bg-green-800 !important;
+    @apply text-white;
 }
 
 .badge {
@@ -157,12 +211,18 @@ export default {
     margin: 0 6.4px 0 0;
 }
 
-#search-history {
-    margin: 0.5rem 0 0 0;
+#cover-wrapper {
+    min-width: 100%;
+}
+
+#cover {
     width: 100%;
-    text-align: start;
-    @apply bg-gray-white;
-    @apply rounded-md
+    max-height: 210px;
+}
+
+#channel-desc {
+    overflow: hidden;
+    max-height: 10em;
 }
 
 #search-filter {
@@ -185,6 +245,48 @@ export default {
     #content {
         margin-right: 1rem;
         margin-left: 1rem;
+    }
+}
+</style>
+
+<style lang="scss">
+.flex-y-start .flex-x-start {
+
+    @apply mt-0;
+
+    .avatar {
+        width: 56px;
+        height: 56px;
+        cursor: auto;
+    }
+
+    #base-label {
+        cursor: auto;
+
+        #channel-title {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        #channel-name {
+            font-size: 0.78rem;
+            font-weight: 300;
+            text-align: left;
+        }
+    }
+
+}
+
+#streaming-url-wrapper .flex-x-start {
+
+    .avatar {
+        width: 2.1rem;
+        height: 2.1rem;
+        cursor: pointer;
+    }
+
+    #channel-title {
+        cursor: pointer;
     }
 }
 </style>

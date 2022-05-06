@@ -11,14 +11,14 @@
         </template>
 
         <template v-slot:label>
-            <label id="channel-name">
+            <label id="channel-title">
                 <div v-if="
                 avatar &&
                 avatar.value &&
                 avatar.value.title">
                     {{ avatar.value.title }}
                 </div>
-                <div v-else> 
+                <div id="channel-name" v-if="showName"> 
                     {{ avatar.name}}
                 </div>
             </label>
@@ -30,6 +30,7 @@
 <script>
 import AvatarLabel from "./base/AvatarLabel.vue";
 export default {
+    name: "LGAvatarLabel",
     components: {
         AvatarLabel
     },
@@ -37,6 +38,10 @@ export default {
         avatar: Object,
         showAvatar: {
             default: true,
+            type: Boolean
+        },
+        showName: {
+            default: false,
             type: Boolean
         },
     },
@@ -58,14 +63,14 @@ export default {
 
 <style scoped>
 #channel-avatar {
-    width: 2.1rem;
-    height: 2.1rem;
-    cursor: pointer !important;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
-#channel-name {
+#channel-title {
     font-size: 0.78rem;
     font-weight: 300;
-    cursor: pointer !important;
+    cursor: pointer;
 }
 </style>

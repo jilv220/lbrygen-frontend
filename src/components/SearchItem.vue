@@ -3,7 +3,7 @@
 
         <div class="avatar">
             <div id="thumbnail" class="rounded">
-                <img v-if="thumbnail" :src="optimizedThumbnail">
+                <img v-if="thumbnail" :src="optimizedThumbnail" @error="useBackupThumbnail()">
             </div>
         </div>
 
@@ -47,12 +47,15 @@ export default {
     },
     data() {
         return {
+            backupThumbnail: '',
             optimizedThumbnail: '',
         }
     },
     mounted() {
-        if (this.thumbnail.url) {
+        if (this.thumbnail &&
+            this.thumbnail.url) {
             this.optimizedThumbnail = ODYSEE_OPTIMIZE + this.thumbnail.url
+            this.backupThumbnail = this.thumbnail.url
         }
     },
     setup() {
@@ -70,6 +73,9 @@ export default {
                 })
             })
         },
+        useBackupThumbnail() {
+            this.optimizedThumbnail = this.backupThumbnail
+        }
     }
 }
 </script>

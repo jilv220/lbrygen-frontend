@@ -1,40 +1,39 @@
 <template>
-  <div v-if="this.isLbryReady">
-    <div>
-      <!-- drawer -->
-      <div class="drawer h-auto">
-        <input id="my-drawer" class="drawer-toggle" type="checkbox" />
-        <div class="drawer-content overflow-hidden">
-          <!-- Page content here -->
-          <div id="navbar" class="navbar fixed shadow z-50">
-            <div class="navbar-start">
-              <label for="my-drawer" class="mr-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </label>
-            </div>
-
-            <div class="pr-4">
-              <img class="lbry-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
-            </div>
-
-            <div class="flex-1">
-              <SearchBar></SearchBar>
-            </div>
-
-            <div class="pr-10">
-              <FilterDropdown></FilterDropdown>
-            </div>
-
-            <div class="navbar-end">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+  <div>
+    <!-- drawer -->
+    <div class="drawer h-auto">
+      <input id="my-drawer" class="drawer-toggle" type="checkbox" />
+      <div class="drawer-content overflow-hidden">
+        <!-- Page content here -->
+        <div id="navbar" class="navbar fixed shadow z-50">
+          <div class="navbar-start">
+            <label for="my-drawer" class="mr-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-              <input type="checkbox" class="toggle mx-3" @click="switchTheme()" v-model="this.checked" />
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 
+            </label>
+          </div>
+
+          <div class="pr-4">
+            <img class="lbry-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
+          </div>
+
+          <div class="flex-1">
+            <SearchBar></SearchBar>
+          </div>
+
+          <div class="pr-10">
+            <FilterDropdown></FilterDropdown>
+          </div>
+
+          <div class="navbar-end">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+            </svg>
+            <input type="checkbox" class="toggle mx-3" @click="switchTheme()" v-model="this.checked" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 
                   0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0
                   4 4 0 018 0zm-.464 4.95l.707.707a1 
                   1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 
@@ -45,48 +44,37 @@
                   0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 
                   8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 
                   0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-              </svg>
-            </div>
+            </svg>
           </div>
-
-          <!-- Router -->
-          <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" :key="$route.fullPath" />
-            </keep-alive>
-          </router-view>
         </div>
 
-        <!-- Drawer Content -->
-        <div class="drawer-side h-screen">
-          <label for="my-drawer" class="drawer-overlay"></label>
-          <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-64">
+        <!-- Router -->
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" :key="$route.fullPath" />
+          </keep-alive>
+        </router-view>
+      </div>
 
-            <!-- Sidebar content here -->
-            <SideBarItem link="home">
-              <template v-slot:item-icon>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+      <!-- Drawer Content -->
+      <div class="drawer-side h-screen">
+        <label for="my-drawer" class="drawer-overlay"></label>
+        <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-64">
+
+          <!-- Sidebar content here -->
+          <SideBarItem link="home">
+            <template v-slot:item-icon>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </template>
-              <template v-slot:item-label>Home</template>
-            </SideBarItem>
+              </svg>
+            </template>
+            <template v-slot:item-label>Home</template>
+          </SideBarItem>
 
-          </ul>
-        </div>
-        
+        </ul>
       </div>
-    </div>
-  </div>
 
-  <!-- Splash Screen -->
-  <div v-else class="flex-y-center">
-    <img class="splash-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
-    <div class="fancy-spinner">
-      <div class="ring"></div>
-      <div class="ring"></div>
-      <div class="dot"></div>
     </div>
   </div>
 </template>
@@ -95,7 +83,7 @@
 import EventService from "./services/EventService.js"
 import SearchBar from '@/components/SearchBar.vue'
 import SideBarItem from '@/components/base/SideBarItem.vue'
-import FilterDropdown from "./components/FilterDropdown.vue";
+import FilterDropdown from "./components/FilterDropdown.vue"
 
 export default {
   name: "App",
@@ -116,12 +104,6 @@ export default {
       this.checkLbryStatus()
       //console.log(this.isLbryReady)
     }, 100)
-  },
-  watch: {
-    isLbryReady: function () {
-      clearInterval(this.intervalId)
-      console.clear()
-    }
   },
   beforeCreate() {
     if (window.localStorage.getItem('theme') == 'dark') {

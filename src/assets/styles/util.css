@@ -113,6 +113,7 @@
 }
 .flex-y {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
 }
@@ -131,7 +132,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-  }
+}
+.flex-y-start {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
 
 /* small screen */
 @media (max-width: 890px) {

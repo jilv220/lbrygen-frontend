@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown flex-1 mr-3">
+    <div class="flex-1 mr-3">
         <input
             tabindex="0"
             id="input-bar"
@@ -9,7 +9,8 @@
             placeholder="Search some contents..."
             autocomplete="off"
             @keyup.enter="resetPage(); performSearch(search.getSearchType, 
-                        searchContent, search.getStreamType, search.getCurrPage);"
+                        searchContent, search.getStreamType, search.getCurrPage)
+                        .then(() => gotoSearchPage())"
         />
     </div>
 </template>
@@ -66,17 +67,24 @@ export default {
                 } else {
                     this.search.storeSourceData(response)
                 }
-            }).then(() => {
-                
-                this.$router.push({ 
+            })
+
+            // Request Channel Info
+            if (searchType == 'channel') {
+                EventService.resolveClaimSingle(normalizedSearch).then((response) => {
+                    this.search.storeChannelData(response)
+                })
+            }
+        },
+        gotoSearchPage() {
+            this.$router.push({ 
                     name: 'search',
                     query: { 
-                        q:  searchContent,
-                        qt: searchType,
-                        st: streamType,
-                        p: currPage
+                        q:  this.searchContent,
+                        qt: this.search.getSearchType,
+                        st: this.search.getStreamType,
+                        p: this.search.getCurrPage
                     }
-                })
             })
         },
         resetPage() {

@@ -21,6 +21,7 @@
 
                         <LGAvatarLabel id="stream-channel" class="flex-x-start"
                         :showAvatar="this.showAvatar"
+                        :showName="true"
                         :avatar="this.avatar"
                         :channelName="this.channelName">
                             <template v-slot:lg-label>
@@ -34,7 +35,7 @@
                             </div>
                         </div>
 
-                        <button id="expand-btn" class="text-green" @click="expandDesc()">More</button>
+                        <button id="expand-btn" class="text-green" @click="expandDesc('stream-desc')">More</button>
                     </div>
                 </div>
 
@@ -140,15 +141,15 @@ export default {
     },
     methods: {
         linkify,
-        expandDesc() {
+        expandDesc(eleToExpand) {
             if (this.shouldExpand) {
                 document.getElementById('expand-btn').innerHTML = 'Less'
-                document.getElementById('stream-desc').style.overflow = 'unset'
-                document.getElementById('stream-desc').style.maxHeight = 'unset'
+                document.getElementById(eleToExpand).style.overflow = 'unset'
+                document.getElementById(eleToExpand).style.maxHeight = 'unset'
             } else {
                 document.getElementById('expand-btn').innerHTML = 'More'
-                document.getElementById('stream-desc').style.overflow = 'hidden'
-                document.getElementById('stream-desc').style.maxHeight = '10em'
+                document.getElementById(eleToExpand).style.overflow = 'hidden'
+                document.getElementById(eleToExpand).style.maxHeight = '10em'
             }
             this.shouldExpand = !this.shouldExpand
         },
@@ -164,7 +165,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 span {
     display: block;
     margin-block-start: 1em;
@@ -231,14 +232,22 @@ iframe {
     overflow-wrap: break-word;
 }
 
-#stream-channel #channel-name {
-    font-size: 1rem;
-    font-weight: 700;
-}
+#stream-channel {
 
-.rounded-full #channel-avatar {
-    @apply w-12;
-    @apply h-12;
+    #channel-title {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .avatar {
+        @apply w-12;
+        @apply h-12;
+    }
+
+    #channel-name {
+        font-size: 0.78rem;
+        font-weight: 300;
+    }
 }
 
 #stream-info-divider {

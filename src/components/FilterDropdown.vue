@@ -78,7 +78,14 @@ export default {
         };
     },
     mounted() {
-        this.search.storeFilterInfo(this.searchType, this.streamType)
+        // Init dropdown
+        if (this.$route.path == '/') {
+            this.search.storeFilterInfo(this.searchType, this.streamType)
+        } else if (this.$route.path == '/search') {
+            // mount into search, trigger mutation
+            this.searchType = this.$route.query.qt
+            this.streamType = this.$route.query.st
+        }
     },
     watch: {
         searchType: function () {
