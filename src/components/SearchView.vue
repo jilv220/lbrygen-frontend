@@ -125,10 +125,9 @@ export default {
                         this.channelData = this.search.getChannelData
                         this.channelName = this.$route.query.q
 
-                        if (this.channelData.result[this.channelName]) {
-                            this.descList = this.channelData
-                                .result[this.channelName]
-                                .value.description.split('\n')
+                        let channelRes = this.channelData.result[this.channelName]
+                        if (channelRes.value && channelRes.value.description) {
+                            this.descList = channelRes.value.description.split('\n')
                         }
                     }
                 })

@@ -18,8 +18,9 @@
                 avatar.value.title">
                     {{ avatar.value.title }}
                 </div>
+                <div v-else> {{ backupTitle.replace('@','') }} </div>
                 <div id="channel-name" v-if="showName"> 
-                    {{ avatar.name}}
+                    {{ avatar.name }}
                 </div>
             </label>
         </template>
@@ -44,6 +45,14 @@ export default {
             default: false,
             type: Boolean
         },
+    },
+    data() {
+        return {
+            backupTitle: ''
+        }
+    },
+    mounted() {
+        this.backupTitle = this.avatar.name.split('').join('')
     },
     methods: {
         gotoChannelView() {
