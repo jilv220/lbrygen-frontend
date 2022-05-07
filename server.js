@@ -1,8 +1,12 @@
 const express = require('express')
+var compression = require('compression')
 const serveStatic = require('serve-static')
 const path = require('path')
 
 const app = express()
+
+// enable gzip
+app.use(compression())
 
 //here we are configuring dist to serve app files
 app.use('/', serveStatic(path.join(__dirname, '/dist')))
