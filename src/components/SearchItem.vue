@@ -3,7 +3,14 @@
 
         <div class="avatar">
             <div id="thumbnail" class="rounded">
-                <img v-if="thumbnail" :src="optimizedThumbnail" @error="useBackupThumbnail()">
+                <div v-if="thumbnail">
+                    <TriFallbackImg
+                    :originURI="optimizedThumbnail"
+                    :backupURI="backupThumbnail"
+                    fallbackURI="../assets/spaceman.png">
+                    </TriFallbackImg>
+                </div>
+                <img v-else src='../assets/spaceman.png'>
             </div>
         </div>
 
@@ -32,10 +39,12 @@
 import { useStreamStore } from "@/stores/StreamStore.js"
 import LGAvatarLabel from "./LGAvatarLabel.vue"
 import { THUMBNAIL_OPTIMIZE } from '@/constants/env'
+import TriFallbackImg from "./base/TriFallbackImg.vue"
 export default {
     components: {
-        LGAvatarLabel
-    },
+    LGAvatarLabel,
+    TriFallbackImg
+},
     props: {
         thumbnail: Object,
         streamUrl: String,
@@ -72,9 +81,6 @@ export default {
                     query: { url: url },
                 })
             })
-        },
-        useBackupThumbnail() {
-            this.optimizedThumbnail = this.backupThumbnail
         }
     }
 }

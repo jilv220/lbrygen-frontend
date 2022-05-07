@@ -6,8 +6,13 @@
             avatar.value && 
             avatar.value.thumbnail" 
             id="channel-avatar">
-                <img :src="optimizedThumbnail" loading="lazy" @error="useBackupThumbnail()">
+                <TriFallbackImg
+                :originURI="optimizedThumbnail"
+                :backupURI="backupThumbnail"
+                fallbackURI="../assets/spaceman.png">
+                </TriFallbackImg>
             </div>
+            <img v-else src='../assets/spaceman.png'>
         </template>
 
         <template v-slot:label>
@@ -18,7 +23,10 @@
                 avatar.value.title">
                     {{ avatar.value.title }}
                 </div>
-                <div v-else> {{ backupTitle.replace('@','') }} </div>
+                <div v-else-if="backupTitle"> 
+                    {{ backupTitle.replace('@','') }} 
+                </div>
+                <div v-else>Anonymous</div>
                 <div id="channel-name" v-if="showName"> 
                     {{ avatar.name }}
                 </div>
@@ -31,11 +39,13 @@
 <script>
 import AvatarLabel from "./base/AvatarLabel.vue"
 import { AVATAR_OPTIMIZE } from '@/constants/env'
+import TriFallbackImg from "./base/TriFallbackImg.vue"
 export default {
     name: "LGAvatarLabel",
     components: {
-        AvatarLabel
-    },
+    AvatarLabel,
+    TriFallbackImg
+},
     props: {
         avatar: Object,
         showAvatar: {
@@ -55,7 +65,8 @@ export default {
         }
     },
     mounted() {
-        if (this.avatar.name) {
+        if (this.avatar &&
+            this.avatar.name) {
             this.backupTitle = this.avatar.name.split('').join('')
         }
         if (this.avatar && 
@@ -77,9 +88,6 @@ export default {
                 }
             })
         },
-        useBackupThumbnail() {
-            this.optimizedThumbnail = this.backupThumbnail
-        }
     }
 }
 </script>
