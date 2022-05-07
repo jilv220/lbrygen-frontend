@@ -19,14 +19,14 @@
 
                         <div id="stream-info-divider" class="divider h-0"></div>
 
-                        <LGAvatarLabel id="stream-channel" class="flex-x-start"
-                        :showAvatar="this.showAvatar"
-                        :showName="true"
-                        :avatar="this.avatar"
-                        :channelName="this.channelName">
-                            <template v-slot:lg-label>
-                                {{ this.channelName }}
-                            </template>
+                        <LGAvatarLabel id="stream-channel" class="flex-x-start" 
+                            :showAvatar="this.showAvatar"
+                            :showName="true" 
+                            :avatar="this.avatar" 
+                            :channelName="this.channelName">
+                                <template v-slot:lg-label>
+                                    {{ this.channelName }}
+                                </template>
                         </LGAvatarLabel>
 
                         <div id="stream-desc">
@@ -41,16 +41,12 @@
 
                 <div id="related-videos" class="card flex-1 md:px-2">
                     <li v-for="item in sourceData.result.items" :key="item">
-                        <SearchItem 
-                        :thumbnail="item.value.thumbnail" 
-                        :streamUrl="item.short_url" 
-                        :showAvatar="false"
-                        :avatar="item.signing_channel"
-                        >
+                        <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url" :showAvatar="false"
+                            :avatar="item.signing_channel">
                             <template v-slot:center>
                                 {{ item.name }}
                             </template>
-                            
+
                         </SearchItem>
                     </li>
                 </div>
@@ -93,51 +89,85 @@ export default {
         return {
             avatar: undefined,
             channelName: '',
+            claimUrlTranformed: '',
             sourceData: '',
             title: '',
             descList: [''],
+            shortUrl: '',
             streamUrl: '',
             shouldExpand: true,
             showAvatar: true
         }
     },
     mounted() {
+        // TODO: Refactor screenUtil
 
-        // Only load to template when mutation happens
-        this.stream.$subscribe((mutation, state) => {
-
-            this.title = this.stream.getStreamTitle
-            this.descList = this.stream.getStreamDesc.split('\n')
-            this.streamUrl = this.stream.getStreamUrl
-            this.avatar = this.stream.getAvatar
-            this.channelName = this.stream.getChannelName
-
-            // Make sure only request once
-            if (mutation.storeId == 'stream' && this.sourceData == '') {
-
-                EventService.getContent('tag', 'video', state.stream.tags, 1, 18, "trending_group").then((response) => {
-
-                    //console.log(response)
-                    if (response.error !== undefined) {
-                        console.error(response)
-                    } else {
-                        this.sourceData = response
-                    }
-                }).then(() => {
-
-                    // TODO: Refactor screenUtil
-                    console.log(window.screen.width)
+        //console.log(window.screen.width)
+        this.adaptScreen(window.screen.width)
+        for (let sw = 375; sw < 1200; sw += 10) {
+            // console.log(sw)
+            window.matchMedia(`(min-width: ${sw}px)`)
+                .addEventListener("change", () => {
                     this.adaptScreen(window.screen.width)
-                    for (let sw = 375; sw < 1200 ; sw+=10) {
-                        // console.log(sw)
-                        window.matchMedia(`(min-width: ${sw}px)`)
-                              .addEventListener("change", () => {
-                                  this.adaptScreen(window.screen.width)
-                              });    
+                });
+        }
+
+        let claimUrlCopy = this.claimUrl.split('#').join(':')
+        this.claimUrlTranformed = claimUrlCopy
+
+        //console.log(this.claimUrlTranformed)
+        EventService.resolveClaimSingle(this.claimUrlTranformed)
+            .then((response) => {
+                //console.log(response)
+                if (response.error !== undefined) {
+                    console.error(response)
+                } else {
+                    let result = response.result
+
+                    let avatar = result[this.claimUrlTranformed].signing_channel
+                    if (avatar) { this.avatar = avatar }
+
+                    let shortUrl = result[this.claimUrlTranformed].short_url
+                    if (shortUrl) { this.shortUrl = shortUrl }
+                    
+                    let value = result[this.claimUrlTranformed].value
+                    let title = result[this.claimUrlTranformed].value.title
+                    let desc = result[this.claimUrlTranformed].value.description
+
+                    if (value) {
+                        if (desc) {
+                            this.descList = desc.split('\n')
+                        }
+                        if(title) {
+                            this.title = title
+                        }
                     }
-                })
-            }
-        })
+                }
+            })
+            .then(() => {
+                EventService.getStreamByUrl(this.shortUrl)
+                    .then((response) => {
+                        //console.log(response)
+                        if (response.error !== undefined) {
+                            console.error(response)
+                        } else {
+                            this.streamUrl = response.streaming_url
+                        }
+                    })
+            })
+            .then(() => {
+                EventService.getContent('tag', 'video', this.stream.getStreamTags, 1, 18, "trending_group")
+                    .then((response) => {
+                        if (response.error !== undefined) {
+                            console.error(response)
+                        } else {
+                            this.sourceData = response
+                        }
+                    })
+            })
+            .catch(e => {
+                console.error('fucked up in stupid long chainquery : ' + e)
+            })
     },
     methods: {
         linkify,
@@ -156,7 +186,7 @@ export default {
         adaptScreen(screenWidth) {
             let iframeContainer = document.getElementById('iframe-container')
 
-            if(iframeContainer) {
+            if (iframeContainer) {
                 iframeContainer.style.width = `${screenWidth}px`
                 iframeContainer.style.height = `${screenWidth / 16 * 9}px`
             }

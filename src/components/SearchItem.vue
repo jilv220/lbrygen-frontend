@@ -73,13 +73,10 @@ export default {
     },
     methods: {
         async getStream(url) {
-
-            this.stream.storeChannelInfo(this.avatar)
-            this.stream.requestStream(url).then(() => {
-                this.$router.push({
-                    name: "stream",
-                    query: { url: url },
-                })
+            
+            this.$router.push({
+                name: 'stream',
+                query: { curl: url }
             })
         }
     }

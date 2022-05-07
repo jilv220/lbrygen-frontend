@@ -30,8 +30,8 @@
 
 
         <div v-if="sourceData">
-            <li v-for="item in sourceData.result.items" :key="item">
-                <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url"
+            <ul><li v-for="item in sourceData.result.items" :key="item">
+                <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.canonical_url"
                     :avatar="item.signing_channel">
                     <template v-slot:center>
 
@@ -66,7 +66,7 @@
 
                     </template>
                 </SearchItem>
-            </li>
+            </li></ul>
         </div>
 
         <!-- pagination -->
