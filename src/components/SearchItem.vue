@@ -31,7 +31,7 @@
 <script>
 import { useStreamStore } from "@/stores/StreamStore.js"
 import LGAvatarLabel from "./LGAvatarLabel.vue"
-import { ODYSEE_OPTIMIZE } from '@/constants/env'
+import { THUMBNAIL_OPTIMIZE } from '@/constants/env'
 export default {
     components: {
         LGAvatarLabel
@@ -54,7 +54,7 @@ export default {
     mounted() {
         if (this.thumbnail &&
             this.thumbnail.url) {
-            this.optimizedThumbnail = ODYSEE_OPTIMIZE + this.thumbnail.url
+            this.optimizedThumbnail = THUMBNAIL_OPTIMIZE + this.thumbnail.url
             this.backupThumbnail = this.thumbnail.url
         }
     },

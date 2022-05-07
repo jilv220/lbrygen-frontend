@@ -6,7 +6,7 @@
             avatar.value && 
             avatar.value.thumbnail" 
             id="channel-avatar">
-                <img :src="avatar.value.thumbnail.url" loading="lazy">
+                <img :src="optimizedThumbnail" loading="lazy" @error="useBackupThumbnail()">
             </div>
         </template>
 
@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import AvatarLabel from "./base/AvatarLabel.vue";
+import AvatarLabel from "./base/AvatarLabel.vue"
+import { AVATAR_OPTIMIZE } from '@/constants/env'
 export default {
     name: "LGAvatarLabel",
     components: {
@@ -48,12 +49,20 @@ export default {
     },
     data() {
         return {
-            backupTitle: ''
+            backupTitle: '',
+            backupThumbnail: '',
+            optimizedThumbnail: '',
         }
     },
     mounted() {
         if (this.avatar.name) {
             this.backupTitle = this.avatar.name.split('').join('')
+        }
+        if (this.avatar && 
+            this.avatar.value && 
+            this.avatar.value.thumbnail) {
+            this.optimizedThumbnail = AVATAR_OPTIMIZE + this.avatar.value.thumbnail.url
+            this.backupThumbnail = this.avatar.value.thumbnail.url
         }
     },
     methods: {
@@ -67,6 +76,9 @@ export default {
                     p: 1
                 }
             })
+        },
+        useBackupThumbnail() {
+            this.optimizedThumbnail = this.backupThumbnail
         }
     }
 }
