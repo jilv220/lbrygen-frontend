@@ -186,10 +186,6 @@ export default {
         adaptScreen(screenWidth) {
             let iframeContainer = document.getElementById('iframe-container')
 
-            if (document.fullscreenElement) { 
-                screen.orientation.lock('portrait')
-            }
-
             if (iframeContainer) {
                 iframeContainer.style.width = `${screenWidth}px`
                 iframeContainer.style.height = `${screenWidth / 16 * 9}px`
