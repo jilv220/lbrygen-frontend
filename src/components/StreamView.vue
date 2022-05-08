@@ -95,25 +95,24 @@ export default {
             descList: [''],
             shortUrl: '',
             streamUrl: '',
+            windowWidth: '',
             shouldExpand: true,
             showAvatar: true
         }
     },
-    mounted() {
-        // TODO: Refactor screenUtil
-
-        //console.log(window.screen.width)
-        this.adaptScreen(window.screen.width)
-        for (let sw = 375; sw < 1200; sw += 10) {
-            // console.log(sw)
-            window.matchMedia(`(min-width: ${sw}px)`)
-                .addEventListener("change", () => {
-                    this.adaptScreen(window.screen.width)
-                });
+    watch: {
+        windowWidth() {
+            console.log(this.windowWidth)
+            this.adaptScreen(window.screen.width)
         }
-
+    },
+    mounted() {
         let claimUrlCopy = this.claimUrl.split('#').join(':')
         this.claimUrlTranformed = claimUrlCopy
+
+        window.addEventListener('resize', () => {
+            this.windowWidth = window.innerWidth
+        })
 
         //console.log(this.claimUrlTranformed)
         EventService.resolveClaimSingle(this.claimUrlTranformed)
@@ -152,6 +151,7 @@ export default {
                             console.error(response)
                         } else {
                             this.streamUrl = response.streaming_url
+                            this.adaptScreen(window.screen.width)
                         }
                     })
             })
@@ -186,6 +186,10 @@ export default {
         adaptScreen(screenWidth) {
             let iframeContainer = document.getElementById('iframe-container')
 
+            if (screenWidth > 1240) {
+                screenWidth *= 0.63
+            }
+
             if (iframeContainer) {
                 iframeContainer.style.width = `${screenWidth}px`
                 iframeContainer.style.height = `${screenWidth / 16 * 9}px`
@@ -209,7 +213,7 @@ iframe {
     width: 100%;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1240px) {
     #iframe-container {
         width: auto !important;
         height: 630px !important;
@@ -223,7 +227,7 @@ iframe {
 }
 
 /* md screen */
-@media (max-width: 1200px) {
+@media (max-width: 1240px) {
 
     #layout {
         display: unset;
