@@ -102,7 +102,7 @@ export default {
     },
     watch: {
         windowWidth() {
-            console.log(this.windowWidth)
+            //console.log(this.windowWidth)
             this.adaptScreen(window.screen.width)
         }
     },
@@ -186,8 +186,8 @@ export default {
         adaptScreen(screenWidth) {
             let iframeContainer = document.getElementById('iframe-container')
 
-            if(document.fullscreenElement) {
-                screenWidth = window.screen.height
+            if (document.fullscreenElement) { 
+                screen.orientation.lock('portrait')
             }
 
             if (iframeContainer) {
