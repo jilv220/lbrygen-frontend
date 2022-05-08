@@ -137,7 +137,7 @@ export default {
                         if (desc) {
                             this.descList = desc.split('\n')
                         }
-                        if(title) {
+                        if (title) {
                             this.title = title
                         }
                     }
@@ -186,8 +186,8 @@ export default {
         adaptScreen(screenWidth) {
             let iframeContainer = document.getElementById('iframe-container')
 
-            if (screenWidth > 1240) {
-                screenWidth *= 0.63
+            if(document.fullscreenEnabled) {
+                screenWidth = window.screen.height
             }
 
             if (iframeContainer) {
