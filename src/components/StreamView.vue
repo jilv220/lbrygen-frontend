@@ -186,7 +186,7 @@ export default {
         adaptScreen(screenWidth) {
             let iframeContainer = document.getElementById('iframe-container')
 
-            if(document.fullscreenEnabled) {
+            if(document.fullscreenElement) {
                 screenWidth = window.screen.height
             }
 
