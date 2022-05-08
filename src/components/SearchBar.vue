@@ -10,7 +10,7 @@
             autocomplete="off"
             @keyup.enter="resetPage(); performSearch(search.getSearchType, 
                         searchContent, search.getStreamType, search.getCurrPage)
-                        .then(() => gotoSearchPage())"
+                        .then(() => gotoSearchPage()); $event.target.blur()"
         />
     </div>
 </template>
