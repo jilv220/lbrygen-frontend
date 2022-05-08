@@ -42,9 +42,9 @@ import { THUMBNAIL_OPTIMIZE } from '@/constants/env'
 import TriFallbackImg from "./base/TriFallbackImg.vue"
 export default {
     components: {
-    LGAvatarLabel,
-    TriFallbackImg
-},
+        LGAvatarLabel,
+        TriFallbackImg
+    },
     props: {
         thumbnail: Object,
         streamUrl: String,
