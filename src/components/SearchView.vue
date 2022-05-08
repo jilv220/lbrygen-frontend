@@ -1,6 +1,10 @@
 <template>
     <div id="content" class="mx-10 pt-20 overflow-hidden">
 
+        <div class="flex-1">
+            <SearchBar></SearchBar>
+        </div>
+
         <div v-if="
         queryType == 'channel' &&
         channelData &&
