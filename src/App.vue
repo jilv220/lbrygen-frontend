@@ -23,7 +23,7 @@
             <SearchBar></SearchBar>
           </div>
           <!-- Search modal -->
-          <label for="search-modal" class="pr-3 modal-button lg:hidden" >
+          <label for="search-modal" class="pr-3 modal-button lg:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
                 d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -33,7 +33,8 @@
           <input type="checkbox" id="search-modal" class="modal-toggle" />
 
           <label for="search-modal" class="modal modal-top">
-            <label class="modal-box p-0 mt-3 shadow-none relative" for="search-modal">
+            <label class="modal-box p-0 mt-3 shadow-none relative" for="search-modal"
+              @keyup.enter="closeModal()">
               <SearchBar></SearchBar>
             </label>
           </label>
@@ -144,6 +145,9 @@ export default {
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
+    },
+    closeModal() {
+      document.getElementsByClassName('modal-toggle')[0].checked = false
     }
   },
 };
