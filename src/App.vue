@@ -19,9 +19,24 @@
             <img class="lbry-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
           </div>
 
-          <div class="flex-1">
+          <div class="flex-1 md:hidden">
             <SearchBar></SearchBar>
           </div>
+          <!-- Search modal -->
+          <label for="search-modal" class="pr-3 modal-button lg:hidden" >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clip-rule="evenodd" />
+            </svg>
+          </label>
+          <input type="checkbox" id="search-modal" class="modal-toggle" />
+
+          <label for="search-modal" class="modal modal-top">
+            <label class="modal-box p-0 mt-3 shadow-none relative" for="search-modal">
+              <SearchBar></SearchBar>
+            </label>
+          </label>
 
           <div class="pr-10">
             <FilterDropdown></FilterDropdown>
@@ -134,7 +149,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -150,7 +165,7 @@ export default {
 }
 
 a {
-  @apply text-green !important
+  @apply text-green #{!important};
 }
 
 #navbar,
@@ -228,6 +243,15 @@ a {
   .splash-logo {
     padding-top: 180px;
     padding-bottom: 20px;
+  }
+}
+
+@media (max-width: 960px) {
+  .modal-top {
+    align-items: flex-start;
+    .modal-box div {
+      @apply mr-0
+    }
   }
 }
 
