@@ -1,14 +1,14 @@
 <template>
-    <DropdownBtn class="hover:bg-green rounded-full p-2">
-        <template v-slot:btn-icon>
+    <BaseModal modalID="filter-modal">
+        <template v-slot:modal-btn-icon>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                    d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                    clip-rule="evenodd" />
+            <path fill-rule="evenodd"
+                d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+                clip-rule="evenodd" />
             </svg>
         </template>
-        <template v-slot:dropdown-content>
-            <div id="filter-area" class="p-6 grid grid-flow-col auto-cols-max text-left">
+        <template v-slot:modal-content>
+            <div id="filter-area" class="p-6 grid grid-flow-col text-left">
 
                 <form id="stream-filter" class="gird grid-flow-row auto-rows-max pr-6" autocomplete="off">
 
@@ -56,16 +56,16 @@
                 </form>
             </div>
         </template>
-    </DropdownBtn>
+    </BaseModal>
 </template>
 
 <script>
-import DropdownBtn from "@/components/base/DropdownBtn.vue"
+import BaseModal from '@/components/base/BaseModal.vue'
 import { useSearchStore } from "@/stores/SearchStore.js"
 
 export default {
     components: {
-        DropdownBtn
+        BaseModal,
     },
     setup() {
         const search = useSearchStore()
@@ -113,5 +113,13 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.pr-6 {
+    .modal {
+        align-items: flex-start;
+        .modal-box {
+            margin-top: 4.5rem;
+        } 
+    }
+}
 </style>

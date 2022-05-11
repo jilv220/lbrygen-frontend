@@ -3,6 +3,10 @@
     font-weight: 700;
 }
 
+a {
+    @apply text-green;
+}
+
 li {
     list-style-type: none;
 }

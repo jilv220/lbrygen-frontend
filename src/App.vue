@@ -15,32 +15,21 @@
             </label>
           </div>
 
-          <div class="pr-4">
-            <img class="lbry-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
-          </div>
+          <div class="flex-1">
+            <div class="pr-4 h-6">
+              <img class="lbry-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
+            </div>
 
-          <div class="flex-1 md:hidden">
-            <SearchBar></SearchBar>
-          </div>
-          <!-- Search modal -->
-          <label for="search-modal" class="pr-3 modal-button lg:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clip-rule="evenodd" />
-            </svg>
-          </label>
-          <input type="checkbox" id="search-modal" class="modal-toggle" />
-
-          <label for="search-modal" class="modal modal-top">
-            <label class="modal-box p-0 mt-3 shadow-none relative" for="search-modal"
-              @keyup.enter="closeModal()">
+            <div class="flex-1 md:hidden">
               <SearchBar></SearchBar>
-            </label>
-          </label>
+            </div>
+            <div id="search-modal-wrapper" class="lg:hidden">
+              <SearchModal></SearchModal>
+            </div>
 
-          <div class="pr-10">
-            <FilterDropdown></FilterDropdown>
+            <div class="pr-6 md:pr-10 md:pl-4">
+              <FilterModal></FilterModal>
+            </div>
           </div>
 
           <div class="navbar-end">
@@ -75,7 +64,7 @@
       <!-- Drawer Content -->
       <div class="drawer-side h-screen">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-64">
+        <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-56">
 
           <!-- Sidebar content here -->
           <SideBarItem link="home">
@@ -98,14 +87,16 @@
 <script>
 import SearchBar from '@/components/SearchBar.vue'
 import SideBarItem from '@/components/base/SideBarItem.vue'
-import FilterDropdown from "./components/FilterDropdown.vue"
+import SearchModal from "./components/SearchModal.vue"
+import FilterModal from "./components/FilterModal.vue"
 
-export default {
+export default ( {
   name: "App",
   components: {
     SearchBar,
+    SearchModal,
     SideBarItem,
-    FilterDropdown
+    FilterModal
   },
   data() {
     return {
@@ -145,12 +136,9 @@ export default {
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName })
-    },
-    closeModal() {
-      document.getElementsByClassName('modal-toggle')[0].checked = false
     }
   },
-};
+})
 </script>
 
 <style lang="scss">
@@ -166,10 +154,6 @@ export default {
 [data-theme="dark"] #app {
   @apply text-white;
   @apply bg-black;
-}
-
-a {
-  @apply text-green #{!important};
 }
 
 #navbar,
@@ -238,32 +222,20 @@ a {
   }
 }
 
+.lbry-logo {
+  height: 100%;
+  width: 100%;
+}
+
 /* small screen */
 @media (max-width: 890px) {
-  .lbry-logo {
-    height: 24px;
-  }
-
   .splash-logo {
     padding-top: 180px;
     padding-bottom: 20px;
   }
 }
 
-@media (max-width: 960px) {
-  .modal-top {
-    align-items: flex-start;
-    .modal-box div {
-      @apply mr-0
-    }
-  }
-}
-
 @media (min-width: 890px) {
-  .lbry-logo {
-    height: 24px;
-  }
-
   .splash-logo {
     max-width: 65%;
     padding: 40px 20px;
