@@ -158,7 +158,11 @@ export default {
                     })
             })
             .then(() => {
-                EventService.getContent('tag', 'video', tags, 1, 18, "trending_group")
+                function getRandomInt(max) {
+                    return Math.floor(Math.random() * max);
+                }
+                
+                EventService.getContent('tag', 'video', tags, getRandomInt(21), 18, "trending_group")
                     .then((response) => {
                         if (response.error !== undefined) {
                             console.error(response)
