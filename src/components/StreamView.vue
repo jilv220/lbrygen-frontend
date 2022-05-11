@@ -114,6 +114,7 @@ export default {
             this.windowWidth = window.innerWidth
         })
 
+        let tags = ['']
         //console.log(this.claimUrlTranformed)
         EventService.resolveClaimSingle(this.claimUrlTranformed)
             .then((response) => {
@@ -130,8 +131,9 @@ export default {
                     if (shortUrl) { this.shortUrl = shortUrl }
                     
                     let value = result[this.claimUrlTranformed].value
-                    let title = result[this.claimUrlTranformed].value.title
-                    let desc = result[this.claimUrlTranformed].value.description
+                    let title = value.title
+                    tags = value.tags
+                    let desc = value.description
 
                     if (value) {
                         if (desc) {
@@ -156,7 +158,7 @@ export default {
                     })
             })
             .then(() => {
-                EventService.getContent('tag', 'video', this.stream.getStreamTags, 1, 18, "trending_group")
+                EventService.getContent('tag', 'video', tags, 1, 18, "trending_group")
                     .then((response) => {
                         if (response.error !== undefined) {
                             console.error(response)
