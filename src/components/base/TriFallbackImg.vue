@@ -5,7 +5,7 @@
         :src='originURI' @error="isRetryErr = true">
     <img v-else-if="!isBackupErr" 
         :src='backupURI' @error="isBackupErr = true">
-    <img v-else :src="fallbackURI">
+    <img v-else :src="require(`@/assets/${fallbackURI}`)">
 </template>
 
 <script>

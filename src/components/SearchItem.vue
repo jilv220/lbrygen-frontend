@@ -3,13 +3,11 @@
 
         <div class="avatar">
             <div id="thumbnail" class="rounded">
-                <div v-if="thumbnail">
-                    <TriFallbackImg
+                <TriFallbackImg v-if="thumbnail"
                     :originURI="optimizedThumbnail"
                     :backupURI="backupThumbnail"
-                    fallbackURI="../assets/spaceman.png">
-                    </TriFallbackImg>
-                </div>
+                    fallbackURI='spaceman.png'>
+                </TriFallbackImg>
                 <img v-else src='../assets/spaceman.png'>
             </div>
         </div>
