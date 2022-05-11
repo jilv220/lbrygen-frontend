@@ -8,9 +8,9 @@
             </svg>
         </template>
         <template v-slot:modal-content>
-            <div id="filter-area" class="p-6 grid grid-flow-col text-left">
+            <div id="filter-area" class="p-6 grid grid-cols-2 gap-4 text-left">
 
-                <form id="stream-filter" class="gird grid-flow-row auto-rows-max pr-6" autocomplete="off">
+                <form id="stream-filter" class="gird pr-6" autocomplete="off">
 
                     <div>
                         <label class="pl-02 pr-06">Filter by : </label>
@@ -119,6 +119,7 @@ export default {
         align-items: flex-start;
         .modal-box {
             margin-top: 4.5rem;
+            width: fit-content;
         } 
     }
 }
