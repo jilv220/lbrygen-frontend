@@ -1,10 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import categories from "@/constants/categories";
 
 const Home = () => import('../components/HomeView.vue')
 const Search = () => import('../components/SearchView.vue')
 const Stream = () => import('../components/StreamView.vue')
 
-const routes = [
+/**
+ * Generate category routes
+ */
+let category_routes = []
+for (let i = 0; i < categories.length; i++) {
+  category_routes[i] = {
+    path: `/${categories[i].link}`,
+    name: `${categories[i].link}`,
+    component: Search,
+  }
+}
+
+/**
+ * Generate other routes
+ */
+let other_routes = [
   {
     path: '/',
     name: 'home',
@@ -26,8 +42,9 @@ const routes = [
     name: 'stream',
     component: Stream,
     props: route => ({ claimUrl: route.query.curl })
-  }
+  },
 ]
+const routes = category_routes.concat(other_routes)
 
 const router = createRouter({
   history: createWebHistory(),

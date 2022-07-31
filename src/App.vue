@@ -103,26 +103,7 @@
           id="drawer-sidebar"
           class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-56"
         >
-          <!-- Sidebar content here -->
-          <SideBarItem link="home">
-            <template v-slot:item-icon>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
-            </template>
-            <template v-slot:item-label>Home</template>
-          </SideBarItem>
+          <SideBarItemList></SideBarItemList>
         </ul>
       </div>
     </div>
@@ -130,17 +111,17 @@
 </template>
 
 <script>
-import SearchBar from "@/components/SearchBar.vue";
-import SideBarItem from "@/components/base/SideBarItem.vue";
-import SearchModal from "./components/SearchModal.vue";
-import FilterModal from "./components/FilterModal.vue";
+import SearchBar from "@/components/SearchBar.vue"
+import SideBarItemList from "@/components/base/SideBarItemList.vue"
+import SearchModal from "./components/SearchModal.vue"
+import FilterModal from "./components/FilterModal.vue"
 
 export default {
   name: "App",
   components: {
     SearchBar,
     SearchModal,
-    SideBarItem,
+    SideBarItemList,
     FilterModal,
   },
   data() {

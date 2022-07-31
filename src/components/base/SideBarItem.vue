@@ -1,6 +1,6 @@
 <template>
     <li @click="navigateTo(link)">
-        <div class="active:bg-green">
+        <div class=" active:bg-green">
             <slot name="item-icon"></slot>
             <slot name="item-label"></slot>
         </div>
@@ -13,8 +13,12 @@ export default {
         link: String
     },
     methods:{
-        navigateTo(routeName) {
-            this.$router.push({ name: routeName })
+        navigateTo(routeName, options) {
+            //console.log(`Should navigate to ${routeName}`)
+            this.$router.push({ 
+                name: routeName,
+                query: options
+            })
         }
     }
 }
