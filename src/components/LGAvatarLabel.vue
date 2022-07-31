@@ -9,7 +9,7 @@
                 <TriFallbackImg
                 :originURI="optimizedThumbnail"
                 :backupURI="backupThumbnail"
-                fallbackURI="../assets/spaceman.png">
+                fallbackURI='spaceman.png'>
                 </TriFallbackImg>
             </div>
             <img v-else src='../assets/spaceman.png'>

@@ -1,14 +1,31 @@
 <template>
     <div>
         <div id="content-wrapper" class="">
+            
+            <div v-if="streamUrl" id="layout" class="grid grid-cols-3 gap-8 mt-4 px-4">
 
-            <div v-if="sourceData != ''" id="layout" class="grid grid-cols-3 gap-8 mt-4 px-4">
-
-                <div id="container" class="grid grid-rows-9 col-span-2">
+                <div id="container" class="grid col-span-2">
 
                     <div id="iframe-container">
-                        <iframe allowfullscreen webkitallowfullscreen :src="streamUrl" frameborder="0">
+
+                        <video 
+                        v-if="this.mimeType == 'video/mp4'"
+                        playsinline 
+                        controls
+                        id="player"
+                        >
+                            <!-- Video files -->
+                            <source
+                            :src="streamUrl"
+                            type="video/mp4"
+                            />
+                        </video>
+
+                        <iframe 
+                        v-else
+                        allowfullscreen webkitallowfullscreen :src="streamUrl" frameborder="0">
                         </iframe>
+
                     </div>
 
                     <div id="stream-info" class="mt-6">
@@ -19,7 +36,9 @@
 
                         <div id="stream-info-divider" class="divider h-0"></div>
 
-                        <LGAvatarLabel id="stream-channel" class="flex-x-start" 
+                        <LGAvatarLabel 
+                        v-if="avatar"
+                        id="stream-channel" class="flex-x-start" 
                             :showAvatar="this.showAvatar"
                             :showName="true" 
                             :avatar="this.avatar" 
@@ -39,14 +58,16 @@
                     </div>
                 </div>
 
-                <div id="related-videos" class="card flex-1 md:px-2">
-                    <li v-for="item in sourceData.result.items" :key="item">
+                <div 
+                v-if="this.relatedVideosData != ''"
+                id="related-videos" 
+                class="card flex-1 md:px-2">
+                    <li v-for="item in relatedVideosData.result.items" :key="item">
                         <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url" :showAvatar="false"
                             :avatar="item.signing_channel">
                             <template v-slot:center>
                                 {{ item.name }}
                             </template>
-
                         </SearchItem>
                     </li>
                 </div>
@@ -72,6 +93,7 @@ import { useStreamStore } from "@/stores/StreamStore.js"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils.js"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
+import Plyr from 'plyr'
 
 export default {
     props: {
@@ -88,31 +110,40 @@ export default {
     data() {
         return {
             avatar: undefined,
+            player: null,
+            polling: null,
             channelName: '',
             claimUrlTranformed: '',
-            sourceData: '',
+            relatedVideosData: '',
             title: '',
             descList: [''],
+            mimeType: '',
             shortUrl: '',
             streamUrl: '',
-            windowWidth: '',
+            videoReady: false,
             shouldExpand: true,
             showAvatar: true
         }
     },
+    created () {
+        this.pollData()
+    },
     watch: {
-        windowWidth() {
-            //console.log(this.windowWidth)
-            this.adaptScreen(window.screen.width)
+        videoReady(value) {
+            console.log(`is video ready : ${value}`)
+
+            // init Plyr instance
+            if (value) {
+                this.initPlyr()
+                clearInterval(this.polling)
+                this.polling = null
+            }
         }
     },
     mounted() {
+
         let claimUrlCopy = this.claimUrl.split('#').join(':')
         this.claimUrlTranformed = claimUrlCopy
-
-        window.addEventListener('resize', () => {
-            this.windowWidth = window.innerWidth
-        })
 
         let tags = ['']
         //console.log(this.claimUrlTranformed)
@@ -153,7 +184,7 @@ export default {
                             console.error(response)
                         } else {
                             this.streamUrl = response.streaming_url
-                            this.adaptScreen(window.screen.width)
+                            this.mimeType = response.mime_type
                         }
                     })
             })
@@ -162,12 +193,12 @@ export default {
                     return Math.floor(Math.random() * max);
                 }
                 
-                EventService.getContent('tag', 'video', tags, getRandomInt(21), 18, "trending_group")
+                EventService.getContent('tag', 'video', tags, getRandomInt(21), 14, "trending_group")
                     .then((response) => {
                         if (response.error !== undefined) {
                             console.error(response)
                         } else {
-                            this.sourceData = response
+                            this.relatedVideosData = response
                         }
                     })
             })
@@ -189,19 +220,45 @@ export default {
             }
             this.shouldExpand = !this.shouldExpand
         },
-        adaptScreen(screenWidth) {
-            let iframeContainer = document.getElementById('iframe-container')
-
-            if (iframeContainer) {
-                iframeContainer.style.width = `${screenWidth}px`
-                iframeContainer.style.height = `${screenWidth / 16 * 9}px`
+        initPlyr() {
+            let config = {
+                debug: false,
+                keyboard: {
+                    global: true
+                },
+                tooltips: {
+                    controls: true,
+                    seek: true
+                },
+                fullscreen: {
+                    enabled: true
+                },
+                autoplay: true,
+                ratio: '16:9',
+                disableContextMenu: false,
+                invertTime: false
             }
-        }
+
+            this.player = new Plyr('#player', config)
+            window.player = this.player
+        },
+        pollData () {
+            this.polling = setInterval(() => {
+                let video = document.getElementsByTagName('video')[0]
+                if (video) {
+                    this.videoReady = true
+                }
+            }, 250)
+        },
     }
 }
 </script>
 
 <style lang="scss">
+html {
+    --plyr-color-main: #2f9176;
+}
+
 span {
     display: block;
     margin-block-start: 1em;
@@ -215,16 +272,8 @@ iframe {
     width: 100%;
 }
 
-@media (min-width: 1240px) {
-    #iframe-container {
-        width: auto !important;
-        height: 630px !important;
-    }
-}
-
 #container {
     position: relative;
-    padding-bottom: 200%;
     overflow: hidden;
 }
 
@@ -237,10 +286,6 @@ iframe {
 
     #container {
         padding-bottom: 1rem;
-    }
-
-    #stream-info {
-        @apply px-4;
     }
 }
 
@@ -266,6 +311,14 @@ iframe {
     text-align: start;
     overflow: auto;
     overflow-wrap: break-word;
+
+    @media (max-width: 1240px) {
+        @apply px-4;
+    }
+
+    @media (min-width: 1241px) {
+        padding-bottom: 150%;
+    }
 }
 
 #stream-channel {

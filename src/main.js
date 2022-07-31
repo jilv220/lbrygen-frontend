@@ -6,16 +6,17 @@ import router from '../src/router'
 /* 
    Global util css style sheet
 */
-import '../src/assets/styles/util.css';
-import '../src/assets/styles/base.css';
+import '../src/assets/styles/util.css'
+import '../src/assets/styles/base.css'
+import 'plyr/dist/plyr.css'
 
 const app = createApp(App)
   .use(createPinia())
-  .use(router);
+  .use(router)
 
 router.isReady().then(() => {
-  app.mount('#app');
-});
+  app.mount('#app')
+})
 
 /* 
    Config global
