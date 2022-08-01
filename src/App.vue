@@ -8,30 +8,16 @@
         <div id="navbar" class="navbar fixed shadow z-50">
           <div class="navbar-start">
             <label for="my-drawer" class="mr-6">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </label>
           </div>
 
           <div class="flex-1">
             <div class="pr-4 h-6">
-              <img
-                class="lbry-logo"
-                alt="Lbry logo"
-                src="./assets/lbry_logo.svg"
-              />
+              <img class="lbry-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
             </div>
 
             <div class="flex-1 md:hidden">
@@ -47,31 +33,12 @@
           </div>
 
           <div class="navbar-end">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
             </svg>
-            <input
-              type="checkbox"
-              class="toggle mx-3"
-              @click="switchTheme()"
-              v-model="this.checked"
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 
+            <input type="checkbox" class="toggle mx-3" @click="switchTheme()" v-model="this.checked" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 
                   0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0
                   4 4 0 018 0zm-.464 4.95l.707.707a1 
                   1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 
@@ -81,9 +48,7 @@
                   1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 
                   0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 
                   8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 
-                  0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                clip-rule="evenodd"
-              />
+                  0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
             </svg>
           </div>
         </div>
@@ -99,10 +64,7 @@
       <!-- Drawer Content -->
       <div class="drawer-side h-screen">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul
-          id="drawer-sidebar"
-          class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-56"
-        >
+        <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-56">
           <SideBarItemList></SideBarItemList>
         </ul>
       </div>
