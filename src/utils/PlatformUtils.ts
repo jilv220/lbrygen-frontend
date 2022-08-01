@@ -27,6 +27,8 @@ export default class PlatformUtils {
 
     isMobilePlatform() : boolean {
         const os = this.getOS()
-        return os in this._mobileOS
+        const res = this._mobileOS.includes(os)
+        
+        return res 
     }
 }

@@ -113,6 +113,7 @@ export default {
             avatar: undefined,
             player: null,
             polling: null,
+            platformUtils: null,
             channelName: '',
             claimUrlTranformed: '',
             relatedVideosData: '',
@@ -132,11 +133,12 @@ export default {
     watch: {
         videoReady(value) {
             console.log(`is video ready : ${value}`)
+            this.platformUtils = new PlatformUtils()
 
             // init Plyr instance
             if (value) {
                 this.initPlyr()
-                if (PlatformUtils.isMobilePlatform) {
+                if (this.platformUtils.isMobilePlatform()) {
                     this.plyrEnableDblClickSeek()
                 }
 
@@ -239,7 +241,7 @@ export default {
                     enabled: true,
                     fallback: true
                 },
-                clickToPlay: !PlatformUtils.isMobilePlatform,
+                clickToPlay: !this.platformUtils.isMobilePlatform(),
                 autoplay: true,
                 ratio: '16:9',
                 disableContextMenu: false,
