@@ -1,5 +1,11 @@
 import svgs from "./svgs"
 
+interface category {
+    link: string,
+    icon: string,
+    label: string
+}
+
 const home = {
     link: 'home',
     icon: svgs.homeIcon,
@@ -21,7 +27,7 @@ const vtuber = {
     label: 'Vtuber'
 }
 
-const categories = 
+const categories: Array<category> = 
 [
     home,
     lbry,

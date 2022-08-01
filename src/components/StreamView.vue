@@ -90,8 +90,9 @@
 <script>
 import EventService from "../services/EventService"
 import { useStreamStore } from "@/stores/StreamStore"
-import SearchItem from '@/components/SearchItem.vue'
+import SearchItem from "@/components/SearchItem.vue"
 import { linkify } from "@/utils/ReUtils"
+import PlatformUtils from "@/utils/PlatformUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import Plyr from 'plyr'
 
@@ -135,6 +136,10 @@ export default {
             // init Plyr instance
             if (value) {
                 this.initPlyr()
+                if (PlatformUtils.isMobilePlatform) {
+                    this.plyrEnableDblClickSeek()
+                }
+
                 clearInterval(this.polling)
                 this.polling = null
             }
@@ -231,8 +236,10 @@ export default {
                     seek: true
                 },
                 fullscreen: {
-                    enabled: true
+                    enabled: true,
+                    fallback: true
                 },
+                clickToPlay: !PlatformUtils.isMobilePlatform,
                 autoplay: true,
                 ratio: '16:9',
                 disableContextMenu: false,
@@ -241,6 +248,40 @@ export default {
 
             this.player = new Plyr('#player', config)
             window.player = this.player
+        },
+        plyrEnableDblClickSeek() {
+            let videoWrapper = document.querySelector('.plyr__video-wrapper')
+            const plyrWidth = document.querySelector("#player").getBoundingClientRect().width
+
+            // Remove EventListeners from Plyr
+            this.player.eventListeners.forEach( function(eventListener) {
+                if(eventListener.type === 'dblclick') {
+                    eventListener.element
+                        .removeEventListener(
+                            eventListener.type, 
+                            eventListener.callback, 
+                            eventListener.options);
+                }
+            })
+
+            // Add custom Dblclick EventListener
+            const forwardThres = 0.7 * plyrWidth
+            const rewindThres = 0.3 * plyrWidth
+            videoWrapper.addEventListener('dblclick', (e) => {
+
+                if (forwardThres < e.offsetX) {
+                    this.player.forward(10)
+                } else if (e.offsetX < rewindThres) {
+                    this.player.rewind(10)
+                }
+            })
+
+            videoWrapper.addEventListener('click', (e) => {
+                if (e.offsetX >= rewindThres
+                &&  e.offsetX <= forwardThres) {
+                    this.player.togglePlay()
+                }
+            })
         },
         pollData () {
             this.polling = setInterval(() => {
