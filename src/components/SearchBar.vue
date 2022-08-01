@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import EventService from "../services/EventService.js"
-import { useSearchStore } from "@/stores/SearchStore.js"
-import Normalizer from '../utils/Normalizer.js'
+import EventService from "../services/EventService"
+import { useSearchStore } from "@/stores/SearchStore"
+import Normalizer from '../utils/Normalizer'
 
 export default {
     setup() {

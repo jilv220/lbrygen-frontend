@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import EventService from "../services/EventService.js"
+import EventService from "../services/EventService"
 
-let streamModel = {
+const streamModel = {
     url: '',
     desc: '',
     title: '',
@@ -27,7 +27,7 @@ export const useStreamStore = defineStore (
             getAvatar: (state) => state.stream.avatar,
         },
         actions: {
-            async requestStream(url) {
+            async requestStream(url: string) {
                 EventService.getStreamByUrl(url).then((response) => {
 
                     this.stream.url = response.streaming_url
@@ -58,7 +58,7 @@ export const useStreamStore = defineStore (
                     }
                 })
             },
-            storeChannelInfo(avatar) {
+            storeChannelInfo(avatar: any) {
                 this.stream.avatar = avatar
             }
         }

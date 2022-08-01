@@ -82,9 +82,9 @@
 </template>
 
 <script>
-import { useSearchStore } from "@/stores/SearchStore.js"
+import { useSearchStore } from "@/stores/SearchStore"
 import SearchItem from '@/components/SearchItem.vue'
-import { linkify } from "@/utils/ReUtils.js"
+import { linkify } from "@/utils/ReUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue";
 
 export default {

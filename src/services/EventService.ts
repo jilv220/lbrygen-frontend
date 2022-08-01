@@ -1,6 +1,6 @@
 import axios from "axios"
 import { API_PROD } from '@/constants/env'
-var qs = require('qs');
+const qs = require('qs');
 
 
 // const base_api = `http://localhost:5000/api`
@@ -9,24 +9,24 @@ const base_api = API_PROD
 
 export default {
 
-  async getStreamByUrl(url) {
-    let res = await axios.get(`${base_api}/getStream?url=${url}`);
+  async getStreamByUrl(url: string) {
+    const res = await axios.get(`${base_api}/getStream?url=${url}`);
     return res.data;
   },
 
-  async downloadFromStream(url) {
-    let res = await axios.get(`${base_api}/getStream?url=${url}`, { params: { d: 'y' } });
+  async downloadFromStream(url: string) {
+    const res = await axios.get(`${base_api}/getStream?url=${url}`, { params: { d: 'y' } });
     return res.data;
   },
 
-  async getContent(type, streamType, content, 
+  async getContent(type: any, streamType: any, content: string | any[], 
                         pageNum = 1, pageSize = 18, order = 'release_time') {
 
     let queryType = ''
 
     //console.log(content)
 
-    let params = { 
+    const params: any = { 
       p: pageNum, 
       ps: pageSize, 
       st: streamType,
@@ -59,7 +59,7 @@ export default {
 
     // Insert some kind of trending algorithm
 
-    let res = 
+    const res = 
     await axios.get( `${base_api}/search`,
     { 
         params: params,
@@ -71,13 +71,13 @@ export default {
     return res.data 
   },
 
-  async resolveClaimSingle(curl) {
-    let res = await axios.get(`${base_api}/resolveSingle?curl=${curl}`);
+  async resolveClaimSingle(curl: string) {
+    const res = await axios.get(`${base_api}/resolveSingle?curl=${curl}`);
     return res.data;
   },
 
   async getDaemonStatus() {
-    let res = await axios.get(`${base_api}/status`)
+    const res = await axios.get(`${base_api}/status`)
     return res.data 
   }
   

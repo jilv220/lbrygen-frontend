@@ -1,5 +1,5 @@
 export default {
-    run(text, picked) {
+    run(text: string, picked: string) {
 
         let result = ''
         

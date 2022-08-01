@@ -61,7 +61,7 @@
 
 <script>
 import BaseModal from '@/components/base/BaseModal.vue'
-import { useSearchStore } from "@/stores/SearchStore.js"
+import { useSearchStore } from "@/stores/SearchStore"
 
 export default {
     components: {

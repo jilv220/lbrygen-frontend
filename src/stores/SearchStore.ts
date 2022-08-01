@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 
-let searchModel = {
-    searchType: String,
-    searchContent: String,
-    streamType: String,
+const searchModel = {
+    searchType: '',
+    searchContent: '',
+    streamType: '',
     currPage: '1',
-    sourceData: Object,
-    channelData: Object
+    sourceData: null,
+    channelData: null
 }
 
 export const useSearchStore = defineStore (
@@ -28,7 +28,7 @@ export const useSearchStore = defineStore (
                 this.search.searchType = 'tag'
                 this.search.searchContent = ''
                 this.search.streamType = 'video'
-                this.search.currPage = 1
+                this.search.currPage = '1'
             },
             initFilter() {
                 this.search.searchType = 'tag'
@@ -38,34 +38,34 @@ export const useSearchStore = defineStore (
                 this.search.currPage = '1' 
             },
             nextPage() {
-                let newPage = Number(this.search.currPage) + 1 
+                const newPage = Number(this.search.currPage) + 1 
                 this.search.currPage = newPage.toString()
             },
             prevPage() {
                 if (Number(this.search.currPage) > 1) {
-                    let newPage = Number(this.search.currPage) - 1 
+                    const newPage = Number(this.search.currPage) - 1 
                     this.search.currPage = newPage.toString()
                 }
             },
-            storeAll(searchType, streamType, currPage) {
+            storeAll(searchType: string, streamType: string, currPage: string) {
                 this.search.searchType = searchType
                 this.search.streamType = streamType
                 this.search.currPage = currPage
             },
-            storeSearchContent(searchContent) {
+            storeSearchContent(searchContent: string) {
                 this.search.searchContent = searchContent
             },
-            storeCurrPage(currPage) {
+            storeCurrPage(currPage: string) {
               this.search.currPage = currPage  
             },
-            storeFilterInfo(searchType, streamType) {
+            storeFilterInfo(searchType: string, streamType: string) {
                 this.search.searchType = searchType
                 this.search.streamType = streamType
             },
-            storeSourceData(sourceData) {
+            storeSourceData(sourceData: any) {
                 this.search.sourceData = sourceData
             },
-            storeChannelData(channelData) {
+            storeChannelData(channelData: any) {
                 this.search.channelData = channelData
             }
         }

@@ -88,10 +88,10 @@
 </template>
 
 <script>
-import EventService from "../services/EventService.js"
-import { useStreamStore } from "@/stores/StreamStore.js"
+import EventService from "../services/EventService"
+import { useStreamStore } from "@/stores/StreamStore"
 import SearchItem from '@/components/SearchItem.vue'
-import { linkify } from "@/utils/ReUtils.js"
+import { linkify } from "@/utils/ReUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import Plyr from 'plyr'
 

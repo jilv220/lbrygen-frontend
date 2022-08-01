@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { useStreamStore } from "@/stores/StreamStore.js"
+import { useStreamStore } from "@/stores/StreamStore"
 import LGAvatarLabel from "./LGAvatarLabel.vue"
 import { THUMBNAIL_OPTIMIZE } from '@/constants/env'
 import TriFallbackImg from "./base/TriFallbackImg.vue"
