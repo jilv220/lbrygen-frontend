@@ -298,10 +298,6 @@ export default {
 </script>
 
 <style lang="scss">
-html {
-    --plyr-color-main: #2f9176;
-}
-
 span {
     display: block;
     margin-block-start: 1em;

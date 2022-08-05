@@ -33,11 +33,15 @@
           </div>
 
           <div class="navbar-end">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+
+            <div v-if="this.checked">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-            </svg>
-            <input type="checkbox" class="toggle mx-3" @click="switchTheme()" v-model="this.checked" />
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              </svg>
+            </div>
+
+            <div v-else>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 
                   0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0
                   4 4 0 018 0zm-.464 4.95l.707.707a1 
@@ -49,7 +53,20 @@
                   0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 
                   8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 
                   0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-            </svg>
+              </svg>
+            </div>
+
+            <input type="checkbox" class="toggle mx-3" @click="switchTheme()" v-model="this.checked" />
+
+            <!-- Connect to eth account -->
+            <div v-if="this.account === ''">
+              <button class="btn bg-green hover:bg-green-800 text-white" @click="getAccount()">Connect</button>
+            </div>
+            <div v-else id='lg-account'>
+              <button class="btn bg-green hover:bg-green-800 text-white">
+                {{ this.strShorten(this.account) }}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -89,8 +106,7 @@ export default {
   data() {
     return {
       checked: this.$theme,
-      intervalId: 0,
-      isLbryReady: false,
+      account: ''
     };
   },
   beforeCreate() {
@@ -110,7 +126,17 @@ export default {
       document.documentElement.setAttribute("data-theme", "dark");
     }
   },
+  mounted() {
+    // web3 login
+    this.getAccount()
+  },
   methods: {
+    async getAccount() {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+      const account = accounts[0]
+      this.account = account
+      console.log(this.account)
+    },
     switchTheme() {
       this.$theme = !this.$theme;
       //console.log(this.$theme);
@@ -122,6 +148,13 @@ export default {
         document.documentElement.setAttribute("data-theme", "light");
         window.localStorage.setItem("theme", "light");
       }
+    },
+    strShorten(str) {
+      let res = ''
+      if (str.length > 7) {
+        res = `${str.slice(0,4)}****${str.slice(-4)}`
+      }
+      return res
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName });
@@ -138,6 +171,8 @@ export default {
   text-align: center;
   @apply text-black;
   @apply bg-white;
+
+  --plyr-color-main: #2f9176;
 }
 
 [data-theme="dark"] #app {
