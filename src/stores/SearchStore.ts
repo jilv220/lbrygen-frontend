@@ -34,24 +34,6 @@ export const useSearchStore = defineStore (
                 this.search.searchType = 'tag'
                 this.search.streamType = 'video'
             },
-            resetPage() {
-                this.search.currPage = '1' 
-            },
-            nextPage() {
-                const newPage = Number(this.search.currPage) + 1 
-                this.search.currPage = newPage.toString()
-            },
-            prevPage() {
-                if (Number(this.search.currPage) > 1) {
-                    const newPage = Number(this.search.currPage) - 1 
-                    this.search.currPage = newPage.toString()
-                }
-            },
-            storeAll(searchType: string, streamType: string, currPage: string) {
-                this.search.searchType = searchType
-                this.search.streamType = streamType
-                this.search.currPage = currPage
-            },
             storeSearchContent(searchContent: string) {
                 this.search.searchContent = searchContent
             },

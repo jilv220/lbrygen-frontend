@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import { useStreamStore } from "@/stores/StreamStore"
 import LGAvatarLabel from "./LGAvatarLabel.vue"
 import { THUMBNAIL_OPTIMIZE } from '@/constants/env'
 import TriFallbackImg from "./base/TriFallbackImg.vue"
@@ -64,10 +63,6 @@ export default {
             this.optimizedThumbnail = THUMBNAIL_OPTIMIZE + this.thumbnail.url
             this.backupThumbnail = this.thumbnail.url
         }
-    },
-    setup() {
-        const stream = useStreamStore()
-        return { stream }
     },
     methods: {
         async getStream(url) {

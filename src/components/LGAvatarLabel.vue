@@ -1,10 +1,7 @@
 <template>
     <AvatarLabel :showAvatar="this.showAvatar" @click="gotoChannelView()">
         <template v-slot:avatar>
-            <div v-if="
-            avatar && 
-            avatar.value && 
-            avatar.value.thumbnail" 
+            <div v-if="avatar?.value?.thumbnail" 
             id="channel-avatar">
                 <TriFallbackImg
                 :originURI="optimizedThumbnail"
@@ -17,10 +14,7 @@
 
         <template v-slot:label>
             <label id="channel-title">
-                <div v-if="
-                avatar &&
-                avatar.value &&
-                avatar.value.title">
+                <div v-if="avatar?.value?.title">
                     {{ avatar.value.title }}
                 </div>
                 <div v-else-if="backupTitle"> 
@@ -28,7 +22,7 @@
                 </div>
                 <div v-else>Anonymous</div>
                 <div id="channel-name" v-if="showName"> 
-                    {{ avatar.name }}
+                    {{ avatar?.name }}
                 </div>
             </label>
         </template>
@@ -40,6 +34,7 @@
 import AvatarLabel from "./base/AvatarLabel.vue"
 import { AVATAR_OPTIMIZE } from '@/constants/env'
 import TriFallbackImg from "./base/TriFallbackImg.vue"
+
 export default {
     name: "LGAvatarLabel",
     components: {

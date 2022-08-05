@@ -89,7 +89,6 @@
 
 <script>
 import EventService from "../services/EventService"
-import { useStreamStore } from "@/stores/StreamStore"
 import SearchItem from "@/components/SearchItem.vue"
 import { linkify } from "@/utils/ReUtils"
 import PlatformUtils from "@/utils/PlatformUtils"
@@ -103,10 +102,6 @@ export default {
     components: {
         SearchItem,
         LGAvatarLabel
-    },
-    setup() {
-        const stream = useStreamStore()
-        return { stream }
     },
     data() {
         return {

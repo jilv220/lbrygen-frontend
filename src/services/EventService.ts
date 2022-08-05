@@ -1,11 +1,11 @@
 import axios from "axios"
 import { API_PROD } from '@/constants/env'
+import Logger from "@/utils/Logger";
 const qs = require('qs');
-
 
 // const base_api = `http://localhost:5000/api`
 const base_api = API_PROD
-
+const logger = new Logger('EventService')
 
 export default {
 
@@ -58,6 +58,7 @@ export default {
     }
 
     // Insert some kind of trending algorithm
+    logger.log(params)
 
     const res = 
     await axios.get( `${base_api}/search`,
@@ -69,6 +70,11 @@ export default {
     })
 
     return res.data 
+  },
+
+  async getChannels() {
+    const res = await axios.get(`${base_api}/get`)
+    return res.data
   },
 
   async resolveClaimSingle(curl: string) {

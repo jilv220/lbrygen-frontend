@@ -1,20 +1,19 @@
 <template>
     <div id="content" class="mx-10 pt-20 overflow-hidden">
 
-        <div v-if="
-        queryType == 'channel' &&
-        channelData &&
-        channelData.result &&
-        channelData.result[channelName] &&
-        channelData.result[channelName].value" class="flex-y-start pb-4">
+        <div v-if="queryType == 'channel' && channelData" 
+        class="flex-y-start pb-4">
             <div id="cover-wrapper" class="flex-x flex-1">
-                <img v-if="channelData.result[channelName].value.cover"
-                    :src="channelData.result[channelName].value.cover.url" loading="lazy" id="cover" class="rounded">
+                <img v-if="channelData?.result[channelName]?.value?.cover"
+                    :src="channelData?.result[channelName]?.value?.cover?.url" loading="lazy" id="cover" class="rounded">
                 <div v-else></div>
             </div>
 
             <div class="p-3 text-left w-full bg-dark">
-                <LGAvatarLabel class="pb-3" :avatar="channelData.result[channelName]" :showName="true">
+
+                <LGAvatarLabel class="pb-3" 
+                :avatar="channelData?.result[channelName]" 
+                :showName="true">
                 </LGAvatarLabel>
 
                 <div id="channel-desc" class="text-left pb-5">
@@ -27,7 +26,6 @@
 
             </div>
         </div>
-
 
         <div v-if="sourceData">
             <ul><li v-for="item in sourceData.result.items" :key="item">
@@ -86,6 +84,9 @@ import { useSearchStore } from "@/stores/SearchStore"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue";
+import Normalizer from "@/utils/Normalizer";
+import EventService from "@/services/EventService";
+import Logger from "@/utils/Logger";
 
 export default {
     components: {
@@ -103,47 +104,55 @@ export default {
         return {
             sourceData: undefined,
             channelData: undefined,
-            channelName: '',
+            channelName: this.$route.query.q,
             descList: [''],
             shouldExpand: true,
-            queryType: this.$route.query.qt
+            queryType: this.$route.query.qt,
+            Logger: new Logger('SearchView')
         };
     },
     mounted() {
-        this.search.$onAction(
-            ({
-                name,
-                after
-            }) => {
-
-                after(() => {
-                    if (name == 'storeSourceData') {
-                        this.sourceData = this.search.getSourceData
-                    }
-
-                    if (name == 'storeChannelData') {
-                        this.channelData = this.search.getChannelData
-                        this.channelName = this.$route.query.q
-
-                        let channelRes = this.channelData.result[this.channelName]
-                        if (channelRes.value && channelRes.value.description) {
-                            this.descList = channelRes.value.description.split('\n')
-                        }
-                    }
-                })
-            }
+        this.performSearch(
+            this.$route.query.qt, 
+            this.$route.query.q, 
+            this.$route.query.st, 
+            this.$route.query.p, 
         )
+        
+        // this.search.$onAction(
+        //     ({
+        //         name,
+        //         after
+        //     }) => {
+
+        //         after(() => {
+        //             if (name == 'storeSourceData') {
+        //                 this.sourceData = this.search.getSourceData
+        //             }
+
+        //             if (name == 'storeChannelData') {
+        //                 this.channelData = this.search.getChannelData
+        //                 this.channelName = this.$route.query.q
+
+        //                 let channelRes = this.channelData.result[this.channelName]
+        //                 if (channelRes.value && channelRes.value.description) {
+        //                     this.descList = channelRes.value.description.split('\n')
+        //                 }
+        //             }
+        //         })
+        //     }
+        // )
     },
     methods: {
         linkify,
-        navigateToSearch() {
+        navigateToSearch(pageNum) {
             this.$router.push({
                 name: 'search',
                 query: {
                     q: this.$route.query.q,
-                    qt: this.search.getSearchType,
-                    st: this.search.getStreamType,
-                    p: this.search.getCurrPage
+                    qt: this.$route.query.qt,
+                    st: this.$route.query.st,
+                    p: pageNum
                 }
             })
         },
@@ -160,16 +169,15 @@ export default {
             this.shouldExpand = !this.shouldExpand
         },
         firstPage() {
-            this.search.resetPage()
-            this.navigateToSearch()
+            this.navigateToSearch(1)
         },
         prevPage() {
-            this.search.prevPage()
-            this.navigateToSearch()
+            if (Number(this.currPage) > 1) {
+                this.navigateToSearch(Number(this.currPage) - 1)
+            }
         },
         nextPage() {
-            this.search.nextPage()
-            this.navigateToSearch()
+            this.navigateToSearch(Number(this.currPage) + 1)
         },
         queryTag(queryContent) {
             this.$router.push({
@@ -181,6 +189,30 @@ export default {
                     p: '1'
                 }
             })
+        },
+        async performSearch(searchType, searchContent, streamType, currPage) {
+            
+            let normalizedSearch = Normalizer.run(searchContent, searchType)
+
+            EventService.getContent(searchType, streamType, 
+                                    normalizedSearch, Number(currPage)).then((response) => {
+
+                //console.log(response)
+                if (response.error !== undefined) {
+                    console.error(response)
+                } else {
+                    this.sourceData = response
+                }
+            })
+
+            // Request Channel Info
+            if (searchType == 'channel') {
+                EventService.resolveClaimSingle(normalizedSearch).then((response) => {
+                    this.channelData = response
+                    this.descList = this.channelData?.result[this.channelName]?.value?.description.split('\n')
+                    this.Logger.log(this.channelData)
+                })
+            }
         }
     },
 };
