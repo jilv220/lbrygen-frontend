@@ -15,6 +15,7 @@
 
 <script>
 import { useSearchStore } from "@/stores/SearchStore"
+import Logger from '@/utils/Logger'
 
 export default {
     setup() {
@@ -24,6 +25,7 @@ export default {
     data() {
         return {
             searchContent: '',
+            Logger: new Logger('SearchBar')
         }
     },
     watch:{
@@ -32,16 +34,22 @@ export default {
             if (from.name == 'search') {
                 this.searchContent = ''
             }
-            if (to.name == 'search') {
+
+            if (from.name === 'search' && to.name === 'search') {
                 this.searchContent = this.$route.query.q
                 this.search.storeFilterInfo(this.$route.query.qt, this.$route.query.st)
             }
+
+            this.Logger.log(this.searchContent)
         }
     },
     mounted() {
         if(this.$route.query.q) {
             this.searchContent = this.$route.query.q
             this.search.storeFilterInfo(this.$route.query.qt, this.$route.query.st)
+        } else {
+            this.searchContent = ''
+            this.search.storeFilterInfo('tag', 'video')
         }
     },
     methods: {

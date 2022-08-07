@@ -19,44 +19,42 @@ export default {
     return res.data;
   },
 
-  async getContent(type: any, streamType: any, content: string | any[], 
-                        pageNum = 1, pageSize = 18, order = 'release_time') {
-
-    let queryType = ''
-
-    //console.log(content)
+  async getContent(type: any, streamType: any, queryContent: string | string[], 
+                        pageNum = 1, pageSize = 20, order = 'release_time') {
 
     const params: any = { 
       p: pageNum, 
       ps: pageSize, 
       st: streamType,
-      o: order
+      o: order,
+      t: undefined,
+      q: undefined,
+      c: undefined,
+      chs: undefined
     }
 
-    if (Array.isArray(content)) {
-
-      if (content.length > 5) {
-        params['t'] = content.slice(0,6)
-      } else {
-        params['t'] = content
-      }
-
-    } else {
-
-      switch (type) {
-        case "tag":
-          queryType = 't'
-          break
-        case "text":
-          queryType = 'q'
-          break
-        case "channel":
-          queryType = 'c'
-          break
-      }
-      params[queryType] = content
+    let queryType = ''
+    switch (type) {
+      case "tag":
+        queryType = 't'
+        break
+      case "text":
+        queryType = 'q'
+        break
+      case "channel":
+        queryType = 'c'
+        break
+      case "channelIds":
+        queryType = 'chs'
+        break
     }
 
+    if (queryType === 'chs' 
+    &&  Array.isArray(queryContent)) {
+      queryContent = queryContent.slice(0,19)
+    }
+    params[queryType] = queryContent
+    
     // Insert some kind of trending algorithm
     logger.log(params)
 

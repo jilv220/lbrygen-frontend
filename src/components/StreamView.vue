@@ -195,7 +195,7 @@ export default {
                     return Math.floor(Math.random() * max);
                 }
                 
-                EventService.getContent('tag', 'video', tags, getRandomInt(21), 14, "trending_group")
+                EventService.getContent('tag', 'video', tags, getRandomInt(14), 14, "trending_group")
                     .then((response) => {
                         if (response.error !== undefined) {
                             console.error(response)

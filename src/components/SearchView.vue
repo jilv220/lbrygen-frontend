@@ -1,5 +1,5 @@
 <template>
-    <div id="content" class="mx-10 pt-20 overflow-hidden">
+    <div id="content">
 
         <div v-if="queryType == 'channel' && channelData" 
         class="flex-y-start pb-4">
@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import { useSearchStore } from "@/stores/SearchStore"
 import SearchItem from '@/components/SearchItem.vue'
 import { linkify } from "@/utils/ReUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue";
@@ -92,10 +91,6 @@ export default {
     components: {
         SearchItem,
         LGAvatarLabel
-    },
-    setup() {
-        const search = useSearchStore()
-        return { search }
     },
     props: {
         currPage: String
@@ -118,30 +113,6 @@ export default {
             this.$route.query.st, 
             this.$route.query.p, 
         )
-        
-        // this.search.$onAction(
-        //     ({
-        //         name,
-        //         after
-        //     }) => {
-
-        //         after(() => {
-        //             if (name == 'storeSourceData') {
-        //                 this.sourceData = this.search.getSourceData
-        //             }
-
-        //             if (name == 'storeChannelData') {
-        //                 this.channelData = this.search.getChannelData
-        //                 this.channelName = this.$route.query.q
-
-        //                 let channelRes = this.channelData.result[this.channelName]
-        //                 if (channelRes.value && channelRes.value.description) {
-        //                     this.descList = channelRes.value.description.split('\n')
-        //                 }
-        //             }
-        //         })
-        //     }
-        // )
     },
     methods: {
         linkify,

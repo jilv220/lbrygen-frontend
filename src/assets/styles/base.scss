@@ -14,3 +14,10 @@ li {
 button {
     cursor: pointer;
 }
+
+#content {
+    margin-left: 2.5rem/* 40px */;
+    margin-right: 2.5rem/* 40px */;
+    padding-top: 5rem/* 80px */;
+    overflow: hidden;
+}

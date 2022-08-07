@@ -6,8 +6,9 @@
       <div class="drawer-content overflow-hidden">
         <!-- Page content here -->
         <div id="navbar" class="navbar fixed shadow z-50">
+
           <div class="navbar-start">
-            <label for="my-drawer" class="mr-6">
+            <label for="my-drawer" class="mr-6" id="sidebar-menu">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -16,8 +17,9 @@
           </div>
 
           <div class="flex-1">
-            <div class="pr-4 h-6">
-              <img class="lbry-logo" alt="Lbry logo" src="./assets/lbry_logo.svg" />
+
+            <div id="lbry-logo" class="pr-4 h-6" @click="navigateTo('home')">
+              <img class="h-full w-full" alt="Lbry logo" src="./assets/lbry_logo.svg" />
             </div>
 
             <div class="flex-1 md:hidden">
@@ -30,6 +32,7 @@
             <div class="pr-6 md:pr-10 md:pl-4">
               <FilterModal></FilterModal>
             </div>
+
           </div>
 
           <div class="navbar-end">
@@ -66,9 +69,7 @@
 
         <!-- Router -->
         <router-view v-slot="{ Component }">
-          <keep-alive>
             <component :is="Component" :key="$route.fullPath" />
-          </keep-alive>
         </router-view>
       </div>
 
@@ -88,7 +89,6 @@ import SearchBar from "@/components/SearchBar.vue";
 import SideBarItemList from "@/components/base/SideBarItemList.vue";
 import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
-import EventService from "./services/EventService";
 
 export default {
   name: "App",
@@ -101,7 +101,6 @@ export default {
   data() {
     return {
       checked: this.$theme,
-      channelData: null,
       account: ''
     };
   },
@@ -125,13 +124,6 @@ export default {
   mounted() {
     // web3 login
     // this.getAccount()
-    EventService.getChannels().then((response) => {
-      if (response.error !== undefined) {
-        console.error(response)
-      } else {
-        this.channelData = response.data
-      }
-    })
   },
   methods: {
     async getAccount() {
@@ -249,9 +241,12 @@ export default {
   }
 }
 
-.lbry-logo {
-  height: 100%;
-  width: 100%;
+#lbry-logo {
+  cursor: pointer;
+}
+
+#sidebar-menu {
+  cursor: pointer;
 }
 
 /* small screen */

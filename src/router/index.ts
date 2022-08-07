@@ -3,6 +3,7 @@ import categories from "@/constants/categories";
 
 const Home = () => import('../components/HomeView.vue')
 const Search = () => import('../components/SearchView.vue')
+const Category = () => import('../components/CategoryView.vue')
 const Stream = () => import('../components/StreamView.vue')
 
 /**
@@ -13,7 +14,7 @@ for (let i = 0; i < categories.length; i++) {
   category_routes[i] = {
     path: `/${categories[i].link}`,
     name: `${categories[i].link}`,
-    component: Search,
+    component: Category,
   }
 }
 
@@ -48,12 +49,19 @@ const routes = category_routes.concat(other_routes)
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
-})
+  routes,
+  scrollBehavior(to, from, savedPosition): any {
+    
+    if (to.name === 'stream' || to.name === 'search') {
+      return { x: 0, y: 0 }
+    } 
 
-router.beforeEach(() => {
-  // scroll to top on new route
-  window.scrollTo(0, 0)
+    if (savedPosition) { 
+      return savedPosition 
+    } else {
+      return { x: 0, y: 0 }
+    } 
+  }
 })
 
 export default router

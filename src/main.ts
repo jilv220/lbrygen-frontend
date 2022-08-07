@@ -7,7 +7,7 @@ import router from '../src/router'
    Global util css style sheet
 */
 import '../src/assets/styles/util.css'
-import '../src/assets/styles/base.css'
+import '../src/assets/styles/base.scss'
 import 'plyr/dist/plyr.css'
 
 const app = createApp(App)
