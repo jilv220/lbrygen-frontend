@@ -74,10 +74,15 @@ export default {
     const res = await axios.get(`${base_api}/get`)
     return res.data
   },
+  
+  async fetchCategoryData(category: string) {
+    const res = await axios.get(`${base_api}/fetch?ctgy=${category}`)
+    return res.data
+  },
 
   async resolveClaimSingle(curl: string) {
     const res = await axios.get(`${base_api}/resolveSingle?curl=${curl}`);
-    return res.data;
+    return res.data
   },
 
   async getDaemonStatus() {

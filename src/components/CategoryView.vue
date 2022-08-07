@@ -31,7 +31,6 @@ export default defineComponent ({
     SearchItem,
   },
   setup() {
-    let categoryData: any
     let channelIds: any
 
     let items = ref()
@@ -41,15 +40,6 @@ export default defineComponent ({
 
     const router = useRouter()
     let currRoute = router.currentRoute.value.name as string
-
-    function getCategoryChIds(routeName: string, categoryData: any) {
-      switch(routeName) {
-        case 'tech':
-          return categoryData.categories.TECHNOLOGY.channelIds
-        case 'art':
-          return categoryData.categories.ART.channelIds
-      }
-    }
 
     async function fetechMoreData() {
       let windowHeight = document.documentElement.scrollTop + window.innerHeight
@@ -72,10 +62,7 @@ export default defineComponent ({
 
     onMounted(async () => {
       try {
-        categoryData = await EventService.getChannels()
-        channelIds = getCategoryChIds(currRoute, categoryData.en)
-
-        let sourceData = await EventService.getContent('channelIds', 'video', channelIds as string[])
+        let sourceData = await EventService.fetchCategoryData(currRoute)
         items.value = sourceData?.result?.items
       }
       catch (err) {
@@ -97,4 +84,16 @@ export default defineComponent ({
 </script>
 
 <style lang="scss">
+#streaming-url-wrapper .flex-x-start {
+
+    .avatar {
+        width: 2.1rem;
+        height: 2.1rem;
+        cursor: pointer;
+    }
+
+    #channel-title {
+        cursor: pointer;
+    }
+}
 </style>
