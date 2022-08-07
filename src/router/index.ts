@@ -35,7 +35,6 @@ const other_routes: Array<any> = [
       searchContent: route.query.q,
       queryType: route.query.qt,
       streamType: route.query.st,
-      currPage: route.query.p
     })
   },
   {

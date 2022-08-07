@@ -78,8 +78,7 @@ export default {
                 query: {
                     q: this.avatar.name,
                     qt: 'channel',
-                    st: 'video',
-                    p: 1
+                    st: 'video'
                 }
             })
         },

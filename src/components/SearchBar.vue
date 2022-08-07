@@ -59,8 +59,7 @@ export default {
                     query: { 
                         q:  this.searchContent,
                         qt: this.search.getSearchType,
-                        st: this.search.getStreamType,
-                        p: this.search.getCurrPage
+                        st: this.search.getStreamType
                     }
             })
         },

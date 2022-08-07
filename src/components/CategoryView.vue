@@ -35,6 +35,7 @@ export default defineComponent ({
     let channelIds: any
 
     let items = ref()
+    let pageNum = 6
     let pageSize = 4
     let readyToLoadMore = true
 
@@ -58,12 +59,12 @@ export default defineComponent ({
       if (bottomOfWindow && readyToLoadMore) {
 
         readyToLoadMore = false
-        let sourceData = await EventService.getContent('channelIds', 'video', channelIds as string[], 5, pageSize)
+        let sourceData = await EventService.getContent('channelIds', 'video', channelIds as string[], pageNum, pageSize)
 
         if (sourceData) {
           const updatedItems = items.value.concat(sourceData?.result?.items)
           items.value = updatedItems
-          pageSize += 4
+          pageNum += 1
           readyToLoadMore = true
         }
       }

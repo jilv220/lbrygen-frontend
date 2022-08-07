@@ -1,19 +1,17 @@
 <template>
     <div id="content">
 
-        <div v-if="queryType == 'channel' && channelData" 
-        class="flex-y-start pb-4">
+        <div v-if="queryType == 'channel' && channelData" class="flex-y-start pb-4">
             <div id="cover-wrapper" class="flex-x flex-1">
-                <img v-if="channelData?.result[channelName]?.value?.cover"
-                    :src="channelData?.result[channelName]?.value?.cover?.url" loading="lazy" id="cover" class="rounded">
+                <img v-if="channelData?.result[queryContent]?.value?.cover"
+                    :src="channelData?.result[queryContent]?.value?.cover?.url" loading="lazy" id="cover"
+                    class="rounded">
                 <div v-else></div>
             </div>
 
             <div class="p-3 text-left w-full bg-dark">
 
-                <LGAvatarLabel class="pb-3" 
-                :avatar="channelData?.result[channelName]" 
-                :showName="true">
+                <LGAvatarLabel class="pb-3" :avatar="channelData?.result[queryContent]" :showName="true">
                 </LGAvatarLabel>
 
                 <div id="channel-desc" class="text-left pb-5">
@@ -27,8 +25,8 @@
             </div>
         </div>
 
-        <div v-if="sourceData">
-            <ul><li v-for="item in sourceData.result.items" :key="item">
+        <ul>
+            <li v-for="item in items" :key="item">
                 <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.canonical_url"
                     :avatar="item.signing_channel">
                     <template v-slot:center>
@@ -55,7 +53,7 @@
                                 {{ item.value.tags[1] }}
                             </div>
 
-                            <div v-if="item.value.tags[2]" class="badge rounded-md"
+                            <div v-if="item.value?.tags[2]" class="badge rounded-md"
                                 @click="queryTag(item.value.tags[2])">
                                 {{ item.value.tags[2] }}
                             </div>
@@ -64,18 +62,8 @@
 
                     </template>
                 </SearchItem>
-            </li></ul>
-        </div>
-
-        <!-- pagination -->
-        <div v-if="sourceData && sourceData.result">
-            <p class="font-heavy"> {{ this.currPage }} </p>
-            <div class="btn-group flex-x-center my-4">
-                <button class="btn" @click="firstPage()">First</button>
-                <button class="btn" @click="prevPage()">Prev</button>
-                <button class="btn" @click="nextPage()">Next</button>
-            </div>
-        </div>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -92,17 +80,18 @@ export default {
         SearchItem,
         LGAvatarLabel
     },
-    props: {
-        currPage: String
-    },
     data() {
         return {
-            sourceData: undefined,
+            items: [],
             channelData: undefined,
-            channelName: this.$route.query.q,
             descList: [''],
             shouldExpand: true,
+            queryContent: this.$route.query.q,
             queryType: this.$route.query.qt,
+            streamType: this.$route.query.st,
+            readyToLoadMore: true,
+            pageNum: 6,
+            pageSize: 4,
             Logger: new Logger('SearchView')
         };
     },
@@ -110,23 +99,15 @@ export default {
         this.performSearch(
             this.$route.query.qt, 
             this.$route.query.q, 
-            this.$route.query.st, 
-            this.$route.query.p, 
+            this.$route.query.st,
         )
+        window.addEventListener('scroll', this.fetechMoreData)
+    },
+    beforeUnmount() {
+        window.removeEventListener('scroll', this.fetechMoreData)
     },
     methods: {
         linkify,
-        navigateToSearch(pageNum) {
-            this.$router.push({
-                name: 'search',
-                query: {
-                    q: this.$route.query.q,
-                    qt: this.$route.query.qt,
-                    st: this.$route.query.st,
-                    p: pageNum
-                }
-            })
-        },
         expandDesc(eleToExpand) {
             if (this.shouldExpand) {
                 document.getElementById('expand-btn').innerHTML = 'Less'
@@ -139,16 +120,25 @@ export default {
             }
             this.shouldExpand = !this.shouldExpand
         },
-        firstPage() {
-            this.navigateToSearch(1)
-        },
-        prevPage() {
-            if (Number(this.currPage) > 1) {
-                this.navigateToSearch(Number(this.currPage) - 1)
+        async fetechMoreData() {
+            let windowHeight = document.documentElement.scrollTop + window.innerHeight
+            let offsetHeight = document.documentElement.offsetHeight
+            let bottomOfWindow = windowHeight >= (0.99 * offsetHeight)
+
+            if (bottomOfWindow && this.readyToLoadMore) {
+                this.readyToLoadMore = false
+
+                let normalizedSearch = Normalizer.run(this.queryContent, this.queryType)
+                let sourceData = await EventService.getContent(this.queryType, this.streamType
+                                        , normalizedSearch, this.pageNum, this.pageSize)
+
+                if (sourceData) {
+                    const updatedItems = this.items.concat(sourceData?.result?.items)
+                    this.items = updatedItems
+                    this.pageNum += 1
+                    this.readyToLoadMore = true
+                }
             }
-        },
-        nextPage() {
-            this.navigateToSearch(Number(this.currPage) + 1)
         },
         queryTag(queryContent) {
             this.$router.push({
@@ -161,28 +151,23 @@ export default {
                 }
             })
         },
-        async performSearch(searchType, searchContent, streamType, currPage) {
+        async performSearch(searchType, searchContent, streamType) {
             
             let normalizedSearch = Normalizer.run(searchContent, searchType)
 
-            EventService.getContent(searchType, streamType, 
-                                    normalizedSearch, Number(currPage)).then((response) => {
+            try {
 
-                //console.log(response)
-                if (response.error !== undefined) {
-                    console.error(response)
-                } else {
-                    this.sourceData = response
+                if (searchType == 'channel') {
+                    this.channelData = await EventService.resolveClaimSingle(normalizedSearch)
+                    this.descList = this.channelData?.result[this.queryContent]?.value?.description?.split('\n')
                 }
-            })
 
-            // Request Channel Info
-            if (searchType == 'channel') {
-                EventService.resolveClaimSingle(normalizedSearch).then((response) => {
-                    this.channelData = response
-                    this.descList = this.channelData?.result[this.channelName]?.value?.description.split('\n')
-                    this.Logger.log(this.channelData)
-                })
+                let sourceData = await EventService.getContent(searchType, streamType, 
+                                    normalizedSearch, 1)
+                this.items = sourceData?.result?.items
+            } 
+            catch (err) {
+                console.error(err)
             }
         }
     },
