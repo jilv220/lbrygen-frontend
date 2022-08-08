@@ -31,11 +31,8 @@ export default defineComponent ({
     SearchItem,
   },
   setup() {
-    let channelIds: any
-
     let items = ref()
     let pageNum = 6
-    let pageSize = 4
     let readyToLoadMore = true
 
     const router = useRouter()
@@ -44,12 +41,12 @@ export default defineComponent ({
     async function fetechMoreData() {
       let windowHeight = document.documentElement.scrollTop + window.innerHeight
       let offsetHeight = document.documentElement.offsetHeight
-      let bottomOfWindow = windowHeight >= (0.99 * offsetHeight)
+      let bottomOfWindow = windowHeight >= (0.95 * offsetHeight)
 
       if (bottomOfWindow && readyToLoadMore) {
 
         readyToLoadMore = false
-        let sourceData = await EventService.getContent('channelIds', 'video', channelIds as string[], pageNum, pageSize)
+        let sourceData = await EventService.fetchCategoryData(currRoute, 'y', pageNum)
 
         if (sourceData) {
           const updatedItems = items.value.concat(sourceData?.result?.items)

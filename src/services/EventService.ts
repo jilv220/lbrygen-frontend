@@ -75,8 +75,11 @@ export default {
     return res.data
   },
   
-  async fetchCategoryData(category: string) {
-    const res = await axios.get(`${base_api}/fetch?ctgy=${category}`)
+  async fetchCategoryData(
+    category: string, 
+    isFetchNext: string = 'n',
+    pageNum: number = 1) {
+    const res = await axios.get(`${base_api}/fetch?ctgy=${category}&n=${isFetchNext}&p=${pageNum}`)
     return res.data
   },
 
