@@ -10,12 +10,15 @@ const Stream = () => import('../components/StreamView.vue')
  * Generate category routes
  */
 const category_routes: Array<any> = []
+const category_literals: string[] = []
+
 for (let i = 0; i < categories.length; i++) {
   category_routes[i] = {
     path: `/${categories[i].link}`,
     name: `${categories[i].link}`,
     component: Category,
   }
+  category_literals.push(categories[i].link)
 }
 
 /**
@@ -50,16 +53,19 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition): any {
+
+
+    console.log(category_literals.includes(to.name as string))
+    console.log(`from ${String(from.name)} to ${String(to.name)}`)
+    console.log(savedPosition)
     
     if (to.name === 'stream' || to.name === 'search') {
-      return { x: 0, y: 0 }
+      return { left: 0, top: 0 }
     } 
-
-    if (savedPosition) { 
-      return savedPosition 
-    } else {
-      return { x: 0, y: 0 }
-    } 
+    else if (category_literals.includes(to.name as string)) {
+      return savedPosition
+    }
+    
   }
 })
 
