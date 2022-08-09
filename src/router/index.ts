@@ -53,19 +53,12 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition): any {
-
-
-    console.log(category_literals.includes(to.name as string))
-    console.log(`from ${String(from.name)} to ${String(to.name)}`)
-    console.log(savedPosition)
-    
     if (to.name === 'stream' || to.name === 'search') {
       return { left: 0, top: 0 }
     } 
     else if (category_literals.includes(to.name as string)) {
       return savedPosition
     }
-    
   }
 })
 

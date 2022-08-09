@@ -69,7 +69,7 @@
 
         <!-- Router -->
         <router-view v-slot="{ Component }">
-          <KeepAlive>
+          <KeepAlive :include="['CategoryView']">
             <component :is="Component" :key="$route.fullPath" />
           </KeepAlive>
         </router-view>

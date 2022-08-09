@@ -23,10 +23,12 @@
 <script lang="ts">
 import SearchItem from '@/components/SearchItem.vue'
 import EventService from '@/services/EventService'
-import { defineComponent, onBeforeUnmount, onMounted, ref} from 'vue'
+import { defineComponent, onActivated, onDeactivated, onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
+import Logger from '@/utils/Logger'
 
 export default defineComponent ({
+  name: 'CategoryView',
   components: {
     SearchItem,
   },
@@ -34,6 +36,7 @@ export default defineComponent ({
     let items = ref()
     let pageNum = 6
     let readyToLoadMore = true
+    let logger = new Logger('CategoryView')
 
     const router = useRouter()
     let currRoute = router.currentRoute.value.name as string
@@ -65,11 +68,19 @@ export default defineComponent ({
       catch (err) {
         console.log(err)
       }
+    })
 
+    /**
+     * For cached component, 
+     * register eventListeners on activated/decativated !!
+    */
+    onActivated(() => {
+      logger.log('activated')
       window.addEventListener('scroll', fetechMoreData)
     })
 
-    onBeforeUnmount(() => {
+    onDeactivated(() => {
+      logger.log('de-activated')
       window.removeEventListener('scroll', fetechMoreData)
     })
 
