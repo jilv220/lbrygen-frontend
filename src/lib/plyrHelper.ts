@@ -4,7 +4,6 @@ import { isProduction } from '@/constants/env'
 
 const _platformUtils = new PlatformUtils()
 const _isFakeMobile = isProduction ? false : true
-let _isFirstClick = true
 
 function initPlyr(): Plyr {
     const config = {
@@ -75,7 +74,6 @@ function _bindNewDblClickListeners(player: Plyr,
 
         const topThres = 0.3 * plyrHeight
         const bottomThres = 0.7 * plyrHeight
-        let clickCounter = 0
 
         plyrWrapper.addEventListener('click', (e) => {
 
@@ -87,19 +85,11 @@ function _bindNewDblClickListeners(player: Plyr,
             const isYInRange = (offsetY >= topThres && offsetY <= bottomThres)
             // console.log(`offsetY: ${offsetY}, topThres: ${topThres}. bottomThres: ${bottomThres}`)
 
-            console.log(clickCounter)
-
-            if(_isFirstClick) {
-                _isFirstClick = false
-            } else if(clickCounter % 2 == 0) {
-                plyrWrapper.focus()
-            } else {
-                if (isXInRange && isYInRange) {
-                    player.togglePlay()
-                }
+            if (isXInRange 
+            && isYInRange
+            && isPlyrTooltipsShown()) {
+                player.togglePlay()
             }
-
-            clickCounter++
         })
     }
 }

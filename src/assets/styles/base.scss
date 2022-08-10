@@ -21,3 +21,15 @@ button {
     padding-top: 5rem/* 80px */;
     overflow: hidden;
 }
+
+/**
+*   Daisy UI override. The default drawer config felt weird.
+**/
+
+.drawer-side {
+    max-height: unset !important;
+}
+
+.drawer-toggle {
+    position: fixed;
+}

@@ -1,12 +1,7 @@
 <template>
   <div>
-    <!-- drawer -->
-    <div class="drawer h-auto">
-      <input id="my-drawer" class="drawer-toggle" type="checkbox" />
-      <div class="drawer-content overflow-hidden">
-        <!-- Page content here -->
-        <div id="navbar" class="navbar fixed shadow z-50">
-
+    <!-- Navbar -->
+    <div id="navbar" class="navbar fixed shadow z-50">
           <div class="navbar-start">
             <label for="my-drawer" class="mr-6" id="sidebar-menu">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -65,7 +60,13 @@
             </div> -->
 
           </div>
-        </div>
+    </div>
+
+    <!-- Drawer -->
+    <div class="drawer h-auto">
+      <input id="my-drawer" class="drawer-toggle" type="checkbox" />
+      <div class="drawer-content overflow-hidden">
+        <!-- Drawer page content -->
 
         <!-- Router -->
         <router-view v-slot="{ Component }">
@@ -77,9 +78,9 @@
       </div>
 
       <!-- Drawer Content -->
-      <div class="drawer-side h-screen">
+      <div class="drawer-side h-full">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul id="drawer-sidebar" class="menu p-4 overflow-y-auto w-80 text-base-content sm:w-56">
+        <ul id="drawer-sidebar">
           <SideBarItemList></SideBarItemList>
         </ul>
       </div>
@@ -250,6 +251,16 @@ export default {
 
 #sidebar-menu {
   cursor: pointer;
+}
+
+#drawer-sidebar {
+  @apply 
+  menu fixed text-base-content 
+  w-72 h-screen pt-4-25 px-2 pb-2 sm:w-56;
+
+  div > li > div {
+    @apply active:bg-green h-11
+  }
 }
 
 /* small screen */

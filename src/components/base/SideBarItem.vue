@@ -1,6 +1,6 @@
 <template>
     <li @click="navigateTo(link)">
-        <div class=" active:bg-green h-11">
+        <div>
             <slot name="item-icon"></slot>
             <slot name="item-label"></slot>
         </div>

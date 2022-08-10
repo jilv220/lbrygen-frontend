@@ -25,7 +25,11 @@ module.exports = {
       'gray-light': '#27272a',
       'gray-white': '#52525b'
     },
-    extend: {},
+    extend: {
+      padding: {
+        '4-25': '4.25rem',
+      }
+    },
   },
   plugins: [require("daisyui")],
 }
