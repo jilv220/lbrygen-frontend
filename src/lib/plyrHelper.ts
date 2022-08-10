@@ -1,8 +1,10 @@
 import Plyr from 'plyr'
 import PlatformUtils from "@/utils/PlatformUtils"
+import { isProduction } from '@/constants/env'
 
 const _platformUtils = new PlatformUtils()
-const _isFakeMobile = false
+const _isFakeMobile = isProduction ? false : true
+let _isFirstClick = true
 
 function initPlyr(): Plyr {
     const config = {
@@ -53,14 +55,16 @@ function _bindNewDblClickListeners(player: Plyr,
 ) {
     const plyrWrapper = queryPlyrWrapper()
     const plyrWidth = queryPlyrWidth(selector)
+    const plyrHeight = queryPlyrHeight(selector)
 
-    if (plyrWrapper && plyrWidth) {
+    if (plyrWrapper && plyrWidth && plyrHeight) {
 
-        const forwardThres = 0.7 * plyrWidth
         const rewindThres = 0.3 * plyrWidth
+        const forwardThres = 0.7 * plyrWidth
         plyrWrapper.addEventListener('dblclick', (e) => {
 
-            const offsetX = (e as MouseEvent).offsetX
+            const pointerEvent = e as PointerEvent
+            const offsetX = pointerEvent.offsetX
 
             if (forwardThres < offsetX) {
                 player.forward(10)
@@ -69,15 +73,33 @@ function _bindNewDblClickListeners(player: Plyr,
             }
         })
 
+        const topThres = 0.3 * plyrHeight
+        const bottomThres = 0.7 * plyrHeight
+        let clickCounter = 0
+
         plyrWrapper.addEventListener('click', (e) => {
 
-            const offsetX = (e as MouseEvent).offsetX
+            const pointerEvent = e as PointerEvent
+            const offsetX = pointerEvent.offsetX
+            const offsetY = pointerEvent.offsetY
 
-            if (offsetX >= rewindThres
-            && offsetX <= forwardThres
-            && isPlyrTooltipsShown()) {
-                player.togglePlay()
+            const isXInRange = (offsetX >= rewindThres && offsetX <= forwardThres)
+            const isYInRange = (offsetY >= topThres && offsetY <= bottomThres)
+            // console.log(`offsetY: ${offsetY}, topThres: ${topThres}. bottomThres: ${bottomThres}`)
+
+            console.log(clickCounter)
+
+            if(_isFirstClick) {
+                _isFirstClick = false
+            } else if(clickCounter % 2 == 0) {
+                plyrWrapper.focus()
+            } else {
+                if (isXInRange && isYInRange) {
+                    player.togglePlay()
+                }
             }
+
+            clickCounter++
         })
     }
 }
@@ -91,9 +113,18 @@ function queryPlyrWidth(selector:
     return plyrWidth
 }
 
-function queryPlyrWrapper() {
+function queryPlyrHeight(selector: 
+    keyof HTMLElementTagNameMap | 
+    keyof SVGElementTagNameMap  |
+    string 
+) {
+    const plyrHeight = document.querySelector(selector)?.getBoundingClientRect().height
+    return plyrHeight
+}
+
+function queryPlyrWrapper() : HTMLElement{
     const plyrWrapper = document.querySelector('.plyr__video-wrapper')
-    return plyrWrapper
+    return plyrWrapper as HTMLElement
 }
 
 function isPlyrTooltipsShown() {

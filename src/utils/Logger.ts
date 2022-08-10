@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const isProduction = process.env.NODE_ENV === 'production'
+import {isProduction} from '@/constants/env'
 
 export default class Logger {
 

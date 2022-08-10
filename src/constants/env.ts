@@ -7,3 +7,4 @@ export const THUMBNAIL_OPTIMIZE = 'https://thumbnails.odycdn.com/optimize/s:390:
 export const AVATAR_OPTIMIZE = 'https://thumbnails.odycdn.com/optimize/s:100:0/quality:85/plain/'
 
 export const IS_DEV = process.env.NODE_ENV !== 'production'
+export const isProduction = process.env.NODE_ENV === 'production'
