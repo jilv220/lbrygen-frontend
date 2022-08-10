@@ -25,10 +25,14 @@ export default class PlatformUtils {
         return this._os;
     }
 
-    isMobilePlatform() : boolean {
+    isMobilePlatform(isFake:boolean = false) : boolean {
+
+        if (isFake) {
+            return true
+        }
+
         const os = this.getOS()
         const res = this._mobileOS.includes(os)
-        
         return res 
     }
 }
