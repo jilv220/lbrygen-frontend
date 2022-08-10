@@ -49,9 +49,9 @@ export default {
         break
     }
 
-    if (queryType === 'chs' 
+    if (queryType === 't' 
     &&  Array.isArray(queryContent)) {
-      queryContent = queryContent.slice(0,19)
+      queryContent = queryContent.slice(0, 5)
     }
     params[queryType] = queryContent
     

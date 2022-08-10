@@ -1,29 +1,19 @@
 <template>
     <div>
-        <div id="content-wrapper" class="">
-            
+        <div class="pt-16">
+
             <div v-if="streamUrl" id="layout" class="grid grid-cols-3 gap-8 mt-4 px-4">
 
                 <div id="container" class="grid col-span-2">
 
                     <div id="iframe-container">
 
-                        <video 
-                        v-if="this.mimeType == 'video/mp4'"
-                        playsinline 
-                        controls
-                        id="player"
-                        >
+                        <video v-if="this.mimeType == 'video/mp4'" playsinline controls id="player">
                             <!-- Video files -->
-                            <source
-                            :src="streamUrl"
-                            type="video/mp4"
-                            />
+                            <source :src="streamUrl" type="video/mp4" />
                         </video>
 
-                        <iframe 
-                        v-else
-                        allowfullscreen webkitallowfullscreen :src="streamUrl" frameborder="0">
+                        <iframe v-else allowfullscreen webkitallowfullscreen :src="streamUrl" frameborder="0">
                         </iframe>
 
                     </div>
@@ -36,16 +26,12 @@
 
                         <div id="stream-info-divider" class="divider h-0"></div>
 
-                        <LGAvatarLabel 
-                        v-if="avatar"
-                        id="stream-channel" class="flex-x-start" 
-                            :showAvatar="this.showAvatar"
-                            :showName="true" 
-                            :avatar="this.avatar" 
+                        <LGAvatarLabel v-if="avatar" id="stream-channel" class="flex-x-start"
+                            :showAvatar="this.showAvatar" :showName="true" :avatar="this.avatar"
                             :channelName="this.channelName">
-                                <template v-slot:lg-label>
-                                    {{ this.channelName }}
-                                </template>
+                            <template v-slot:lg-label>
+                                {{ this.channelName }}
+                            </template>
                         </LGAvatarLabel>
 
                         <div id="stream-desc">
@@ -58,15 +44,18 @@
                     </div>
                 </div>
 
-                <div 
-                v-if="this.relatedVideosData != ''"
-                id="related-videos" 
-                class="card flex-1 md:px-2">
-                    <li v-for="item in relatedVideosData.result.items" :key="item">
-                        <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.short_url" :showAvatar="false"
-                            :avatar="item.signing_channel">
+                <div id="related-videos" class="card flex-1 md:px-2">
+                    <li v-for="item in relatedVideosData?.result?.items" :key="item">
+                        <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.canonical_url"
+                            :showAvatar="false" :avatar="item.signing_channel">
                             <template v-slot:center>
-                                {{ item.name }}
+                                <div v-if="item.value.title">
+                                    {{ item.value.title }}
+                                </div>
+
+                                <div v-else>
+                                    {{ item.name }}
+                                </div>
                             </template>
                         </SearchItem>
                     </li>
@@ -94,6 +83,7 @@ import { linkify } from "@/utils/ReUtils"
 import PlatformUtils from "@/utils/PlatformUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import plyrHelper from '@/lib/plyrHelper'
+import _ from 'lodash'
 
 export default {
     props: {
@@ -139,71 +129,51 @@ export default {
             }
         }
     },
-    mounted() {
+    beforeUnmount() {
+        this.player.destroy()
+    },
+    async mounted() {
 
         let claimUrlCopy = this.claimUrl.split('#').join(':')
         this.claimUrlTranformed = claimUrlCopy
 
         let tags = ['']
-        //console.log(this.claimUrlTranformed)
-        EventService.resolveClaimSingle(this.claimUrlTranformed)
-            .then((response) => {
-                //console.log(response)
-                if (response.error !== undefined) {
-                    console.error(response)
-                } else {
-                    let result = response.result
+        // console.log(this.claimUrlTranformed)
 
-                    let avatar = result[this.claimUrlTranformed].signing_channel
-                    if (avatar) { this.avatar = avatar }
+        try  {
+            let claimRes = await EventService.resolveClaimSingle(this.claimUrlTranformed)
+            let result = claimRes.result
 
-                    let shortUrl = result[this.claimUrlTranformed].short_url
-                    if (shortUrl) { this.shortUrl = shortUrl }
-                    
-                    let value = result[this.claimUrlTranformed].value
-                    let title = value.title
-                    tags = value.tags
-                    let desc = value.description
+            let avatar = result[this.claimUrlTranformed].signing_channel
+            if (avatar) { this.avatar = avatar }
 
-                    if (value) {
-                        if (desc) {
-                            this.descList = desc.split('\n')
-                        }
-                        if (title) {
-                            this.title = title
-                        }
-                    }
+            let shortUrl = result[this.claimUrlTranformed].short_url
+            if (shortUrl) { this.shortUrl = shortUrl }
+
+            let value = result[this.claimUrlTranformed].value
+            let title = value.title
+            tags = value.tags
+            let desc = value.description
+
+            if (value) {
+                if (desc) {
+                    this.descList = desc.split('\n')
                 }
-            })
-            .then(() => {
-                EventService.getStreamByUrl(this.shortUrl)
-                    .then((response) => {
-                        //console.log(response)
-                        if (response.error !== undefined) {
-                            console.error(response)
-                        } else {
-                            this.streamUrl = response.streaming_url
-                            this.mimeType = response.mime_type
-                        }
-                    })
-            })
-            .then(() => {
-                function getRandomInt(max) {
-                    return Math.floor(Math.random() * max);
+                if (title) {
+                    this.title = title
                 }
-                
-                EventService.getContent('tag', 'video', tags, getRandomInt(14), 14, "trending_group")
-                    .then((response) => {
-                        if (response.error !== undefined) {
-                            console.error(response)
-                        } else {
-                            this.relatedVideosData = response
-                        }
-                    })
-            })
-            .catch(e => {
-                console.error('fucked up in stupid long chainquery : ' + e)
-            })
+            }
+
+            let streamRes = await EventService.getStreamByUrl(this.shortUrl)
+            this.streamUrl = streamRes.streaming_url
+            this.mimeType = streamRes.mime_type
+
+            let relatedRes = await EventService.getContent('tag', 'video', tags, _.random(14), 14, "trending_group")
+            this.relatedVideosData = relatedRes
+        }
+        catch (err) {
+            console.log(err)
+        }
     },
     methods: {
         linkify,
@@ -262,15 +232,12 @@ iframe {
     }
 }
 
-#content-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding-top: 4rem;
-}
-
 #stream-loading {
     padding-top: 17.5%;
+
+    @media (max-width: 1240px) {
+        padding-top: 60%;
+    }
 }
 
 #stream-loading .fancy-spinner div.ring {
@@ -278,6 +245,13 @@ iframe {
     width: 20rem;
     height: 20rem;
     box-shadow: none;
+
+    @media (max-width: 1240px) {
+        border-width: 1.5rem;
+        width: 15rem;
+        height: 15rem;
+        box-shadow: none;
+    }
 }
 
 #stream-info {

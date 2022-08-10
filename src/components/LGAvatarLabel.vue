@@ -60,13 +60,10 @@ export default {
         }
     },
     mounted() {
-        if (this.avatar &&
-            this.avatar.name) {
+        if (this.avatar?.name) {
             this.backupTitle = this.avatar.name.split('').join('')
         }
-        if (this.avatar && 
-            this.avatar.value && 
-            this.avatar.value.thumbnail) {
+        if (this.avatar?.value?.thumbnail) {
             this.optimizedThumbnail = AVATAR_OPTIMIZE + this.avatar.value.thumbnail.url
             this.backupThumbnail = this.avatar.value.thumbnail.url
         }
