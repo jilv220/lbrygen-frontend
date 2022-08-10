@@ -2,7 +2,7 @@ import Plyr from 'plyr'
 import PlatformUtils from "@/utils/PlatformUtils"
 
 const _platformUtils = new PlatformUtils()
-const _isFakeMobile = true
+const _isFakeMobile = false
 
 function initPlyr(): Plyr {
     const config = {
