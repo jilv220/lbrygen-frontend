@@ -52,7 +52,7 @@ export default defineComponent ({
         let sourceData = await EventService.fetchCategoryData(currRoute, 'y', pageNum)
 
         if (sourceData) {
-          const updatedItems = items.value.concat(sourceData?.result?.items)
+          const updatedItems = items?.value?.concat(sourceData?.result?.items)
           items.value = updatedItems
           pageNum += 1
           readyToLoadMore = true
