@@ -83,7 +83,7 @@ import { linkify } from "@/utils/ReUtils"
 import PlatformUtils from "@/utils/PlatformUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import plyrHelper from '@/lib/plyrHelper'
-import _ from 'lodash'
+import random from 'lodash/random'
 
 export default {
     props: {
@@ -168,7 +168,7 @@ export default {
             this.streamUrl = streamRes.streaming_url
             this.mimeType = streamRes.mime_type
 
-            let relatedRes = await EventService.getContent('tag', 'video', tags, _.random(14), 14, "trending_group")
+            let relatedRes = await EventService.getContent('tag', 'video', tags, random(14), 14, "trending_group")
             this.relatedVideosData = relatedRes
         }
         catch (err) {
