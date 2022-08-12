@@ -80,7 +80,6 @@
 import EventService from "../services/EventService"
 import SearchItem from "@/components/SearchItem.vue"
 import { linkify } from "@/utils/ReUtils"
-import PlatformUtils from "@/utils/PlatformUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import plyrHelper from '@/lib/plyrHelper'
 import random from 'lodash/random'
@@ -98,7 +97,6 @@ export default {
             avatar: undefined,
             player: null,
             polling: null,
-            platformUtils: null,
             channelName: '',
             claimUrlTranformed: '',
             relatedVideosData: '',
@@ -118,19 +116,20 @@ export default {
     watch: {
         videoReady(value) {
             console.log(`is video ready : ${value}`)
-            this.platformUtils = new PlatformUtils()
 
             // init Plyr instance
             if (value) {
                 this.player = plyrHelper.initPlyr()
                 plyrHelper.plyrEnableDblClickSeek(this.player, '#player')
+
                 clearInterval(this.polling)
                 this.polling = null
             }
-        }
+        },
     },
     beforeUnmount() {
         this.player.destroy()
+        plyrHelper.destroy()
     },
     async mounted() {
 

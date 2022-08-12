@@ -1,6 +1,7 @@
 import Plyr from 'plyr'
 import PlatformUtils from "@/utils/PlatformUtils"
 import { isProduction } from '@/constants/env'
+import { Observable, fromEvent, Subscription } from 'rxjs';
 
 const _platformUtils = new PlatformUtils()
 const _isFakeMobile = isProduction ? false : true
@@ -49,6 +50,8 @@ function _removeDblClickListeners(player: Plyr) {
     )
 }
 
+let tooltipSubscription: Subscription
+let clickSubscription: Subscription
 function _bindNewDblClickListeners(player: Plyr, 
     selector: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap | string 
 ) {
@@ -75,8 +78,15 @@ function _bindNewDblClickListeners(player: Plyr,
         const topThres = 0.3 * plyrHeight
         const bottomThres = 0.7 * plyrHeight
 
-        plyrWrapper.addEventListener('click', (e) => {
+        const tooltipListener = addTooltipListener()
+        const clickListener = fromEvent(plyrWrapper, 'click')
 
+        let isPlyrTooltipShown: any
+        tooltipSubscription = tooltipListener.subscribe(value => {
+            isPlyrTooltipShown = value
+        })
+
+        clickSubscription = clickListener.subscribe((e) => {
             const pointerEvent = e as PointerEvent
             const offsetX = pointerEvent.offsetX
             const offsetY = pointerEvent.offsetY
@@ -85,13 +95,33 @@ function _bindNewDblClickListeners(player: Plyr,
             const isYInRange = (offsetY >= topThres && offsetY <= bottomThres)
             // console.log(`offsetY: ${offsetY}, topThres: ${topThres}. bottomThres: ${bottomThres}`)
 
-            if (isXInRange 
-            && isYInRange
-            && isPlyrTooltipsShown()) {
+            if (isXInRange
+                && isYInRange
+                && isPlyrTooltipShown) {
+
+                console.log(isPlyrTooltipShown)
                 player.togglePlay()
             }
         })
     }
+}
+
+function destroy() {
+    tooltipSubscription.unsubscribe()
+    clickSubscription.unsubscribe()
+}
+
+function addTooltipListener() {
+    return new Observable(
+        function subscribe (subscriber) {
+            const id = setInterval(() => {
+                subscriber.next(isPlyrTooltipShown())
+            }, 750)
+            return function unsubscribe() {
+                clearInterval(id)
+            }
+        }
+    )
 }
 
 function queryPlyrWidth(selector: 
@@ -117,7 +147,7 @@ function queryPlyrWrapper() : HTMLElement{
     return plyrWrapper as HTMLElement
 }
 
-function isPlyrTooltipsShown() {
+function isPlyrTooltipShown() {
     // if null => Tooltips are shown
     return !document.querySelector('.plyr--hide-controls')
 }
@@ -134,5 +164,6 @@ function plyrEnableDblClickSeek(player: Plyr,
 // Need to wrap export default in an object to do function exports !!
 export default {
     initPlyr,
+    destroy,
     plyrEnableDblClickSeek,
 }
