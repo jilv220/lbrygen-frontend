@@ -128,7 +128,7 @@ export default {
         },
     },
     beforeUnmount() {
-        this.player.destroy()
+        this.player?.destroy()
         plyrHelper.destroy()
     },
     async mounted() {

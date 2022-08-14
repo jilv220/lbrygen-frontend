@@ -107,8 +107,8 @@ function _bindNewDblClickListeners(player: Plyr,
 }
 
 function destroy() {
-    tooltipSubscription.unsubscribe()
-    clickSubscription.unsubscribe()
+    tooltipSubscription?.unsubscribe()
+    clickSubscription?.unsubscribe()
 }
 
 function addTooltipListener() {
