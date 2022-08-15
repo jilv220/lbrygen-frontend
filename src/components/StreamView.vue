@@ -26,13 +26,18 @@
 
                         <div id="stream-info-divider" class="divider h-0"></div>
 
-                        <LGAvatarLabel v-if="avatar" id="stream-channel" class="flex-x-start"
-                            :showAvatar="this.showAvatar" :showName="true" :avatar="this.avatar"
-                            :channelName="this.channelName">
-                            <template v-slot:lg-label>
-                                {{ this.channelName }}
-                            </template>
-                        </LGAvatarLabel>
+                        <div class="flex justify-between">
+                            <LGAvatarLabel v-if="avatar" id="stream-channel"
+                                :showAvatar="this.showAvatar" :showName="true" :avatar="this.avatar"
+                                :channelName="this.channelName">
+                                <template v-slot:lg-label>
+                                    {{ this.channelName }}
+                                </template>
+                            </LGAvatarLabel>
+                            <a class="btn bg-green hover:bg-green-800 text-white" :href="downloadUrl">
+                                Download
+                            </a>
+                        </div>
 
                         <div id="stream-desc">
                             <div v-for="(line, index) in descList" :key="index">
@@ -83,6 +88,7 @@ import { linkify } from "@/utils/ReUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import plyrHelper from '@/lib/plyrHelper'
 import random from 'lodash/random'
+import { API_PROD } from '@/constants/env'
 
 export default {
     props: {
@@ -105,6 +111,7 @@ export default {
             mimeType: '',
             shortUrl: '',
             streamUrl: '',
+            downloadUrl: '',
             videoReady: false,
             shouldExpand: true,
             showAvatar: true
@@ -167,6 +174,10 @@ export default {
             this.streamUrl = streamRes.streaming_url
             this.mimeType = streamRes.mime_type
 
+            // Setup download
+            const blob = this.streamUrl.split('/').pop()
+            this.downloadUrl = `${API_PROD}/download/${blob}`
+
             let relatedRes = await EventService.getContent('tag', 'video', tags, random(14), 14, "trending_group")
             this.relatedVideosData = relatedRes
         }
@@ -195,7 +206,7 @@ export default {
                     this.videoReady = true
                 }
             }, 250)
-        },
+        }
     }
 }
 </script>
