@@ -1,13 +1,15 @@
 <template>
-  <label :for='modalID' class="modal-button cursor-pointer">
+  <label :for='modalID' :id='`${modalID}-btn`'  class="modal-button cursor-pointer">
       <slot name="modal-btn-icon"></slot>
   </label>
   <input type="checkbox" :id="modalID" class="modal-toggle" />
 
-  <label :for='modalID' class="modal">
+  <label :for='modalID' :id="`${modalID}-layout`"  class="modal">
+
+    <!-- This for-label needs to be empty !! -->
     <label
       class="modal-box p-0 shadow-none relative"
-      :for='modalID'
+      for='' :id="`${modalID}-box`"
     >
       <slot name="modal-content"></slot>
     </label>

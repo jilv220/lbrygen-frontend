@@ -114,13 +114,11 @@ export default {
 </script>
 
 <style lang="scss">
-.pr-6 {
-    .modal {
-        align-items: flex-start;
-        .modal-box {
-            margin-top: 4.5rem;
-            width: fit-content;
-        } 
-    }
+#filter-modal-layout {
+    align-items: flex-start;
+    .modal-box {
+        margin-top: 4.5rem;
+        width: fit-content;
+    } 
 }
 </style>

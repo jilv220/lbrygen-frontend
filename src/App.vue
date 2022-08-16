@@ -24,7 +24,7 @@
               <SearchModal></SearchModal>
             </div>
 
-            <div class="pr-6 md:pr-10 md:pl-4">
+            <div class="pr-5 md:pr-10 md:pl-4">
               <FilterModal></FilterModal>
             </div>
 
