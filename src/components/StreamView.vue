@@ -280,6 +280,8 @@ iframe {
 
 #stream-channel {
 
+    @apply mt-0
+
     #channel-title {
         font-size: 1rem;
         font-weight: 700;
