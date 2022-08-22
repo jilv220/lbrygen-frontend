@@ -51,8 +51,8 @@
 
                 <div id="related-videos" class="card flex-1 md:px-2">
                     <li v-for="item in relatedVideosData?.result?.items" :key="item">
-                        <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.canonical_url"
-                            :showAvatar="false" :avatar="item.signing_channel">
+                        <SearchItem :thumbnail="item.value.thumbnail" :showAvatar="false" 
+                        :avatar="item.signing_channel">
                             <template v-slot:center>
                                 <div v-if="item.value.title">
                                     {{ item.value.title }}

@@ -14,7 +14,7 @@
 
         <div id="streaming-url-wrapper" class="flex-1 grid">
 
-            <label id="streaming-url" @click="getStream(streamUrl)">
+            <label id="streaming-url">
                 <slot name="center"></slot>
             </label>
 
@@ -44,7 +44,6 @@ export default {
     },
     props: {
         thumbnail: Object,
-        streamUrl: String,
         avatar: Object,
         showAvatar: {
             default: true,
@@ -62,15 +61,6 @@ export default {
             this.thumbnail.url) {
             this.optimizedThumbnail = THUMBNAIL_OPTIMIZE + this.thumbnail.url
             this.backupThumbnail = this.thumbnail.url
-        }
-    },
-    methods: {
-        async getStream(url) {
-            
-            this.$router.push({
-                name: 'stream',
-                query: { curl: url }
-            })
         }
     }
 }

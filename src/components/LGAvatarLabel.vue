@@ -1,19 +1,27 @@
 <template>
-    <AvatarLabel :showAvatar="this.showAvatar" @click="gotoChannelView()">
+    <AvatarLabel :showAvatar="this.showAvatar">
         <template v-slot:avatar>
-            <div v-if="avatar?.value?.thumbnail" 
-            id="channel-avatar">
-                <TriFallbackImg
-                :originURI="optimizedThumbnail"
-                :backupURI="backupThumbnail"
-                fallbackURI='spaceman.png'>
-                </TriFallbackImg>
+            <div @click="gotoChannelView()">
+                <div v-if="avatar?.value?.thumbnail" 
+                id="channel-avatar">
+                    <TriFallbackImg
+                    :originURI="optimizedThumbnail"
+                    :backupURI="backupThumbnail"
+                    fallbackURI='spaceman.png'>
+                    </TriFallbackImg>
+                </div>
+                <img v-else src='../assets/spaceman.png'>
             </div>
-            <img v-else src='../assets/spaceman.png'>
         </template>
 
         <template v-slot:label>
-            <label id="channel-title">
+            <router-link 
+            id="channel-title"
+            :to="{ name: 'search', query: { 
+                    q: this.avatar.name,
+                    qt: 'channel',
+                    st: 'video' }}"
+            >
                 <div v-if="avatar?.value?.title">
                     {{ avatar.value.title }}
                 </div>
@@ -24,7 +32,7 @@
                 <div id="channel-name" v-if="showName"> 
                     {{ avatar?.name }}
                 </div>
-            </label>
+            </router-link>
         </template>
 
     </AvatarLabel>

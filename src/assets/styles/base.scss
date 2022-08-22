@@ -3,8 +3,10 @@
     font-weight: 700;
 }
 
-a {
-    @apply text-green;
+span {
+    a {
+        @apply text-green;
+    }
 }
 
 li {

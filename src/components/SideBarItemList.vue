@@ -2,10 +2,12 @@
   <!-- Sidebar content here -->
   <div v-for="category in Categories" :key="category">
     <SideBarItem :link="category.link">
-        <template v-slot:item-icon>
-            <span v-html="category.icon"></span>
-        </template>
-        <template v-slot:item-label>{{ category.label }}</template>
+      <template v-slot:item-icon>
+        <span v-html="category.icon"></span>
+      </template>
+      <template v-slot:item-label>
+        <a :href="category.link"> {{ category.label }} </a>
+      </template>
     </SideBarItem>
   </div>
 </template>

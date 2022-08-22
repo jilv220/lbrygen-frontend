@@ -90,7 +90,7 @@
 
 <script>
 import SearchBar from "@/components/SearchBar.vue";
-import SideBarItemList from "@/components/base/SideBarItemList.vue";
+import SideBarItemList from "@/components/SideBarItemList.vue";
 import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
 

@@ -2,7 +2,7 @@
   <div id="content">
     <ul>
       <li v-for="item in items" :key="item">
-        <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.canonical_url" :avatar="item.signing_channel">
+        <SearchItem :thumbnail="item.value.thumbnail" :avatar="item.signing_channel">
           <template v-slot:center>
 
             <div v-if="item.value.title">

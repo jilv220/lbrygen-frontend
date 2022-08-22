@@ -27,37 +27,33 @@
 
         <ul>
             <li v-for="item in items" :key="item">
-                <SearchItem :thumbnail="item.value.thumbnail" :streamUrl="item.canonical_url"
-                    :avatar="item.signing_channel">
+                <SearchItem :thumbnail="item.value.thumbnail" :avatar="item.signing_channel">
                     <template v-slot:center>
 
-                        <div v-if="item.value.title">
-                            {{ item.value.title }}
-                        </div>
+                        <router-link :to="{ name: 'stream', query: {curl: item.canonical_url} }">
+                            <div v-if="item.value.title">
+                                {{ item.value.title }}
+                            </div>
 
-                        <div v-else>
-                            {{ item.name }}
-                        </div>
+                            <div v-else>
+                                {{ item.name }}
+                            </div>
+                        </router-link>
 
                     </template>
                     <template v-slot:rear>
 
                         <div v-if="item.value.tags" id="tag-group" class="flex-x row-start-6">
-                            <div v-if="item.value.tags[0]" class="badge tag-spacing rounded-md"
-                                @click="queryTag(item.value.tags[0])">
-                                {{ item.value.tags[0] }}
+                            <div v-for="tag in item.value.tags.slice(0,3)" :key="tag">
+                                <router-link :to="tagRoutes(tag)">
+                                    <div v-if="!isLastTag(tag, item.value.tags.slice(0,3))" class="badge tag-spacing rounded-md">
+                                        {{ tag }}
+                                    </div>
+                                    <div v-else class="badge rounded-md">
+                                        {{ tag }}
+                                    </div>
+                                </router-link>
                             </div>
-
-                            <div v-if="item.value.tags[1]" class="badge tag-spacing rounded-md"
-                                @click="queryTag(item.value.tags[1])">
-                                {{ item.value.tags[1] }}
-                            </div>
-
-                            <div v-if="item.value?.tags[2]" class="badge rounded-md"
-                                @click="queryTag(item.value.tags[2])">
-                                {{ item.value.tags[2] }}
-                            </div>
-
                         </div>
 
                     </template>
@@ -74,6 +70,7 @@ import LGAvatarLabel from "@/components/LGAvatarLabel.vue";
 import Normalizer from "@/utils/Normalizer";
 import EventService from "@/services/EventService";
 import Logger from "@/utils/Logger";
+import last from "lodash/last";
 
 export default {
     components: {
@@ -91,7 +88,7 @@ export default {
             streamType: this.$route.query.st,
             readyToLoadMore: true,
             pageNum: 6,
-            pageSize: 4,
+            pageSize: 8,
             Logger: new Logger('SearchView')
         };
     },
@@ -108,6 +105,9 @@ export default {
     },
     methods: {
         linkify,
+        isLastTag(tag, tags) {
+            return tag === last(tags)
+        },
         expandDesc(eleToExpand) {
             if (this.shouldExpand) {
                 document.getElementById('expand-btn').innerHTML = 'Less'
@@ -140,8 +140,8 @@ export default {
                 }
             }
         },
-        queryTag(queryContent) {
-            this.$router.push({
+        tagRoutes(queryContent) {
+            return {
                 name: 'search',
                 query: {
                     q: queryContent,
@@ -149,7 +149,7 @@ export default {
                     st: 'video',
                     p: '1'
                 }
-            })
+            }
         },
         async performSearch(searchType, searchContent, streamType) {
             
