@@ -8,3 +8,6 @@ export const AVATAR_OPTIMIZE = 'https://thumbnails.odycdn.com/optimize/s:100:0/q
 
 export const IS_DEV = process.env.NODE_ENV !== 'production'
 export const isProduction = process.env.NODE_ENV === 'production'
+
+export const VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg']
+export const AUDIO_TYPES = ['audio/mp3', 'audio/wav', 'audio/ogg']

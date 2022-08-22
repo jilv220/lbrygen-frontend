@@ -5,14 +5,16 @@
         <SearchItem :thumbnail="item.value.thumbnail" :avatar="item.signing_channel">
           <template v-slot:center>
 
-            <div v-if="item.value.title">
-              {{ item.value.title }}
-            </div>
+            <router-link :to="{ name: 'stream', query: {curl: item.canonical_url} }">
+              <div v-if="item.value.title">
+                {{ item.value.title }}
+              </div>
 
-            <div v-else>
-              {{ item.name }}
-            </div>
-
+              <div v-else>
+                {{ item.name }}
+              </div>
+            </router-link>
+            
           </template>
         </SearchItem>
       </li>

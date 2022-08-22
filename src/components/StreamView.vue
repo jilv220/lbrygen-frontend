@@ -8,9 +8,12 @@
 
                     <div id="iframe-container">
 
-                        <video v-if="this.mimeType == 'video/mp4'" playsinline controls id="player">
-                            <!-- Video files -->
-                            <source :src="streamUrl" type="video/mp4" />
+                        <video v-if="VIDEO_TYPES.includes(this.mimeType)" playsinline controls id="player">
+                            <source :src="streamUrl"/>
+                        </video>
+
+                        <video v-else-if="AUDIO_TYPES.includes(this.mimeType)" playsinline controls id="player">
+                            <source :src="streamUrl"/>
                         </video>
 
                         <iframe v-else allowfullscreen webkitallowfullscreen :src="streamUrl" frameborder="0">
@@ -18,7 +21,7 @@
 
                     </div>
 
-                    <div id="stream-info" class="mt-6">
+                    <div id="stream-info" class="mt-3">
 
                         <h1 id="stream-title">
                             {{ title }}
@@ -50,20 +53,24 @@
                 </div>
 
                 <div id="related-videos" class="card flex-1 md:px-2">
-                    <li v-for="item in relatedVideosData?.result?.items" :key="item">
-                        <SearchItem :thumbnail="item.value.thumbnail" :showAvatar="false" 
+                    <div v-for="item in relatedVideosData?.result?.items" :key="item">
+                        <SearchItem
+                        :thumbnail="item.value.thumbnail" 
+                        :showAvatar="false" 
                         :avatar="item.signing_channel">
                             <template v-slot:center>
-                                <div v-if="item.value.title">
-                                    {{ item.value.title }}
-                                </div>
+                                <router-link :to="{ name: 'stream', query: {curl: item.canonical_url} }">
+                                    <div v-if="item.value.title">
+                                        {{ item.value.title }}
+                                    </div>
 
-                                <div v-else>
-                                    {{ item.name }}
-                                </div>
+                                    <div v-else>
+                                        {{ item.name }}
+                                    </div>
+                                </router-link>
                             </template>
                         </SearchItem>
-                    </li>
+                    </div>
                 </div>
 
             </div>
@@ -88,7 +95,7 @@ import { linkify } from "@/utils/ReUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import plyrHelper from '@/lib/plyrHelper'
 import random from 'lodash/random'
-import { API_PROD } from '@/constants/env'
+import { API_PROD, VIDEO_TYPES, AUDIO_TYPES } from '@/constants/env'
 
 export default {
     props: {
@@ -114,7 +121,9 @@ export default {
             downloadUrl: '',
             videoReady: false,
             shouldExpand: true,
-            showAvatar: true
+            showAvatar: true,
+            VIDEO_TYPES,
+            AUDIO_TYPES
         }
     },
     created () {
@@ -150,16 +159,16 @@ export default {
             let claimRes = await EventService.resolveClaimSingle(this.claimUrlTranformed)
             let result = claimRes.result
 
-            let avatar = result[this.claimUrlTranformed].signing_channel
+            let avatar = result[this.claimUrlTranformed]?.signing_channel
             if (avatar) { this.avatar = avatar }
 
-            let shortUrl = result[this.claimUrlTranformed].short_url
+            let shortUrl = result[this.claimUrlTranformed]?.short_url
             if (shortUrl) { this.shortUrl = shortUrl }
 
-            let value = result[this.claimUrlTranformed].value
-            let title = value.title
-            tags = value.tags
-            let desc = value.description
+            let value = result[this.claimUrlTranformed]?.value
+            let title = value?.title
+            tags = value?.tags
+            let desc = value?.description
 
             if (value) {
                 if (desc) {
@@ -178,7 +187,7 @@ export default {
             const blob = this.streamUrl.split('/').pop()
             this.downloadUrl = `${API_PROD}/download/${blob}`
 
-            let relatedRes = await EventService.getContent('tag', 'video', tags, random(14), 14, "trending_group")
+            let relatedRes = await EventService.getContent('tag', 'video', tags, random(1, 14), 14, "trending_group")
             this.relatedVideosData = relatedRes
         }
         catch (err) {
@@ -318,5 +327,12 @@ iframe {
 #expand-btn {
     font-size: 1.1rem;
     font-weight: 400;
+}
+
+#related-videos {
+    div > div > #thumbnail {
+        width: 192px;
+        height: 108px;
+    }
 }
 </style>
