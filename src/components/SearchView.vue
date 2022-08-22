@@ -42,8 +42,7 @@
 
                     </template>
                     <template v-slot:rear>
-
-                        <div v-if="item.value.tags" id="tag-group" class="flex-x row-start-6">
+                        <div v-if="item.value.tags" id="tag-group">
                             <div v-for="tag in item.value.tags.slice(0,3)" :key="tag">
                                 <router-link :to="tagRoutes(tag)">
                                     <div v-if="!isLastTag(tag, item.value.tags.slice(0,3))" class="badge tag-spacing rounded-md">
@@ -55,7 +54,6 @@
                                 </router-link>
                             </div>
                         </div>
-
                     </template>
                 </SearchItem>
             </li>

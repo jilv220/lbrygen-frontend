@@ -19,13 +19,14 @@
             </label>
 
             <LGAvatarLabel
+            id="streaming-avatar-label"
             :showAvatar="this.showAvatar"
             :avatar="this.avatar">
             </LGAvatarLabel>
 
         </div>
 
-        <div id="search-result-rear" class="grid grid-rows-6">
+        <div id="search-result-rear" class="self-end">
             <slot name="rear"></slot>
         </div>
 
@@ -66,7 +67,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 #search-result-rear {
     align-content: center;
 }
@@ -91,8 +92,8 @@ export default {
 }
 
 #thumbnail {
-    width: calc(12rem * 1.2);
-    height: calc(12rem * 0.6);
+    width: 13.75rem;
+    height: calc(13.75rem / 1.7);
 }
 
 /* md screen */
@@ -113,6 +114,11 @@ export default {
     }
     #streaming-url {
         -webkit-line-clamp: 2;
+    }
+    #streaming-avatar-label {
+        #base-label {
+            @apply line-clamp-1
+        }
     }
 }
 </style>

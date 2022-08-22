@@ -7,7 +7,7 @@
         </div>
         <div v-else></div>
 
-        <div id="base-label" >
+        <div id="base-label">
             <slot name="label"></slot>
         </div>
     </div>
