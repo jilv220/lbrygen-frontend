@@ -1,7 +1,7 @@
 <template>
     <AvatarLabel :showAvatar="this.showAvatar">
         <template v-slot:avatar>
-            <div @click="gotoChannelView()">
+            <router-link :to="channelRoutes()">
                 <div v-if="avatar?.value?.thumbnail" 
                 id="channel-avatar">
                     <TriFallbackImg
@@ -11,16 +11,13 @@
                     </TriFallbackImg>
                 </div>
                 <img v-else src='../assets/spaceman.png'>
-            </div>
+            </router-link>
         </template>
 
         <template v-slot:label>
             <router-link 
             id="channel-title"
-            :to="{ name: 'search', query: { 
-                    q: this.avatar.name,
-                    qt: 'channel',
-                    st: 'video' }}"
+            :to="channelRoutes()"
             >
                 <div v-if="avatar?.value?.title">
                     {{ avatar.value.title }}
@@ -77,15 +74,15 @@ export default {
         }
     },
     methods: {
-        gotoChannelView() {
-            this.$router.push({
+        channelRoutes() {
+            return {
                 name: 'search',
                 query: {
-                    q: this.avatar.name,
+                    q: this.avatar?.name,
                     qt: 'channel',
                     st: 'video'
                 }
-            })
+            }
         },
     }
 }
