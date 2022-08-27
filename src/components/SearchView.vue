@@ -45,10 +45,11 @@
                         <div v-if="item.value.tags" id="tag-group" class="flex">
                             <div v-for="tag in item.value.tags.slice(0,3)" :key="tag">
                                 <router-link :to="tagRoutes(tag)">
-                                    <div v-if="!isLastTag(tag, item.value.tags.slice(0,3))" class="badge tag-spacing rounded-md">
+                                    <div v-if="!isLastTag(tag, item.value.tags.slice(0,3))" 
+                                        class="badge tag-spacing rounded-md bg-secondary">
                                         {{ tag }}
                                     </div>
-                                    <div v-else class="badge rounded-md">
+                                    <div v-else class="badge rounded-md bg-secondary">
                                         {{ tag }}
                                     </div>
                                 </router-link>
@@ -180,17 +181,9 @@ export default {
 }
 
 .badge {
-    @apply bg-white-sub;
-    @apply text-black;
     @apply hover:bg-green;
     @apply border-0;
     cursor: pointer;
-}
-
-[data-theme="dark"] .badge {
-    @apply bg-gray-white;
-    @apply text-white;
-    @apply hover:bg-green;
 }
 
 .avatar {
