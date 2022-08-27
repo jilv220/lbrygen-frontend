@@ -35,4 +35,26 @@ module.exports = {
     require("daisyui"),
     require('@tailwindcss/line-clamp')
   ],
+  daisyui: {
+    themes: [
+      {
+        mylight: {
+          primary: "#1f1f22",
+          secondary: "#e3e3e3",
+          accent: "#37cdbe",
+          neutral: "#ffffff",
+          "base-100": "#ffffff",
+        },
+      },
+      {
+        mydark: {
+          primary: "#ffffff",
+          secondary: "#52525b",
+          accent: "#37cdbe",
+          neutral: "#27272a",
+          "base-100": "#1f1f22",
+        },
+      }
+    ],
+  },
 }

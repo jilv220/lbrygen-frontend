@@ -8,7 +8,7 @@
             </svg>
         </template>
         <template v-slot:modal-content>
-            <div id="filter-area" class="p-6 grid grid-cols-2 gap-4 text-left">
+            <div id="filter-area" class="p-6 grid grid-cols-2 gap-4 text-left bg-neutral">
 
                 <form id="stream-filter" class="gird pr-6" autocomplete="off">
 

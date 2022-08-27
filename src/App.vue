@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Navbar -->
-    <div id="navbar" class="navbar fixed shadow z-50">
+    <div id="navbar" class="navbar fixed shadow z-50 bg-neutral">
           <div class="navbar-start">
             <label for="my-drawer" class="mr-6" id="sidebar-menu">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -11,7 +11,7 @@
             </label>
           </div>
 
-          <div class="flex-1">
+          <div class="flex-1 flex justify-between">
 
             <div id="lbry-logo" class="pr-4 h-6" @click="navigateTo('home')">
               <img class="h-full w-full" alt="Lbry logo" src="./assets/lbry_logo.svg" />
@@ -20,17 +20,24 @@
             <div class="flex-1 md:hidden">
               <SearchBar></SearchBar>
             </div>
-            <div id="search-modal-wrapper" class="lg:hidden">
-              <SearchModal></SearchModal>
-            </div>
 
-            <div class="pr-5 md:pr-10 md:pl-4">
-              <FilterModal></FilterModal>
+            <div class="flex">
+              <div id="search-modal-wrapper" class="lg:hidden">
+              <SearchModal></SearchModal>
+              </div>
+
+              <div class="pr-5 md:pr-4 md:pl-4">
+                <FilterModal></FilterModal>
+              </div>
+
+              <div class="pr-5">
+                <RelayModal></RelayModal>
+              </div>
             </div>
 
           </div>
 
-          <div class="navbar-end">
+          <div class="navbar-end md:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
             </svg>
@@ -66,7 +73,7 @@
     <div class="drawer h-auto">
       <input id="my-drawer" class="drawer-toggle" type="checkbox" />
       <div class="drawer-content overflow-hidden">
-        <!-- Drawer page content -->
+        <!-- Page content -->
 
         <!-- Router -->
         <router-view v-slot="{ Component }">
@@ -80,7 +87,7 @@
       <!-- Drawer Content -->
       <div class="drawer-side h-full">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul id="drawer-sidebar">
+        <ul id="drawer-sidebar" class="bg-neutral">
           <SideBarItemList></SideBarItemList>
         </ul>
       </div>
@@ -93,6 +100,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import SideBarItemList from "@/components/SideBarItemList.vue";
 import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
+import RelayModal from "./components/RelayModal.vue";
 
 export default {
   name: "App",
@@ -101,7 +109,8 @@ export default {
     SearchModal,
     SideBarItemList,
     FilterModal,
-  },
+    RelayModal
+},
   data() {
     return {
       checked: this.$theme,
@@ -111,18 +120,18 @@ export default {
   beforeCreate() {
     if (window.localStorage.getItem("theme") == "dark") {
       this.$theme = 1;
-      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.setAttribute("data-theme", "mydark");
       window.localStorage.setItem("theme", "dark");
     } else if (window.localStorage.getItem("theme") == "light") {
       this.$theme = 0;
-      document.documentElement.setAttribute("data-theme", "light");
+      document.documentElement.setAttribute("data-theme", "mylight");
       window.localStorage.setItem("theme", "light");
     } else if (
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme: dark)").matches
     ) {
       this.$theme = 1;
-      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.setAttribute("data-theme", "mydark");
     }
   },
   mounted() {
@@ -141,10 +150,10 @@ export default {
       //console.log(this.$theme);
 
       if (this.$theme) {
-        document.documentElement.setAttribute("data-theme", "dark");
+        document.documentElement.setAttribute("data-theme", "mydark");
         window.localStorage.setItem("theme", "dark");
       } else {
-        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.setAttribute("data-theme", "mylight");
         window.localStorage.setItem("theme", "light");
       }
     },
@@ -168,27 +177,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  @apply text-black;
-  @apply bg-white;
-
   --plyr-color-main: #2f9176;
-}
 
-[data-theme="dark"] #app {
-  @apply text-white;
-  @apply bg-black;
-}
-
-#navbar,
-#drawer-sidebar,
-#filter-area {
-  @apply bg-white;
-}
-
-[data-theme="dark"] #navbar,
-[data-theme="dark"] #drawer-sidebar,
-[data-theme="dark"] #filter-area {
-  @apply bg-gray-light;
+  @apply text-primary;
 }
 
 .fancy-spinner {
@@ -247,6 +238,8 @@ export default {
 
 #lbry-logo {
   cursor: pointer;
+  width: 112px;
+  height: 40px;
 }
 
 #sidebar-menu {

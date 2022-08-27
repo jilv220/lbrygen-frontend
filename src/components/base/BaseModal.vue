@@ -8,7 +8,7 @@
 
     <!-- This for-label needs to be empty !! -->
     <label
-      class="modal-box p-0 shadow-none relative"
+      class="modal-box p-0 shadow-none relative overflow-hidden"
       for='' :id="`${modalID}-box`"
     >
       <slot name="modal-content"></slot>

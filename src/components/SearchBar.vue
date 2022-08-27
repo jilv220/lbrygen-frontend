@@ -87,13 +87,9 @@ export default {
 }
 
 #input-bar {
-    @apply bg-white;
+    @apply bg-secondary;
     @apply input-bordered;
     @apply border-black;
     @apply rounded-2xl
-}
-
-[data-theme="dark"] #input-bar {
-    @apply bg-gray-white;
 }
 </style>
