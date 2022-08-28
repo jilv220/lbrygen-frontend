@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouterOptions } from 'vue-router';
+import { createRouter, createWebHashHistory, RouterOptions } from 'vue-router';
 import categories from "@/constants/categories";
 
 const Home = () => import('../components/HomeView.vue')
@@ -50,7 +50,7 @@ const other_routes: Array<any> = [
 const routes = category_routes.concat(other_routes)
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
   scrollBehavior(to, from, savedPosition): any {
     if (to.name === 'stream' || to.name === 'search') {
