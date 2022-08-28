@@ -6,7 +6,7 @@
         <span v-html="category.icon"></span>
       </template>
       <template v-slot:item-label>
-        <a :href="category.link"> {{ category.label }} </a>
+        <router-link :to="category.link"> {{ category.label }} </router-link>
       </template>
     </SideBarItem>
   </div>
