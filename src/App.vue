@@ -101,6 +101,7 @@ import SideBarItemList from "@/components/SideBarItemList.vue";
 import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
 import RelayModal from "./components/RelayModal.vue";
+import { gun } from '@/lib/gun/useGun'
 
 export default {
   name: "App",
@@ -114,7 +115,7 @@ export default {
   data() {
     return {
       checked: this.$theme,
-      account: ''
+      isLogin: false
     };
   },
   beforeCreate() {
@@ -135,16 +136,15 @@ export default {
     }
   },
   mounted() {
-    // web3 login
-    // this.getAccount()
+    const user = gun.user()
+    user.recall({sessionStorage}, () => {
+      const pub = user.is?.pub
+      if (pub) {
+        console.log(`Logged in as ${pub}`)
+      }
+    })
   },
   methods: {
-    async getAccount() {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-      const account = accounts[0]
-      this.account = account
-      console.log(this.account)
-    },
     switchTheme() {
       this.$theme = !this.$theme;
       //console.log(this.$theme);
@@ -156,13 +156,6 @@ export default {
         document.documentElement.setAttribute("data-theme", "mylight");
         window.localStorage.setItem("theme", "light");
       }
-    },
-    strShorten(str) {
-      let res = ''
-      if (str.length > 7) {
-        res = `${str.slice(0, 4)}****${str.slice(-4)}`
-      }
-      return res
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName });

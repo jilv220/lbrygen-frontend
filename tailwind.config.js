@@ -41,7 +41,7 @@ module.exports = {
         mylight: {
           primary: "#1f1f22",
           secondary: "#e3e3e3",
-          accent: "#37cdbe",
+          accent: "#2f9176",
           neutral: "#ffffff",
           "base-100": "#ffffff",
         },
@@ -50,7 +50,7 @@ module.exports = {
         mydark: {
           primary: "#ffffff",
           secondary: "#52525b",
-          accent: "#37cdbe",
+          accent: "#2f9176",
           neutral: "#27272a",
           "base-100": "#1f1f22",
         },

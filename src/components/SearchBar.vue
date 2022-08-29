@@ -80,7 +80,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .input {
     height: 2.5rem !important;
     min-height: auto !important;
@@ -90,6 +90,6 @@ export default {
     @apply bg-secondary;
     @apply input-bordered;
     @apply border-black;
-    @apply rounded-2xl
+    @apply rounded-2xl;
 }
 </style>
