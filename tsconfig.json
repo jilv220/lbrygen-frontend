@@ -36,7 +36,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx", 
-    "src/lib/gun/*.js"
+    "src/lib/**/*.js"
   ],
   "exclude": [
     "node_modules"

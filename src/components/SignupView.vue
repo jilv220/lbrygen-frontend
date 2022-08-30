@@ -1,7 +1,7 @@
 <template>
     <div id="content" class="h-full">
         <div class="flex flex-col justify-center items-center">
-            <div class="flex flex-col pt-10 w-1/3 md:w-full" id="form-group">
+            <div class="flex flex-col pt-10 w-1/3 md:w-11/12" id="form-group">
 
                 <label class="label pb-4">
                     <span class="label-text text-xl font-bold">Join</span>
