@@ -43,6 +43,7 @@ export let gun2;
 export function useGun(opts = { localStorage: false }) {
   if (!gun) {
     gun = Gun({ peers: [peer.value], ...opts });
+    window.gun = gun
   }
   return gun;
 }
