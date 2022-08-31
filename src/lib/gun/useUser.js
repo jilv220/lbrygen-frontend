@@ -43,6 +43,9 @@ function userRecall(userStore) {
 
     const pair = JSON.parse(localStorage.getItem('userPair'))
     logger.log(pair)
+
+    if(!pair) { return }
+
     user.auth(pair, () => {
         let currUser
         if (user.is?.pub) {
