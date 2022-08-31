@@ -1,15 +1,15 @@
 <template>
     <div class="flex flex-col ">
 
-        <div class="avatar">
-            <div id="card-thumbnail" class="rounded">
-                <TriFallbackImg v-if="thumbnail"
-                    :originURI="optimizedThumbnail"
-                    :backupURI="backupThumbnail"
-                    fallbackURI='spaceman.png'>
-                </TriFallbackImg>
-                <img v-else src='../assets/spaceman.png'>
-            </div>
+        <div class="avatar inline-block">
+            <router-link :to="{ name: 'stream', query: {curl: curl} }">
+                <div id="card-thumbnail" class="rounded">
+                    <TriFallbackImg v-if="thumbnail" :originURI="optimizedThumbnail" :backupURI="backupThumbnail"
+                        fallbackURI='spaceman.png'>
+                    </TriFallbackImg>
+                    <img v-else src='../assets/spaceman.png'>
+                </div>
+            </router-link>
         </div>
 
         <div id="card-claim-info" class="flex-1 grid">
@@ -19,9 +19,7 @@
             </label>
 
             <div id="card-avatar-label">
-                <LGAvatarLabel
-                :showAvatar="this.showAvatar"
-                :avatar="this.avatar">
+                <LGAvatarLabel :showAvatar="this.showAvatar" :avatar="this.avatar">
                 </LGAvatarLabel>
             </div>
 
@@ -46,6 +44,7 @@ export default {
     props: {
         thumbnail: Object,
         avatar: Object,
+        curl: String,
         showAvatar: {
             default: true,
             type: Boolean

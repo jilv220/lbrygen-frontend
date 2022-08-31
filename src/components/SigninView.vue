@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
-import { useUser } from '@/lib/gun/useUser'
+import { useUser, userLogIn } from '@/lib/gun/useUser'
 import { useUserStore } from '@/stores/UserStore'
 
 const userInfo = reactive({
@@ -48,16 +48,8 @@ const userStore = useUserStore()
 
 const user = useUser().recall({sessionStorage: true})
 function handleSignin() {
-    user.auth(userInfo.email, userInfo.password, (status: any)=> {
-        if (status.err) {
-            console.log('login failed')
-        } else {
-            console.log(status)
-            
-            userStore.storeUser({pub: status.put.pub })
-            router.push({name: "home"})
-        }
-    })
+    userLogIn(userInfo.email, userInfo.password, userStore)
+    router.push({name: 'home'})
 }
 </script>
 

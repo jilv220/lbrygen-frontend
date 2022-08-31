@@ -184,7 +184,7 @@ export default {
             this.mimeType = streamRes.mime_type
 
             // Setup download
-            const blob = this.streamUrl.split('/').pop()
+            const blob = this.streamUrl?.split('/').pop()
             this.downloadUrl = `${API_PROD}/download/${blob}`
 
             let relatedRes = await EventService.getContent('tag', 'video', tags, random(1, 14), 14, "trending_group")
