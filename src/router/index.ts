@@ -14,7 +14,7 @@ const Stream = () => import('../components/StreamView.vue')
 const category_routes: Array<any> = []
 const category_literals: string[] = []
 
-for (let i = 0; i < categories.length; i++) {
+for (let i = 1; i < categories.length; i++) {
   category_routes[i] = {
     path: `/${categories[i].link}`,
     name: `${categories[i].link}`,
