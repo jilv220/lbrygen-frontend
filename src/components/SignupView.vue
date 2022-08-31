@@ -33,23 +33,33 @@
 import { reactive } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import { gun } from '@/lib/gun/useGun'
+import { useUserStore } from '@/stores/UserStore'
 
 const newUser = reactive({
     email: "",
     password: "",
 })
 const router = useRouter()
-
+const userStore = useUserStore()
 const user = gun.user().recall({sessionStorage: true})
+
 function handleSignup() {
-    const cb = user.create(newUser.email, newUser.password)
-    console.log(cb)
-    gun.get(`~@${newUser.email}`).once((data: any)=>{
+
+    // Need to enforce user uniqueness since gun won't handle it
+    gun.get(`~@${newUser.email}`).once((data: any) => {
+
         if (data !== undefined) {
             // if user exist, route to sign in page
             router.push({name: 'signin'})
+        } else {
+            user.create(newUser.email, newUser.password, (status: any) => {
+                
+                userStore.storeUser({pub: status.pub })
+                router.push({name: "home"})
+            })
         }
-    });
+
+    })
 }
 </script>
 

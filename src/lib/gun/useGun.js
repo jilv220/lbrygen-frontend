@@ -19,6 +19,7 @@ window.Buffer = Buffer
 window.setImmediate = setTimeout
 
 import { peer } from './useRelay'
+import { IS_DEV } from "@/constants/env";
 
 
 // https://github.com/amark/gun/wiki/volunteer.dht
@@ -43,7 +44,11 @@ export let gun2;
 export function useGun(opts = { localStorage: false }) {
   if (!gun) {
     gun = Gun({ peers: [peer.value], ...opts });
-    window.gun = gun
+
+    if (IS_DEV) {
+      // Expose gun for testing purpose
+      window.gun = gun
+    }
   }
   return gun;
 }

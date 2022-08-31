@@ -1,10 +1,16 @@
 <template>
   <div id="content">
-    <ul>
-      <li v-for="item in items" :key="item">
-        <SearchItem :thumbnail="item.value.thumbnail" :avatar="item.signing_channel">
-          <template v-slot:center>
 
+    <label class="label justify-start">
+      <span v-html="currIcon" class="mr-2"></span>
+      <span class="label-text text-lg font-bold"> {{ upperFirst(currRoute) }}</span>
+    </label>
+
+    <ul class="grid grid-cols-4 gap-4">
+      <li v-for="item in items" :key="item" class="pb-8">
+        <CardItem :thumbnail="item.value.thumbnail" :avatar="item.signing_channel">
+
+          <template v-slot:center>
             <router-link :to="{ name: 'stream', query: {curl: item.canonical_url} }">
               <div v-if="item.value.title">
                 {{ item.value.title }}
@@ -14,16 +20,17 @@
                 {{ item.name }}
               </div>
             </router-link>
-            
           </template>
-        </SearchItem>
+
+        </CardItem>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import SearchItem from '@/components/SearchItem.vue'
+import CardItem from '@/components/CardItem.vue'
+import categories from "@/constants/categories";
 import EventService from '@/services/EventService'
 import { defineComponent, onActivated, onDeactivated, onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
@@ -32,7 +39,7 @@ import Logger from '@/utils/Logger'
 export default defineComponent ({
   name: 'CategoryView',
   components: {
-    SearchItem,
+    CardItem,
   },
   setup() {
     let items = ref()
@@ -42,6 +49,9 @@ export default defineComponent ({
 
     const router = useRouter()
     let currRoute = router.currentRoute.value.name as string
+    let currIcon = categories.filter(category => category.link === currRoute)[0].icon
+
+    const upperFirst = require('lodash/upperFirst')
 
     async function fetechMoreData() {
       let windowHeight = document.documentElement.scrollTop + window.innerHeight
@@ -87,7 +97,10 @@ export default defineComponent ({
     })
 
     return { 
-      items
+      items,
+      currRoute,
+      currIcon,
+      upperFirst
     }
   },
 })
@@ -105,5 +118,12 @@ export default defineComponent ({
     #channel-title {
         cursor: pointer;
     }
+}
+
+.label > span {
+  svg {
+    height: 16px;
+    width: 16px;
+  }
 }
 </style>

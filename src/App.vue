@@ -106,7 +106,7 @@ import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
 import RelayModal from "./components/RelayModal.vue";
 import { useUserStore } from '@/stores/UserStore'
-import { useUser, userLogOut, isLoggedIn } from '@/lib/gun/useUser'
+import { userLogOut, isLoggedIn, userRecall } from '@/lib/gun/useUser'
 
 export default {
   name: "App",
@@ -144,15 +144,7 @@ export default {
     }
   },
   mounted() {
-    const user = useUser()
-    user.recall({ sessionStorage }, () => {
-
-      let currUser
-      if (user.is?.pub) {
-        currUser = { pub: user.is.pub }
-        this.userStore.storeUser(currUser)
-      }
-    })
+    userRecall(this.userStore)
   },
   methods: {
     switchTheme() {
