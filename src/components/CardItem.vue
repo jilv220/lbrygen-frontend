@@ -123,7 +123,7 @@ export default {
 }
 
 @media (max-width: 960px) {
-    .grid {
+    #content > .grid {
        display: unset; 
     }
     #content {
