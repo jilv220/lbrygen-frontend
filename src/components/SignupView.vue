@@ -32,16 +32,18 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
-import { gun } from '@/lib/gun/useGun'
+import { useGun } from '@/lib/gun/useGun'
+import { userCreate, userLogIn } from '@/lib/gun/useUser'
 import { useUserStore } from '@/stores/UserStore'
 
 const newUser = reactive({
     email: "",
     password: "",
 })
+
+const gun = useGun() as any 
 const router = useRouter()
 const userStore = useUserStore()
-const user = gun.user().recall({sessionStorage: true})
 
 function handleSignup() {
 
@@ -52,11 +54,8 @@ function handleSignup() {
             // if user exist, route to sign in page
             router.push({name: 'signin'})
         } else {
-            user.create(newUser.email, newUser.password, (status: any) => {
-                
-                userStore.storeUser({pub: status.pub })
-                router.push({name: "home"})
-            })
+            userCreate(newUser.email, newUser.password, userStore)
+            router.push({name: "home"})
         }
 
     })

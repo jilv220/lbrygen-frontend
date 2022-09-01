@@ -36,7 +36,7 @@
 
       </div>
 
-      <div v-if="!userStore.isUserLoggedIn()" class="h-10">
+      <div v-if="!userStore.$state.status" class="h-10">
         <label class="label mx-4 p-0 text-green">
           <router-link :to="{name: 'signin'}">Log In</router-link>
         </label>
@@ -56,15 +56,8 @@
 
         <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-neutral rounded-box w-52 mt-4">
           <li>
-            <div @click="logout()">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-              <path fill-rule="evenodd"
-                d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"
-                clip-rule="evenodd" />
-              <path fill-rule="evenodd"
-                d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z"
-                clip-rule="evenodd" />
-              </svg>
+            <div @click="userLogOut(this.userStore)" class="h-12">
+              <span v-html="signOutIcon"></span>
               Sign out
             </div>
           </li>
@@ -92,7 +85,7 @@
       <div class="drawer-side h-full">
         <label for="my-drawer" class="drawer-overlay"></label>
         <ul id="drawer-sidebar" class="bg-neutral">
-          <SideBarItemList></SideBarItemList>
+          <SideBar></SideBar>
         </ul>
       </div>
     </div>
@@ -101,22 +94,23 @@
 
 <script>
 import SearchBar from "@/components/SearchBar.vue";
-import SideBarItemList from "@/components/SideBarItemList.vue";
+import SideBar from "@/components/SideBar.vue";
 import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
 import RelayModal from "./components/RelayModal.vue";
 import { useUserStore } from '@/stores/UserStore'
-import { userLogOut, isLoggedIn, userRecall } from '@/lib/gun/useUser'
+import { userLogOut, isUserLoggedIn, userRecall } from '@/lib/gun/useUser'
+import { signOutIcon } from '@/constants/svgs'
 
 export default {
   name: "App",
   components: {
     SearchBar,
     SearchModal,
-    SideBarItemList,
+    SideBar,
     FilterModal,
     RelayModal,
-},
+  },
   setup() {
     const userStore = useUserStore()
     return { userStore }
@@ -124,6 +118,7 @@ export default {
   data() {
     return {
       checked: this.$theme,
+      signOutIcon: signOutIcon
     };
   },
   beforeCreate() {
@@ -162,12 +157,7 @@ export default {
     navigateTo(routeName) {
       this.$router.push({ name: routeName });
     },
-    logout() {
-      userLogOut()
-      if (!isLoggedIn()) {
-        this.userStore.resetUser()
-      }
-    }
+    userLogOut
   },
 };
 </script>

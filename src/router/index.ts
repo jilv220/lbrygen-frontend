@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouterOptions } from 'vue-router';
 import categories from "@/constants/categories";
 
 const Home = () => import('../components/HomeView.vue')
+const Following = () => import('../components/FollowingView.vue')
 const Signup = () => import('../components/SignupView.vue')
 const Signin = () => import('../components/SigninView.vue')
 const Search = () => import('../components/SearchView.vue')
@@ -14,7 +15,7 @@ const Stream = () => import('../components/StreamView.vue')
 const category_routes: Array<any> = []
 const category_literals: string[] = []
 
-for (let i = 1; i < categories.length; i++) {
+for (let i = 0; i < categories.length; i++) {
   category_routes[i] = {
     path: `/${categories[i].link}`,
     name: `${categories[i].link}`,
@@ -31,6 +32,11 @@ const other_routes: Array<any> = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/following',
+    name: 'following',
+    component: Following
   },
   {
     path: '/signup',
@@ -68,6 +74,10 @@ const router = createRouter({
     if (to.name === 'stream' || to.name === 'search') {
       return { left: 0, top: 0 }
     } 
+    else if (category_literals.includes(to.name as string)
+          && category_literals.includes(from.name as string)) {
+      return { left: 0, top: 0 }
+    }
     else if (category_literals.includes(to.name as string)) {
       return savedPosition
     }

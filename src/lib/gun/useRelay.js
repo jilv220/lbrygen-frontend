@@ -7,6 +7,7 @@ import { useGun } from './useGun'
 import { computed, reactive, watch } from 'vue'
 import { useStorage } from "@vueuse/core";
 import ms from 'ms'
+import { async } from 'rxjs';
 
 export const defaultPeer = "https://relay.peer.ooo/gun";
 export const peer = useStorage("peer", defaultPeer);
@@ -63,7 +64,11 @@ function setPeer(url) {
   window.location.reload()
 }
 
-function resetPeer() {
+export function setPeerNoReload(url) {
+  peer.value = url
+}
+
+export function resetPeer() {
   peer.value = defaultPeer
   window.location.reload()
 }

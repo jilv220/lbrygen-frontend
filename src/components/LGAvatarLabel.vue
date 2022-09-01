@@ -1,5 +1,5 @@
 <template>
-    <AvatarLabel :showAvatar="this.showAvatar">
+    <AvatarLabel :showAvatar="this.showAvatar" :showRear="this.showRear">
         <template v-slot:avatar>
             <router-link :to="channelRoutes()">
                 <div v-if="avatar?.value?.thumbnail" 
@@ -31,6 +31,13 @@
                 </div>
             </router-link>
         </template>
+
+        <template v-slot:rear>
+            <div v-if="showRear">
+                <slot name="rear"></slot> 
+            </div>
+            <div v-else></div>
+        </template>
     </AvatarLabel>
 </template>
 
@@ -49,6 +56,10 @@ export default {
         avatar: Object,
         showAvatar: {
             default: true,
+            type: Boolean
+        },
+        showRear: {
+            default: false,
             type: Boolean
         },
         showName: {

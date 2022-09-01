@@ -11,7 +11,15 @@
 
             <div class="p-3 text-left w-full bg-dark">
 
-                <LGAvatarLabel class="pb-3" :avatar="channelData?.result[queryContent]" :showName="true">
+                <LGAvatarLabel class="pb-3" id="channel-avatar-label"
+                :avatar="channelData?.result[queryContent]" 
+                :showName="true" :showRear="true"
+                >
+                    <template v-slot:rear>
+                        <button class="btn btn-accent text-white" @click="handleSubscribe()">
+                            Follow
+                        </button>
+                    </template>
                 </LGAvatarLabel>
 
                 <div id="channel-desc" class="text-left pb-5">
@@ -70,16 +78,23 @@ import Normalizer from "@/utils/Normalizer";
 import EventService from "@/services/EventService";
 import Logger from "@/utils/Logger";
 import last from "lodash/last";
+import { useUserStore } from '@/stores/UserStore';
+import { channelSubscribe, isUserLoggedIn } from '@/lib/gun/useUser'
 
 export default {
     components: {
         SearchItem,
         LGAvatarLabel
     },
+    setup() {
+        const userStore = useUserStore()
+        return { userStore }
+    },
     data() {
         return {
             items: [],
             channelData: undefined,
+            channelAddress: '',
             descList: [''],
             shouldExpand: true,
             queryContent: this.$route.query.q,
@@ -159,6 +174,7 @@ export default {
                 if (searchType == 'channel') {
                     this.channelData = await EventService.resolveClaimSingle(normalizedSearch)
                     this.descList = this.channelData?.result[this.queryContent]?.value?.description?.split('\n')
+                    this.channelAddress = this.channelData?.result[this.queryContent]?.address
                 }
 
                 let sourceData = await EventService.getContent(searchType, streamType, 
@@ -167,6 +183,14 @@ export default {
             } 
             catch (err) {
                 console.error(err)
+            }
+        },
+        handleSubscribe() {
+            if (!isUserLoggedIn()) {
+                this.Logger.log('User not logged in !!')
+                this.$router.push({name: 'signup'})
+            } else {
+                channelSubscribe(this.userStore.$state.pair.pub, this.channelAddress)
             }
         }
     },
@@ -234,7 +258,7 @@ export default {
 </style>
 
 <style lang="scss">
-.flex-y-start .flex-x-start {
+#channel-avatar-label {
 
     @apply mt-0;
 
@@ -261,7 +285,7 @@ export default {
 
 }
 
-#streaming-url-wrapper .flex-x-start {
+#streaming-url-wrapper .flex .flex {
 
     .avatar {
         width: 2.1rem;

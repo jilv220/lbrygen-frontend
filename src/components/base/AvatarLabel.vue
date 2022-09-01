@@ -1,15 +1,23 @@
 <template>
-    <div class="flex-x-start mt-2">
-        <div v-if="showAvatar" class="avatar mr-2">
-            <div id="base-avatar" class="rounded-full">
-                <slot name="avatar"></slot>
+    <div class="flex flex-row items-center justify-between mt-2">
+
+        <div class="flex items-center">
+            <div v-if="showAvatar" class="avatar mr-2">
+                <div id="base-avatar" class="rounded-full">
+                    <slot name="avatar"></slot>
+                </div>
+            </div>
+            <div v-else></div>
+
+            <div id="base-label">
+                <slot name="label"></slot>
             </div>
         </div>
-        <div v-else></div>
 
-        <div id="base-label">
-            <slot name="label"></slot>
+        <div v-if="showRear">
+            <slot name="rear"></slot> 
         </div>
+        <div v-else></div>
     </div>
 </template>
 
@@ -20,10 +28,10 @@ export default {
             default: true,
             type: Boolean
         },
+        showRear: {
+            default: false,
+            type: Boolean
+        }
     },
 }
 </script>
-
-<style>
-
-</style>

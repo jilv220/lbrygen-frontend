@@ -1,32 +1,26 @@
 import { defineStore } from 'pinia'
+import { IUserPair } from '@/constants/interfaces'
 
 interface userModel {
-    pub: string
+    pair?: IUserPair
+    status: boolean
 }
 
-const userModel : userModel = {
-    pub: ''
+const userState : userModel = {
+    pair: undefined,
+    status: false
 }
 
 export const useUserStore = defineStore (
     'user', 
     {
-        state: () => ({
-            user: userModel
-        }),
-        getters: {
-            getUserPubkey: (state) => state.user.pub
+        state: () => {
+            return {...userState}
         },
         actions: {
             storeUser(user: userModel) {
-                this.user = user
+                this.$state = user
             },
-            isUserLoggedIn() : boolean {
-                return this.user.pub != ''
-            },
-            resetUser() {
-                this.user.pub = ''
-            }
         }
     }
 )

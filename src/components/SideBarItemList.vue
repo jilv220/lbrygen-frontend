@@ -1,31 +1,21 @@
 <template>
-  <!-- Sidebar content here -->
-  <div v-for="category in Categories" :key="category">
-    <SideBarItem :link="category.link">
+  <div v-for="item in props.items" :key="item.label">
+    <SideBarItem :link="item.link">
       <template v-slot:item-icon>
-        <span v-html="category.icon"></span>
+        <span v-html="item.icon"></span>
       </template>
       <template v-slot:item-label>
-        <router-link :to="category.link"> {{ category.label }} </router-link>
+        {{ item.label }}
       </template>
     </SideBarItem>
   </div>
 </template>
 
-<script>
+<script setup="props" lang="ts">
 import SideBarItem from "@/components/base/SideBarItem.vue";
-import Categories from "@/constants/categories";
-export default {
-  components: {
-    SideBarItem,
-  },
-  data() {
-    return {
-      Categories,
-    };
-  },
-};
-</script>
+import { ISideBarItem } from "@/constants/interfaces";
 
-<style>
-</style>
+const props = defineProps({
+  items: Array<ISideBarItem>
+});
+</script>

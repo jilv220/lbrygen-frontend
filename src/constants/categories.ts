@@ -1,16 +1,6 @@
 import svgs from "./svgs"
+import { ISideBarItem } from "./interfaces"
 
-interface category {
-    link: string,
-    icon: string,
-    label: string
-}
-
-const home = {
-    link: 'home',
-    icon: svgs.homeIcon,
-    label: 'Home'
-}
 const featured = {
     link: 'featured',
     icon: svgs.featuredIcon,
@@ -48,9 +38,8 @@ const vtuber = {
     label: 'Vtuber'
 }
 
-const categories: Array<category> = 
+const categories: Array<ISideBarItem> = 
 [
-    home,
     featured,
     education, 
     gaming,

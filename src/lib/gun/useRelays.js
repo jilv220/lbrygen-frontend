@@ -25,7 +25,7 @@
 
 import urlRegex from 'url-regex'
 import { reactive } from 'vue'
-import { relay } from './useRelay'
+import { relay, setPeerNoReload, resetPeer } from './useRelay'
 
 const relays = reactive({})
 const errors = reactive({})
@@ -72,6 +72,21 @@ export async function loadRelays({
         }
     })
     return relays
+}
+
+export async function finalize() {
+
+    loadRelays()
+    .then(() => {
+
+        for (const [key, value] of Object.entries(relays)) {
+            // console.log(value.url)
+            setPeerNoReload(value.url)
+            //new Promise(r => setTimeout(r, 250))
+            //resetPeer()
+            //window.location.reload()
+        }
+    })
 }
 
 /**

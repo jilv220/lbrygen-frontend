@@ -5,12 +5,15 @@
 
 import Gun from "gun/gun";
 import "gun/lib/then";
+import "gun/lib/path";
+import "gun/lib/unset";
+import "gun/lib/not";
 import "gun/lib/radix";
 import "gun/lib/radisk";
 import "gun/lib/store";
 import "gun/lib/rindexed";
 // import "gun/lib/webrtc";
-import "gun/nts";
+// import "gun/nts";
 
 
 // polyfiils for Gun 0.2020.1236

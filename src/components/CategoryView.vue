@@ -1,49 +1,22 @@
 <template>
   <div id="content">
-
-    <label class="label justify-start">
-      <span v-html="currIcon" class="mr-2"></span>
-      <span class="label-text text-lg font-bold"> {{ upperFirst(currRoute) }}</span>
-    </label>
-
-    <ul class="grid grid-cols-4 gap-4">
-      <li v-for="item in items" :key="item" class="pb-8">
-        <CardItem 
-        :thumbnail="item.value.thumbnail" 
-        :avatar="item.signing_channel"
-        :curl="item.canonical_url"
-        >
-          <template v-slot:center>
-            <router-link :to="{ name: 'stream', query: {curl: item.canonical_url} }">
-              <div v-if="item.value.title">
-                {{ item.value.title }}
-              </div>
-
-              <div v-else>
-                {{ item.name }}
-              </div>
-            </router-link>
-          </template>
-
-        </CardItem>
-      </li>
-    </ul>
+    <ContentFragment :icon="currIcon" :content-label="currRoute" :items="items"></ContentFragment>
   </div>
 </template>
 
 <script lang="ts">
-import CardItem from '@/components/CardItem.vue'
 import categories from "@/constants/categories";
 import EventService from '@/services/EventService'
 import { defineComponent, onActivated, onDeactivated, onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import Logger from '@/utils/Logger'
+import ContentFragment from './ContentFragment.vue';
 
 export default defineComponent ({
   name: 'CategoryView',
   components: {
-    CardItem,
-  },
+    ContentFragment
+},
   setup() {
     let items = ref()
     let pageNum = 6
@@ -110,7 +83,7 @@ export default defineComponent ({
 </script>
 
 <style lang="scss">
-#streaming-url-wrapper .flex-x-start {
+#card-avatar-label .flex .flex {
 
     .avatar {
         width: 2.1rem;
