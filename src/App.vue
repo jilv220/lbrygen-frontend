@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="flex justify-between w-2/5">
+      <div class="flex justify-between w-1/3">
 
         <div class="flex-1 md:hidden">
           <SearchBar></SearchBar>
@@ -27,10 +27,6 @@
 
           <div class="pr-5 md:pr-4 md:pl-4">
             <FilterModal></FilterModal>
-          </div>
-
-          <div>
-            <RelayModal></RelayModal>
           </div>
         </div>
 
@@ -97,9 +93,8 @@ import SearchBar from "@/components/SearchBar.vue";
 import SideBar from "@/components/SideBar.vue";
 import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
-import RelayModal from "./components/RelayModal.vue";
 import { useUserStore } from '@/stores/UserStore'
-import { userLogOut, isUserLoggedIn, userRecall } from '@/lib/gun/useUser'
+import { userLogOut, userRecall } from '@/lib/gun/useUser'
 import { signOutIcon } from '@/constants/svgs'
 
 export default {
@@ -109,7 +104,6 @@ export default {
     SearchModal,
     SideBar,
     FilterModal,
-    RelayModal,
   },
   setup() {
     const userStore = useUserStore()

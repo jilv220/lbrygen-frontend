@@ -69,41 +69,23 @@ function userRecall(userStore) {
     })
 }
 
-function getAllSubscriptions(pubKey) {
+function getAllSubscriptions(address) {
 
-    return gun
-    .get(`~${pubKey}`)
+    return user
     .get('subscriptions')
+    .get(address)
+    .map()
 }
 
-async function channelSubscribe(pubKey, address) {
+function channelSubscribe(address, following) {
 
-    let subscriptions = await getAllSubscriptions(pubKey).then()
-
-    for (const key in subscriptions) {
-
-        let tmp = await gun
-                    .get(key)
-                    .then()
-        
-        if (tmp) {
-
-            let obj = Object.values(tmp)
-            let objAddr = obj[obj.length-1]
-
-            // logger.log(objAddr)
-            if (address === objAddr) {
-                logger.log('Already subscribe to the channel !!')
-                return 
-            }
-        }
-    }
-
-    gun
-    .get(`~${pubKey}`)
-    .put({subscriptions: {}})
+    user
     .get('subscriptions')
-    .set({address: address})
+    .put(address)
+    .get(address)
+    .put(following, (ack) => {
+        logger.log(ack)
+    })
 }
 
 export {
@@ -113,5 +95,6 @@ export {
     userLogIn,
     userLogOut,
     userRecall,
-    channelSubscribe
+    channelSubscribe,
+    getAllSubscriptions
 }

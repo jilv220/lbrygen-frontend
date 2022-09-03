@@ -21,6 +21,9 @@ export const useUserStore = defineStore (
             storeUser(user: userModel) {
                 this.$state = user
             },
+            isUserLoggedIn() {
+                return this.$state.status
+            }
         }
     }
 )

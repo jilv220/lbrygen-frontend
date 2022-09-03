@@ -44,6 +44,7 @@ module.exports = {
           accent: "#2f9176",
           neutral: "#ffffff",
           "base-100": "#ffffff",
+          error: "#fe5493"
         },
       },
       {
@@ -53,6 +54,7 @@ module.exports = {
           accent: "#2f9176",
           neutral: "#27272a",
           "base-100": "#1f1f22",
+          error: "#fe5493"
         },
       }
     ],

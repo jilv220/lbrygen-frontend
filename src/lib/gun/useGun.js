@@ -4,10 +4,9 @@
  */
 
 import Gun from "gun/gun";
+import "gun/lib/axe";
 import "gun/lib/then";
-import "gun/lib/path";
 import "gun/lib/unset";
-import "gun/lib/not";
 import "gun/lib/radix";
 import "gun/lib/radisk";
 import "gun/lib/store";
@@ -21,9 +20,8 @@ import { Buffer } from 'buffer'
 window.Buffer = Buffer
 window.setImmediate = setTimeout
 
-import { peer } from './useRelay'
+const default_peers = [`https://gun-rs.iris.to/gun`, `https://lbrygen.xyz/gun`]
 import { IS_DEV } from "@/constants/env";
-
 
 // https://github.com/amark/gun/wiki/volunteer.dht
 // https://github.com/draeder/gun-relays
@@ -46,7 +44,7 @@ export let gun2;
 
 export function useGun(opts = { localStorage: false }) {
   if (!gun) {
-    gun = Gun({ peers: [peer.value], ...opts });
+    gun = Gun({ peers: default_peers, ...opts });
 
     if (IS_DEV) {
       // Expose gun for testing purpose
@@ -64,7 +62,7 @@ export function useGun(opts = { localStorage: false }) {
 
 export function useGun2(opts = { localStorage: false }) {
   if (!gun2) {
-    gun2 = Gun({ peers: [peer.value], ...opts });
+    gun2 = Gun({ peers: default_peers, ...opts });
   }
   return gun2;
 }
@@ -88,15 +86,3 @@ export const soul = Gun?.node?.soul;
  * @function genUUID
  */
 export const genUUID = Gun?.text?.random;
-
-// A putPriv chain extension as noted by @amark
-const GUN = require('gun')
-const SEA = require('gun/sea')
-
-GUN.chain.putPriv = function (data, cb, opt) {
-  var ref = this;
-  (async function () {
-    ref.put(await SEA.encrypt(data, ref.back(-1).user().pair()), cb, opt);
-  })();
-  return ref;
-};

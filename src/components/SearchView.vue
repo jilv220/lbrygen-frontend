@@ -16,9 +16,7 @@
                 :showName="true" :showRear="true"
                 >
                     <template v-slot:rear>
-                        <button class="btn btn-accent text-white" @click="handleSubscribe()">
-                            Follow
-                        </button>
+                        <FollowBtn :channelAddress="this.channelAddress"></FollowBtn>
                     </template>
                 </LGAvatarLabel>
 
@@ -80,12 +78,14 @@ import Logger from "@/utils/Logger";
 import last from "lodash/last";
 import { useUserStore } from '@/stores/UserStore';
 import { channelSubscribe, isUserLoggedIn } from '@/lib/gun/useUser'
+import FollowBtn from './FollowBtn.vue';
 
 export default {
     components: {
-        SearchItem,
-        LGAvatarLabel
-    },
+    SearchItem,
+    LGAvatarLabel,
+    FollowBtn
+},
     setup() {
         const userStore = useUserStore()
         return { userStore }
@@ -190,7 +190,7 @@ export default {
                 this.Logger.log('User not logged in !!')
                 this.$router.push({name: 'signup'})
             } else {
-                channelSubscribe(this.userStore.$state.pair.pub, this.channelAddress)
+                channelSubscribe(this.channelAddress)
             }
         }
     },
