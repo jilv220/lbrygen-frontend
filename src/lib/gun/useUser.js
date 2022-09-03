@@ -69,25 +69,6 @@ function userRecall(userStore) {
     })
 }
 
-function getAllSubscriptions(address) {
-
-    return user
-    .get('subscriptions')
-    .get(address)
-    .map()
-}
-
-function channelSubscribe(address, following) {
-
-    user
-    .get('subscriptions')
-    .put(address)
-    .get(address)
-    .put(following, (ack) => {
-        logger.log(ack)
-    })
-}
-
 export {
     useUser,
     userCreate,
@@ -95,6 +76,4 @@ export {
     userLogIn,
     userLogOut,
     userRecall,
-    channelSubscribe,
-    getAllSubscriptions
 }

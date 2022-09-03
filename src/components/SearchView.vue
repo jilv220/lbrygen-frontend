@@ -16,7 +16,7 @@
                 :showName="true" :showRear="true"
                 >
                     <template v-slot:rear>
-                        <FollowBtn :channelAddress="this.channelAddress"></FollowBtn>
+                        <FollowBtn :claimId="this.claimId"></FollowBtn>
                     </template>
                 </LGAvatarLabel>
 
@@ -77,7 +77,6 @@ import EventService from "@/services/EventService";
 import Logger from "@/utils/Logger";
 import last from "lodash/last";
 import { useUserStore } from '@/stores/UserStore';
-import { channelSubscribe, isUserLoggedIn } from '@/lib/gun/useUser'
 import FollowBtn from './FollowBtn.vue';
 
 export default {
@@ -94,7 +93,7 @@ export default {
         return {
             items: [],
             channelData: undefined,
-            channelAddress: '',
+            claimId: '',
             descList: [''],
             shouldExpand: true,
             queryContent: this.$route.query.q,
@@ -174,7 +173,7 @@ export default {
                 if (searchType == 'channel') {
                     this.channelData = await EventService.resolveClaimSingle(normalizedSearch)
                     this.descList = this.channelData?.result[this.queryContent]?.value?.description?.split('\n')
-                    this.channelAddress = this.channelData?.result[this.queryContent]?.address
+                    this.claimId = this.channelData?.result[this.queryContent]?.claim_id
                 }
 
                 let sourceData = await EventService.getContent(searchType, streamType, 
@@ -185,14 +184,6 @@ export default {
                 console.error(err)
             }
         },
-        handleSubscribe() {
-            if (!isUserLoggedIn()) {
-                this.Logger.log('User not logged in !!')
-                this.$router.push({name: 'signup'})
-            } else {
-                channelSubscribe(this.channelAddress)
-            }
-        }
     },
 };
 </script>

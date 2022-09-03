@@ -16,7 +16,7 @@ export default defineComponent ({
   name: 'CategoryView',
   components: {
     ContentFragment
-},
+  },
   setup() {
     let items = ref()
     let pageNum = 6

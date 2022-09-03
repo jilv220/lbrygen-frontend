@@ -132,7 +132,7 @@ export default {
       document.documentElement.setAttribute("data-theme", "mydark");
     }
   },
-  mounted() {
+  created() {
     userRecall(this.userStore)
   },
   methods: {

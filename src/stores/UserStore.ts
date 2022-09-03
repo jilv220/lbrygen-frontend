@@ -23,6 +23,9 @@ export const useUserStore = defineStore (
             },
             isUserLoggedIn() {
                 return this.$state.status
+            },
+            getUserPubkey() {
+                return this.$state.pair?.pub
             }
         }
     }
