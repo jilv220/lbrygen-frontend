@@ -30,14 +30,15 @@ export async function getAllSubscriptions() {
         .get('subscriptions')
         .map()
         .once((data: any, key: any) => {
-            if (key !== '_') {
+            if (data && key !== '_') {
                 subsArr.push(key)
             }
         })
 
         setTimeout(() => {
             resolve(subsArr)
-        }, 100)  // How much should this even be !???
+        }, 100)  
+        // How much should this even be !???
     })
 
     return subscriptions

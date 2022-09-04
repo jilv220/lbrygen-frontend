@@ -2,16 +2,25 @@
 import { followingIcon } from '@/constants/svgs';
 import EventService from '@/services/EventService';
 import { getAllSubscriptions } from '@/services/Subscriptions';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import ContentFragment from './ContentFragment.vue';
+import InfiniteScroll from './base/InfiniteScroll.vue';
 
-let currIcon = followingIcon
-let currRoute = 'following'
+const currIcon = followingIcon
+const currRoute = 'following'
+const items = ref()
+
 let subscriptions: string[]
-let items = ref()
+let pageNum = 2
 
-onMounted(async () => {
+async function infiniteHandler() {
+    const sourceData = await EventService.getContent('channelIds', 'video', subscriptions, pageNum)
+    const moreItems = sourceData.result?.items
+    items?.value?.push(...moreItems)
+    pageNum += 1
+}
 
+onBeforeMount(async () => {
     subscriptions = await getAllSubscriptions()
     try {
         let sourceData = await EventService.getContent('channelIds', 'video', subscriptions)
@@ -26,6 +35,7 @@ onMounted(async () => {
 <template>
     <div id="content">
         <ContentFragment :icon="currIcon" :content-label="currRoute" :items="items"></ContentFragment>
+        <InfiniteScroll :infinite="infiniteHandler"></InfiniteScroll>
     </div>
 </template>
 
