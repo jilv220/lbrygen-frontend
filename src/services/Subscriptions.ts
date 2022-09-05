@@ -7,7 +7,6 @@ const logger = new Logger('Subscriptions')
 export function channelSubscribe(claimId: string, following: boolean) {
     user
     .get('subscriptions')
-    .put(claimId)
     .get(claimId)
     .put(following, (ack: any) => {
         logger.log(ack)
