@@ -5,7 +5,6 @@
 
 import { useGun } from "./useGun"
 import Logger from "@/utils/Logger"
-import mapValues from 'lodash/mapValues'
 
 const gun = useGun()
 const user = gun.user()
