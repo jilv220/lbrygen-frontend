@@ -40,3 +40,16 @@ button {
     padding-left: 0;
     padding-top: 0;
 }
+
+/**
+*   WalletConnect override. 
+**/
+
+.walletconnect-modal__mobile__toggle {
+    a {
+        @apply text-blue-connect
+    }
+}
+.walletconnect-search__input {
+    color: rgba(60, 66, 82, 0.6)
+}

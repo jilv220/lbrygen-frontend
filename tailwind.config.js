@@ -10,6 +10,7 @@ module.exports = {
     },
     colors: {
       'blue': '#1fb6ff',
+      'blue-connect': '#3b99fc',
       'purple': '#7e5bef',
       'pink': '#ff49db',
       'orange': '#ff7849',

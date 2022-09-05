@@ -33,32 +33,11 @@
       </div>
 
       <div v-if="!userStore.$state.status" class="h-10">
-        <label class="label mx-4 p-0 text-green">
-          <router-link :to="{name: 'signin'}">Log In</router-link>
-        </label>
-
-        <router-link :to="{name: 'signup'}" class="btn btn-accent min-h-0 h-10 mr-2 text-white">
-          Sign Up
-        </router-link>
+        <ConnectBtn></ConnectBtn>
       </div>
 
-      <div v-else class="dropdown dropdown-end">
-
-        <div tabindex="0" class="avatar cursor-pointer">
-          <div class="rounded-full h-10 w-10">
-            <img class="h-full w-full" alt="User avatar" src="./assets/spaceman.png" />
-          </div>
-        </div>
-
-        <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-neutral rounded-box w-52 mt-4">
-          <li>
-            <div @click="userLogOut(this.userStore)" class="h-12">
-              <span v-html="signOutIcon"></span>
-              Sign out
-            </div>
-          </li>
-        </ul>
-
+      <div v-else>
+        <NavBarDropdown></NavBarDropdown>
       </div>
     </div>
 
@@ -93,9 +72,12 @@ import SearchBar from "@/components/SearchBar.vue";
 import SideBar from "@/components/SideBar.vue";
 import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
-import { useUserStore } from '@/stores/UserStore'
-import { userLogOut, userRecall } from '@/lib/gun/useUser'
-import { signOutIcon } from '@/constants/svgs'
+import ConnectBtn from "./components/ConnectBtn.vue";
+import NavBarDropdown from "./components/NavBarDropdown.vue";
+
+import { useUserStore } from "./stores/UserStore";
+import { userRecall } from '@/lib/gun/useUser';
+import connectWallet from "./lib/walletConnect/connect/connectWallet";
 
 export default {
   name: "App",
@@ -104,6 +86,8 @@ export default {
     SearchModal,
     SideBar,
     FilterModal,
+    ConnectBtn,
+    NavBarDropdown
   },
   setup() {
     const userStore = useUserStore()
@@ -112,7 +96,6 @@ export default {
   data() {
     return {
       checked: this.$theme,
-      signOutIcon: signOutIcon
     };
   },
   beforeCreate() {
@@ -132,8 +115,16 @@ export default {
       document.documentElement.setAttribute("data-theme", "mydark");
     }
   },
-  created() {
-    userRecall(this.userStore)
+  async created() {
+    // recall user 
+    if (localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER') !== null) {
+      try {
+        await connectWallet()
+        this.userStore.$state.status = true
+      } catch(error) {
+        console.log(error)
+      }
+    }
   },
   methods: {
     switchTheme() {
@@ -150,8 +141,7 @@ export default {
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName });
-    },
-    userLogOut
+    }
   },
 };
 </script>
