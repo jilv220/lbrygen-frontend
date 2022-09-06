@@ -10,7 +10,6 @@ import '../src/assets/styles/util.css'
 import '../src/assets/styles/base.scss'
 import 'plyr/dist/plyr.css'
 
-
 /* 
    Init App
 */

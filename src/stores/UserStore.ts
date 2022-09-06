@@ -1,32 +1,32 @@
-import { defineStore } from 'pinia'
-import { IUserPair } from '@/constants/interfaces'
+import { reactive } from "vue"
 
-interface userModel {
-    pair?: IUserPair
-    status: boolean
-}
-
-const userState : userModel = {
-    pair: undefined,
-    status: false
-}
-
-export const useUserStore = defineStore (
-    'user', 
-    {
-        state: () => {
-            return {...userState}
-        },
-        actions: {
-            storeUser(user: userModel) {
-                this.$state = user
-            },
-            isUserLoggedIn() {
-                return this.$state.status
-            },
-            getUserPubkey() {
-                return this.$state.pair?.pub
-            }
-        }
+const defaultState = {
+    userpair: {
+        pub: '',
+        epub: '',
+        priv: '',
+        epriv: ''
+    },
+    status: false,
+    actions: {
+        isUserLoggedIn: isUserLoggedIn,
+        getUserPubkey: getUserPubkey,
+        resetState: resetState
     }
-)
+}
+
+const userState = reactive({...defaultState})
+
+function isUserLoggedIn() {
+    return userState.status
+}
+
+function getUserPubkey() {
+    return userState.userpair
+}
+
+function resetState() {
+    Object.assign(userState, defaultState)
+}
+
+export default userState

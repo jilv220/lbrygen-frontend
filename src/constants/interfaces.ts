@@ -4,6 +4,11 @@ export interface ISideBarItem {
     label: string
 }
 
+export interface userModel {
+    userpair?: IUserPair
+    status: boolean
+}
+
 export interface IUserPair {
     pub: string,
     priv: string,

@@ -1,9 +1,15 @@
 import { providers } from "ethers"
 import web3Modal from "./web3Modal";
+import Logger from "@/utils/Logger";
+
+const logger = new Logger('connectWallet')
 
 const connectWallet = async () => {
   try {
     const provider = await web3Modal.connect()
+    provider.on("accountsChanged", (provider) => {
+      console.log('connect', provider);
+    });
 
     const library = new providers.Web3Provider(provider);
     const signer = await library.getSigner();
@@ -14,17 +20,13 @@ const connectWallet = async () => {
 
     });
 
-    provider.on("accountsChanged", (accounts) => {
-
-    });
-
     provider.on("chainChanged", (chainId) => {
 
     });
 
   } 
   catch (error) {
-    console.log(error);
+    logger.error(error)
     return error
   }
 };

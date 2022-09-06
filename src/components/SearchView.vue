@@ -76,18 +76,13 @@ import Normalizer from "@/utils/Normalizer";
 import EventService from "@/services/EventService";
 import Logger from "@/utils/Logger";
 import last from "lodash/last";
-import { useUserStore } from '@/stores/UserStore';
 import FollowBtn from './FollowBtn.vue';
 
 export default {
     components: {
-    SearchItem,
-    LGAvatarLabel,
-    FollowBtn
-},
-    setup() {
-        const userStore = useUserStore()
-        return { userStore }
+        SearchItem,
+        LGAvatarLabel,
+        FollowBtn
     },
     data() {
         return {

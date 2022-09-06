@@ -32,7 +32,7 @@
 
       </div>
 
-      <div v-if="!userStore.$state.status" class="h-10">
+      <div v-if="!userState.status" class="h-10">
         <ConnectBtn></ConnectBtn>
       </div>
 
@@ -74,10 +74,8 @@ import SearchModal from "./components/SearchModal.vue";
 import FilterModal from "./components/FilterModal.vue";
 import ConnectBtn from "./components/ConnectBtn.vue";
 import NavBarDropdown from "./components/NavBarDropdown.vue";
-
-import { useUserStore } from "./stores/UserStore";
-import { userRecall } from '@/lib/gun/useUser';
-import connectWallet from "./lib/walletConnect/connect/connectWallet";
+import userState from "./stores/UserStore";
+import Session from "@/services/Session";
 
 export default {
   name: "App",
@@ -90,8 +88,7 @@ export default {
     NavBarDropdown
   },
   setup() {
-    const userStore = useUserStore()
-    return { userStore }
+    return { userState }
   },
   data() {
     return {
@@ -116,15 +113,7 @@ export default {
     }
   },
   async created() {
-    // recall user 
-    if (localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER') !== null) {
-      try {
-        await connectWallet()
-        this.userStore.$state.status = true
-      } catch(error) {
-        console.log(error)
-      }
-    }
+    Session.recall()
   },
   methods: {
     switchTheme() {

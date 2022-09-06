@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import disconnectWallet from '@/lib/walletConnect/connect/disconnectWallet';
-
-import { userLogOut } from '@/lib/gun/useUser'
-import { useUserStore } from '@/stores/UserStore'
+import Session from '@/services/Session'
 import { signOutIcon } from '@/constants/svgs'
 
-const userStore = useUserStore()
-
 const disconnectUser = async () => {
-    await disconnectWallet()
-    userLogOut(userStore)
+    await Session.logout()
 };
 
 </script>

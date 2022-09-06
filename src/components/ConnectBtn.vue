@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import connectWallet from '../lib/walletConnect/connect/connectWallet'
-import { useUserStore } from '@/stores/UserStore';
-
-const userStore = useUserStore()
+import Session from '@/services/Session'
 
 const connectUser = async () => {
-    await connectWallet()
-    userStore.$state.status = true
+    await Session.ethereumLogin()
 };
 </script>
 

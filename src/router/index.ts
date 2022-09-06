@@ -3,8 +3,6 @@ import categories from "@/constants/categories";
 
 const Home = () => import('../components/HomeView.vue')
 const Following = () => import('../components/FollowingView.vue')
-const Signup = () => import('../components/SignupView.vue')
-const Signin = () => import('../components/SigninView.vue')
 const Search = () => import('../components/SearchView.vue')
 const Category = () => import('../components/CategoryView.vue')
 const Stream = () => import('../components/StreamView.vue')
@@ -37,16 +35,6 @@ const other_routes: Array<any> = [
     path: '/following',
     name: 'following',
     component: Following
-  },
-  {
-    path: '/signup',
-    name: 'signup',
-    component: Signup
-  },
-  {
-    path: '/signin',
-    name: 'signin',
-    component: Signin
   },
   {
     path: '/search',

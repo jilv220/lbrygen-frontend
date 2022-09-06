@@ -13,6 +13,7 @@
     "@vueuse/core": "^9.1.1",
     "@walletconnect/web3-provider": "^1.8.0",
     "axios": "^0.21.4",
+    "elliptic": "^6.5.4",
     "ethers": "^5.7.0",
     "gun": "^0.2020.1238",
     "lodash": "^4.17.21",

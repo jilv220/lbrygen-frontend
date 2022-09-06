@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/UserStore'
+import userState from '@/stores/UserStore'
 import Logger from '@/utils/Logger'
-import { useUser } from '@/lib/gun/useUser'
+import Session from '@/services/Session'
+
+import { onMounted, ref } from 'vue'
 import { channelSubscribe, getSubscription } from '@/services/Subscriptions'
 
-const userStore = useUserStore()
-const router = useRouter()
 const logger = new Logger('FollowBtn')
 
 const props = defineProps({
@@ -17,7 +15,6 @@ const props = defineProps({
     }
 })
 
-const user = useUser()
 let following = ref(false)
 let hover = ref(false)
 
@@ -30,12 +27,11 @@ onMounted(async () => {
 
 async function handleSubscribe() {
 
-    following.value = !following.value
-
-    if (!userStore.isUserLoggedIn()) {
-        logger.log('User not logged in !!')
-        router.push({ name: 'signup' })
+    if (!userState.status) {
+        logger.error('User not logged in !! Prompt Login !!')
+        await Session.ethereumLogin()
     } else {
+        following.value = !following.value
         channelSubscribe(props.claimId, following.value)
     }
 }
