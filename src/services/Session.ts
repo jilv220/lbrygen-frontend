@@ -1,5 +1,5 @@
 import web3Modal from '@/lib/walletConnect/connect/web3Modal'
-import Web3 from 'web3';
+import * as Eth from 'web3-eth'
 import Logger from '@/utils/Logger';
 import userState from '@/stores/UserStore';
 
@@ -37,7 +37,9 @@ async function ethereumConnect() {
     });
   
     const provider = await web3Modal.connect();
-    return new Web3(provider);
+
+    // Work around, stupid export system
+    return new Eth['default'](provider);
 }
 
 const user = useUser()
@@ -71,12 +73,12 @@ function recall() {
 
 async function ethereumLogin() {
 
-    const web3 = await ethereumConnect();
-    const accounts = await web3.eth.getAccounts();
+    const eth = await ethereumConnect();
+    const accounts = await eth.getAccounts();
   
     if (accounts.length > 0) {
       const message = "I'm trusting this application with an irrevocable access key to my Lbrygen account.";
-      const signature = await web3.eth.personal.sign(message, accounts[0], '');
+      const signature = await eth.personal.sign(message, accounts[0], '');
       const signatureBytes = hexToUint8Array(signature.substring(2));
       const hash1 = await window.crypto.subtle.digest('SHA-256', signatureBytes);
       const hash2 = await window.crypto.subtle.digest('SHA-256', hash1);
