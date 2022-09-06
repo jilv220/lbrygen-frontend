@@ -98,7 +98,7 @@ export default {
     /* Standard way to clamp */
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 
     padding-left: 0px; 
@@ -123,6 +123,9 @@ export default {
 
 @media (max-width: 960px) {
     #content > .grid {
+       display: unset; 
+    }
+    #content > div > .grid {
        display: unset; 
     }
     #content {

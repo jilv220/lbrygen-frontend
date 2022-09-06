@@ -1,4 +1,4 @@
-import web3Modal from '@/lib/walletConnect/connect/web3Modal'
+import web3Modal from '@/lib/web3Modal'
 import * as Eth from 'web3-eth'
 import Logger from '@/utils/Logger';
 import userState from '@/stores/UserStore';

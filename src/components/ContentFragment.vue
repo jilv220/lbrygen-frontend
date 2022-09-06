@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <label class="label justify-start">
+    <label class="label justify-start pb-3">
         <span v-html="icon" class="mr-2"></span>
         <span class="label-text text-lg font-bold"> {{ upperFirst(contentLabel) }}</span>
     </label>
