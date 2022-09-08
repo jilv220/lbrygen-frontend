@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { createHead } from "@vueuse/head"
 import App from './App.vue'
 import router from '../src/router'
 
@@ -15,6 +16,7 @@ import 'plyr/dist/plyr.css'
 */
 const app = createApp(App)
   .use(createPinia())
+  .use(createHead())
   .use(router)
 
 router.isReady().then(() => {

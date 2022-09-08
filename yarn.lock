@@ -1457,6 +1457,11 @@
     "@vueuse/shared" "9.1.1"
     vue-demi "*"
 
+"@vueuse/head@^0.7.9":
+  version "0.7.9"
+  resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.9.tgz#888ab87667ab6dbe6edba10d176fa91c1b0ec021"
+  integrity sha512-5wnRiH2XIUSLLXJDLDDTcpvAg5QXgTIVZl46AU7to/T91KHsdBLHSE4WhRO7kP0jbkAhlxnx64E29cQtwBrMjg==
+
 "@vueuse/metadata@9.1.1":
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-9.1.1.tgz#b3fe4b97e62096f7566cd8eb107c503998b2c9a6"

@@ -76,6 +76,8 @@ import ConnectBtn from "./components/ConnectBtn.vue";
 import NavBarDropdown from "./components/NavBarDropdown.vue";
 import userState from "./stores/UserStore";
 import Session from "@/services/Session";
+import { useHead } from "@vueuse/head";
+import { siteName, homeDesp } from "@/constants/strings"
 
 export default {
   name: "App",
@@ -88,6 +90,22 @@ export default {
     NavBarDropdown
   },
   setup() {
+
+    const homeMeta = {
+      title: siteName,
+      description: homeDesp,
+    }
+
+    useHead({
+      title: homeMeta.title,
+      meta: [
+        {
+          name: 'description',
+          content: homeMeta.description
+        }
+      ]
+    })
+
     return { userState }
   },
   data() {
