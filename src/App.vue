@@ -9,8 +9,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </label>
-        <div id="lbry-logo" class="pr-4 h-6" @click="navigateTo('home')">
-          <img class="h-full w-full" alt="Lbry logo" src="./assets/lbry_logo.svg" />
+        <div id="lbry-logo" class="mr-4 h-6" @click="navigateTo('home')">
+          <img class="h-full w-full" alt="Lbry logo" src="./assets/lbrygen_logo.png" />
         </div>
       </div>
 
@@ -202,7 +202,7 @@ export default {
 
 #lbry-logo {
   cursor: pointer;
-  width: 112px;
+  width: 40px;
   height: 40px;
 }
 
