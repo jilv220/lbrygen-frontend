@@ -32,6 +32,10 @@ const other_routes: Array<any> = [
     component: Home
   },
   {
+    path: '/home',
+    redirect: '/'
+  },
+  {
     path: '/following',
     name: 'following',
     component: Following

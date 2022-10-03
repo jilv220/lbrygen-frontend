@@ -11,7 +11,7 @@
   "dependencies": {
     "@vue/cli-plugin-typescript": "^5.0.8",
     "@vueuse/core": "^9.1.1",
-    "@vueuse/head": "^0.7.9",
+    "@vueuse/head": "^0.8.2",
     "@walletconnect/web3-provider": "^1.8.0",
     "axios": "^0.21.4",
     "elliptic": "^6.5.4",
