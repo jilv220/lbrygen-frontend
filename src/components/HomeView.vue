@@ -13,9 +13,14 @@ const contentCollection = ref()
 onBeforeMount(async () => {
 
     subscriptions = await getAllSubscriptions()
-    const sourceData = await EventService.getContent('channelIds', 'video', subscriptions)
-    const items = sourceData?.result?.items
-    contentCollection.value = [{category: primaryNav[1], items: items.slice(0, 12)}]
+    contentCollection.value = []
+
+    // Don't show following if no subscription
+    if (subscriptions.length !== 0) {
+        const sourceData = await EventService.getContent('channelIds', 'video', subscriptions)
+        const items = sourceData?.result?.items
+        contentCollection.value = [{category: primaryNav[1], items: items.slice(0, 12)}]
+    }
 
     for (const i in categories) {
         const sourceData = await EventService.fetchCategoryData(categories[i].link)
