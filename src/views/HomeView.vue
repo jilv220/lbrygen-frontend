@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
-import ContentFragment from './ContentFragment.vue';
+import ContentFragment from '@/components/ContentFragment.vue';
 import primaryNav from '@/constants/primaryNavigation'
 import categories from '@/constants/categories'
 import EventService from '@/services/EventService';

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import categories from "@/constants/categories"
 import EventService from '@/services/EventService'
+import ContentFragment from '@/components/ContentFragment.vue'
+import InfiniteScroll from '@/components/base/InfiniteScroll.vue'
+
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ContentFragment from './ContentFragment.vue'
-import InfiniteScroll from './base/InfiniteScroll.vue'
 
 let items = ref()
 let pageNum = 6

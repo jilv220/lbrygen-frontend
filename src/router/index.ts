@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory, RouterOptions } from 'vue-router';
 import categories from "@/constants/categories";
 
-const Home = () => import('../components/HomeView.vue')
-const Following = () => import('../components/FollowingView.vue')
-const Search = () => import('../components/SearchView.vue')
-const Category = () => import('../components/CategoryView.vue')
-const Stream = () => import('../components/StreamView.vue')
+const Home = () => import('../views/HomeView.vue')
+const Following = () => import('../views/FollowingView.vue')
+const Search = () => import('../views/SearchView.vue')
+const Category = () => import('../views/CategoryView.vue')
+const Stream = () => import('../views/StreamView.vue')
 
 /**
  * Generate category routes

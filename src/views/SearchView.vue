@@ -76,7 +76,7 @@ import Normalizer from "@/utils/Normalizer";
 import EventService from "@/services/EventService";
 import Logger from "@/utils/Logger";
 import last from "lodash/last";
-import FollowBtn from './FollowBtn.vue';
+import FollowBtn from '@/components/FollowBtn.vue';
 
 export default {
     components: {

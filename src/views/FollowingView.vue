@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { followingIcon } from '@/constants/svgs';
 import EventService from '@/services/EventService';
+import ContentFragment from '@/components/ContentFragment.vue';
+import InfiniteScroll from '@/components/base/InfiniteScroll.vue';
+
+import { followingIcon } from '@/constants/svgs';
 import { getAllSubscriptions } from '@/services/Subscriptions';
 import { onBeforeMount, onMounted, ref } from 'vue';
-import ContentFragment from './ContentFragment.vue';
-import InfiniteScroll from './base/InfiniteScroll.vue';
 
 const currIcon = followingIcon
 const currRoute = 'following'
