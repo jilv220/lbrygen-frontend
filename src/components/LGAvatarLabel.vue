@@ -30,6 +30,10 @@
                     {{ avatar?.name }}
                 </div>
             </router-link>
+
+            <div class="text-sm">
+                {{ this.relativeDT }}
+            </div>
         </template>
 
         <template v-slot:rear>
@@ -45,15 +49,17 @@
 import AvatarLabel from "./base/AvatarLabel.vue"
 import { AVATAR_OPTIMIZE } from '@/constants/env'
 import TriFallbackImg from "./base/TriFallbackImg.vue"
+import { DateTime } from "luxon"
 
 export default {
     name: "LGAvatarLabel",
     components: {
-    AvatarLabel,
-    TriFallbackImg
-},
+        AvatarLabel,
+        TriFallbackImg
+    },
     props: {
         avatar: Object,
+        timestamp: Number,
         showAvatar: {
             default: true,
             type: Boolean
@@ -72,6 +78,7 @@ export default {
             backupTitle: '',
             backupThumbnail: '',
             optimizedThumbnail: '',
+            relativeDT: ''
         }
     },
     mounted() {
@@ -81,6 +88,9 @@ export default {
         if (this.avatar?.value?.thumbnail) {
             this.optimizedThumbnail = AVATAR_OPTIMIZE + this.avatar.value.thumbnail.url
             this.backupThumbnail = this.avatar.value.thumbnail.url
+        }
+        if (this.timestamp) {
+            this.relativeDT = DateTime.fromSeconds(this.timestamp).toRelative()
         }
     },
     methods: {

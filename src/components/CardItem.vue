@@ -19,7 +19,10 @@
             </label>
 
             <div id="card-avatar-label">
-                <LGAvatarLabel :showAvatar="this.showAvatar" :avatar="this.avatar">
+                <LGAvatarLabel 
+                :showAvatar="this.showAvatar" 
+                :avatar="this.avatar"
+                :timestamp="this.timestamp">
                 </LGAvatarLabel>
             </div>
 
@@ -44,6 +47,7 @@ export default {
     props: {
         thumbnail: Object,
         avatar: Object,
+        timestamp: Number,
         curl: String,
         showAvatar: {
             default: true,
@@ -75,8 +79,16 @@ export default {
     width: 300px;
     text-align: start;
     align-self: flex-start;
-    font-size: 1rem;
-    font-weight: 700;  
+
+    #card-title {
+        font-size: 14px;
+        font-weight: 600;  
+    }
+
+    #channel-title {
+        font-size: 12px;
+        font-weight: 700;
+    }
 }
 
 #card-claim-info .flex-x-start {

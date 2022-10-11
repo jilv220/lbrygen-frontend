@@ -18,6 +18,7 @@
     "ethers": "^5.7.0",
     "gun": "^0.2020.1238",
     "lodash": "^4.17.21",
+    "luxon": "^3.0.4",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "node-sass": "^7.0.1",
     "pinia": "^2.0.13",

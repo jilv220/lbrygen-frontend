@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { timestamp } from 'rxjs';
 import CardItem from './CardItem.vue'
 const upperFirst = require('lodash/upperFirst')
 
@@ -17,7 +18,12 @@ const props = defineProps({
 
     <ul class="grid grid-cols-4 gap-4">
         <li v-for="item in items" :key="item" class="pb-8">
-            <CardItem :thumbnail="item.value.thumbnail" :avatar="item.signing_channel" :curl="item.canonical_url">
+            <CardItem 
+            :thumbnail="item.value.thumbnail" 
+            :avatar="item.signing_channel" 
+            :curl="item.canonical_url" 
+            :timestamp="item.timestamp"
+            >
                 <template v-slot:center>
                     <router-link :to="{ name: 'stream', query: { curl: item.canonical_url } }">
                         <div v-if="item.value.title">
