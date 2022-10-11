@@ -59,7 +59,7 @@
       <!-- Drawer Content -->
       <div class="drawer-side h-full">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul id="drawer-sidebar" class="bg-neutral">
+        <ul id="drawer-sidebar" class="bg-neutral relative">
           <SideBar></SideBar>
         </ul>
       </div>
