@@ -6,15 +6,15 @@ import plyrHelper from '@/lib/plyrHelper'
 import random from 'lodash/random'
 
 import { API_PROD, VIDEO_TYPES, AUDIO_TYPES } from '@/constants/env'
-import { linkify } from "@/utils/ReUtils"
 import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { MaybeTimer, MaybePlyr } from '@/types/StreamTypes'
+import { linkify } from "@/utils/ReUtils"
+import { useHead } from "@vueuse/head"
 
 const props = defineProps(['claimUrl'])
 
 let player : MaybePlyr = undefined
 let polling : MaybeTimer = undefined
-
 let downloadUrl = ''
 let shouldExpand = true
 
@@ -29,6 +29,17 @@ let mimeType = ref('')
 // Should use reactive and define interfaces for them
 let avatar = ref()
 let relatedVideosData = ref()
+
+// Setup metadata
+useHead({
+    title,
+    meta: [
+        {
+            name: 'description',
+            content: () => desc.value
+        }
+    ]
+})
 
 onBeforeMount(() => {
     pollData()

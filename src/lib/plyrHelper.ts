@@ -8,7 +8,7 @@ const _isFakeMobile = isProduction ? false : true
 
 function initPlyr(): Plyr {
     const config = {
-        debug: true,
+        debug: false,
         keyboard: {
             global: true
         },
