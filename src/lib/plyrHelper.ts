@@ -8,7 +8,7 @@ const _isFakeMobile = isProduction ? false : true
 
 function initPlyr(): Plyr {
     const config = {
-        debug: false,
+        debug: true,
         keyboard: {
             global: true
         },
@@ -37,7 +37,7 @@ function _removeDblClickListeners(player: Plyr) {
      * Have to cast as any due to missing type for eventListeners
     */
 
-    (player as any).eventListeners.forEach( 
+    (player as any).eventListeners!.forEach( 
         function(eventListener: any) {
             if(eventListener.type === 'dblclick') {
                 eventListener.element

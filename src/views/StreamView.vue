@@ -1,18 +1,135 @@
+<script setup lang="ts">
+import EventService from "../services/EventService"
+import SearchItem from "@/components/SearchItem.vue"
+import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
+import plyrHelper from '@/lib/plyrHelper'
+import random from 'lodash/random'
+
+import { API_PROD, VIDEO_TYPES, AUDIO_TYPES } from '@/constants/env'
+import { linkify } from "@/utils/ReUtils"
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { MaybeTimer, MaybePlyr } from '@/types/StreamTypes'
+
+const props = defineProps(['claimUrl'])
+
+let player : MaybePlyr = undefined
+let polling : MaybeTimer = undefined
+
+let downloadUrl = ''
+let shouldExpand = true
+
+// Maybe should make a state for this ...
+let videoReady = ref(false)
+let shortUrl = ref('')
+let title = ref('')
+let desc = ref('')
+let streamUrl = ref('')
+let mimeType = ref('')
+
+// Should use reactive and define interfaces for them
+let avatar = ref()
+let relatedVideosData = ref()
+
+onBeforeMount(() => {
+    pollData()
+})
+
+onMounted(async () => {
+    let claimUrlCopy = props.claimUrl.split('#').join(':')
+    let claimUrlTranformed = claimUrlCopy
+    let tags = ['']
+
+    try {
+        let claimRes = await EventService.resolveClaimSingle(claimUrlTranformed)
+        let result = claimRes.result
+
+        let claimAvatar = result[claimUrlTranformed]?.signing_channel
+        if (claimAvatar) { avatar.value = claimAvatar }
+
+        let claimShortUrl = result[claimUrlTranformed]?.short_url
+        if (claimShortUrl) { shortUrl.value = claimShortUrl }
+
+        let value = result[claimUrlTranformed]?.value
+        tags = value?.tags
+
+        // Setup decription and title
+        title.value = value?.title
+        desc.value = value?.description?.replaceAll('\n', '<br>')
+
+        let streamRes = await EventService.getStreamByUrl(claimShortUrl)
+        streamUrl.value = streamRes.streaming_url
+        mimeType.value = streamRes.mime_type
+
+        // Setup download
+        const blob = streamUrl?.value.split('/').pop()
+        downloadUrl = `${API_PROD}/download/${blob}`
+
+        let relatedRes = await EventService.getContent('tag', 'video', tags, random(1, 14), 14, "trending_group")
+        relatedVideosData.value = relatedRes
+    }
+    catch (err) {
+        console.error(err)
+    }
+})
+
+watch(() => videoReady.value, () => {
+
+    let value = videoReady.value
+    console.log(`is video ready : ${value}`)
+
+    // init Plyr instance
+    if (value) {
+        player = plyrHelper.initPlyr()
+        plyrHelper.plyrEnableDblClickSeek(player, '#player')
+
+        clearInterval(polling)
+        polling = undefined
+    }
+})
+
+onBeforeUnmount(() => {
+    player?.destroy()
+    plyrHelper.destroy()
+})
+
+function pollData() {
+    polling = setInterval(() => {
+        let video = document.getElementById("player")
+        if (video) {
+            videoReady.value = true
+        }
+    }, 250)
+}
+
+function expandDesc(eleToExpand) {
+    if (shouldExpand) {
+        document.getElementById('expand-btn')!.innerHTML = 'Less'
+        document.getElementById(eleToExpand)!.style.overflow = 'unset'
+        document.getElementById(eleToExpand)!.style.maxHeight = 'unset'
+    } else {
+        document.getElementById('expand-btn')!.innerHTML = 'More'
+        document.getElementById(eleToExpand)!.style.overflow = 'hidden'
+        document.getElementById(eleToExpand)!.style.maxHeight = '10em'
+    }
+    shouldExpand = !shouldExpand
+}
+</script>
+
 <template>
     <div>
         <div class="pt-16">
 
-            <div v-if="streamUrl" id="layout" class="grid grid-cols-3 gap-8 mt-4 px-4">
+            <div v-if="streamUrl!=''" id="layout" class="grid grid-cols-3 gap-8 mt-4 px-4">
 
                 <div id="container" class="grid col-span-2">
 
                     <div id="iframe-container">
 
-                        <video v-if="VIDEO_TYPES.includes(this.mimeType)" playsinline controls id="player">
+                        <video v-if="VIDEO_TYPES.includes(mimeType)" playsinline controls id="player">
                             <source :src="streamUrl"/>
                         </video>
 
-                        <video v-else-if="AUDIO_TYPES.includes(this.mimeType)" playsinline controls id="player">
+                        <video v-else-if="AUDIO_TYPES.includes(mimeType)" playsinline controls id="player">
                             <source :src="streamUrl"/>
                         </video>
 
@@ -31,11 +148,10 @@
 
                         <div class="flex justify-between">
                             <LGAvatarLabel v-if="avatar" id="stream-channel"
-                                :showAvatar="this.showAvatar" :showName="true" :avatar="this.avatar"
-                                :channelName="this.channelName">
-                                <template v-slot:lg-label>
-                                    {{ this.channelName }}
-                                </template>
+                                :showAvatar="true" 
+                                :showName="true" 
+                                :avatar="avatar"
+                            >
                             </LGAvatarLabel>
                             <a class="btn bg-green hover:bg-green-800 text-white" :href="downloadUrl">
                                 Download
@@ -43,7 +159,7 @@
                         </div>
 
                         <article id="stream-desc">
-                            <span v-html="linkify(this.desc)"></span>
+                            <span v-html="linkify(desc)"></span>
                         </article>
 
                         <button id="expand-btn" class="text-green" @click="expandDesc('stream-desc')">More</button>
@@ -85,132 +201,6 @@
 
     </div>
 </template>
-
-<script>
-import EventService from "../services/EventService"
-import SearchItem from "@/components/SearchItem.vue"
-import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
-import plyrHelper from '@/lib/plyrHelper'
-import random from 'lodash/random'
-
-import { API_PROD, VIDEO_TYPES, AUDIO_TYPES } from '@/constants/env'
-import { linkify } from "@/utils/ReUtils"
-
-export default {
-    props: {
-        claimUrl: String,
-    },
-    components: {
-        SearchItem,
-        LGAvatarLabel
-    },
-    data() {
-        return {
-            avatar: undefined,
-            player: null,
-            polling: null,
-            channelName: '',
-            claimUrlTranformed: '',
-            relatedVideosData: '',
-            title: '',
-            desc: '',
-            mimeType: '',
-            shortUrl: '',
-            streamUrl: '',
-            downloadUrl: '',
-            videoReady: false,
-            shouldExpand: true,
-            showAvatar: true,
-            VIDEO_TYPES,
-            AUDIO_TYPES
-        }
-    },
-    created () {
-        this.pollData()
-    },
-    watch: {
-        videoReady(value) {
-            console.log(`is video ready : ${value}`)
-
-            // init Plyr instance
-            if (value) {
-                this.player = plyrHelper.initPlyr()
-                plyrHelper.plyrEnableDblClickSeek(this.player, '#player')
-
-                clearInterval(this.polling)
-                this.polling = null
-            }
-        },
-    },
-    beforeUnmount() {
-        this.player?.destroy()
-        plyrHelper.destroy()
-    },
-    async mounted() {
-
-        let claimUrlCopy = this.claimUrl.split('#').join(':')
-        this.claimUrlTranformed = claimUrlCopy
-
-        let tags = ['']
-        // console.log(this.claimUrlTranformed)
-
-        try  {
-            let claimRes = await EventService.resolveClaimSingle(this.claimUrlTranformed)
-            let result = claimRes.result
-
-            let avatar = result[this.claimUrlTranformed]?.signing_channel
-            if (avatar) { this.avatar = avatar }
-
-            let shortUrl = result[this.claimUrlTranformed]?.short_url
-            if (shortUrl) { this.shortUrl = shortUrl }
-
-            let value = result[this.claimUrlTranformed]?.value
-            tags = value?.tags
-
-            // Setup decription and title
-            this.title = value?.title
-            this.desc = value?.description?.replaceAll('\n', '<br>')
-
-            let streamRes = await EventService.getStreamByUrl(this.shortUrl)
-            this.streamUrl = streamRes.streaming_url
-            this.mimeType = streamRes.mime_type
-
-            // Setup download
-            const blob = this.streamUrl?.split('/').pop()
-            this.downloadUrl = `${API_PROD}/download/${blob}`
-
-            let relatedRes = await EventService.getContent('tag', 'video', tags, random(1, 14), 14, "trending_group")
-            this.relatedVideosData = relatedRes
-        }
-        catch (err) {
-            console.log(err)
-        }
-    },
-    methods: {
-        linkify,
-        expandDesc(eleToExpand) {
-            if (this.shouldExpand) {
-                document.getElementById('expand-btn').innerHTML = 'Less'
-                document.getElementById(eleToExpand).style.overflow = 'unset'
-                document.getElementById(eleToExpand).style.maxHeight = 'unset'
-            } else {
-                document.getElementById('expand-btn').innerHTML = 'More'
-                document.getElementById(eleToExpand).style.overflow = 'hidden'
-                document.getElementById(eleToExpand).style.maxHeight = '10em'
-            }
-            this.shouldExpand = !this.shouldExpand
-        },
-        pollData () {
-            this.polling = setInterval(() => {
-                let video = document.getElementsByTagName('video')[0]
-                if (video) {
-                    this.videoReady = true
-                }
-            }, 250)
-        }
-    }
-}
-</script>
 
 <style lang="scss">
 span {
