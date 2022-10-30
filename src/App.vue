@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Navbar -->
-    <div id="navbar" class="navbar fixed justify-between shadow z-50 bg-neutral">
+    <nav id="navbar" class="navbar fixed justify-between shadow z-50 bg-neutral">
       <div class="navbar-start">
         <label for="my-drawer" class="mr-6" id="sidebar-menu">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -39,7 +39,7 @@
       <div v-else>
         <NavBarDropdown></NavBarDropdown>
       </div>
-    </div>
+    </nav>
 
     <!-- Drawer -->
     <div class="drawer h-auto">
@@ -59,9 +59,9 @@
       <!-- Drawer Content -->
       <div class="drawer-side h-full">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul id="drawer-sidebar" class="bg-neutral relative">
+        <nav id="drawer-sidebar" class="bg-neutral relative">
           <SideBar></SideBar>
-        </ul>
+        </nav>
       </div>
     </div>
   </div>
