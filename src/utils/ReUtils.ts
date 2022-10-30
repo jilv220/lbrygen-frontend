@@ -1,5 +1,3 @@
-import { buffer } from "rxjs";
-
 export function linkify (str : string) {
     /* eslint-disable no-useless-escape */
     const re = /(?![^<]*>|[^<>]*<\/)((https?:)\/\/[a-z0-9&#=.\/\-?_]+)/gi

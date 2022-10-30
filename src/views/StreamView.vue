@@ -42,11 +42,9 @@
                             </a>
                         </div>
 
-                        <div id="stream-desc">
-                            <div v-for="(line, index) in descList" :key="index">
-                                <span v-html="linkify(line)"></span>
-                            </div>
-                        </div>
+                        <article id="stream-desc">
+                            <span v-html="linkify(this.desc)"></span>
+                        </article>
 
                         <button id="expand-btn" class="text-green" @click="expandDesc('stream-desc')">More</button>
                     </div>
@@ -91,11 +89,12 @@
 <script>
 import EventService from "../services/EventService"
 import SearchItem from "@/components/SearchItem.vue"
-import { linkify } from "@/utils/ReUtils"
 import LGAvatarLabel from "@/components/LGAvatarLabel.vue"
 import plyrHelper from '@/lib/plyrHelper'
 import random from 'lodash/random'
+
 import { API_PROD, VIDEO_TYPES, AUDIO_TYPES } from '@/constants/env'
+import { linkify } from "@/utils/ReUtils"
 
 export default {
     props: {
@@ -114,7 +113,7 @@ export default {
             claimUrlTranformed: '',
             relatedVideosData: '',
             title: '',
-            descList: [''],
+            desc: '',
             mimeType: '',
             shortUrl: '',
             streamUrl: '',
@@ -166,18 +165,11 @@ export default {
             if (shortUrl) { this.shortUrl = shortUrl }
 
             let value = result[this.claimUrlTranformed]?.value
-            let title = value?.title
             tags = value?.tags
-            let desc = value?.description
 
-            if (value) {
-                if (desc) {
-                    this.descList = desc.split('\n')
-                }
-                if (title) {
-                    this.title = title
-                }
-            }
+            // Setup decription and title
+            this.title = value?.title
+            this.desc = value?.description?.replaceAll('\n', '<br>')
 
             let streamRes = await EventService.getStreamByUrl(this.shortUrl)
             this.streamUrl = streamRes.streaming_url
