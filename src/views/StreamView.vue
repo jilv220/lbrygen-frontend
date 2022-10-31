@@ -65,7 +65,7 @@ onMounted(async () => {
 
         // Setup decription and title
         title.value = value?.title
-        desc.value = value?.description?.replaceAll('\n', '<br>')
+        desc.value = value?.description
 
         let streamRes = await EventService.getStreamByUrl(claimShortUrl)
         streamUrl.value = streamRes.streaming_url
@@ -169,11 +169,13 @@ function expandDesc(eleToExpand) {
                             </a>
                         </div>
 
-                        <article id="stream-desc">
-                            <span v-html="linkify(desc)"></span>
-                        </article>
+                        <div v-if="desc!==undefined">
+                            <article id="stream-desc">
+                                <span v-html="linkify(desc)"></span>
+                            </article>
 
-                        <button id="expand-btn" class="text-green" @click="expandDesc('stream-desc')">More</button>
+                            <button id="expand-btn" class="text-green" @click="expandDesc('stream-desc')">More</button>
+                        </div>
                     </div>
                 </div>
 
