@@ -64,8 +64,11 @@ onMounted(async () => {
         tags = value?.tags
 
         // Setup decription and title
-        title.value = value?.title
-        desc.value = value?.description
+        let claimTitle = value?.title
+        if (claimTitle) { title.value = claimTitle }
+
+        let claimDesc = value?.description
+        if (claimDesc) { desc.value = claimDesc?.replaceAll('\n', '<br>') }
 
         let streamRes = await EventService.getStreamByUrl(claimShortUrl)
         streamUrl.value = streamRes.streaming_url
